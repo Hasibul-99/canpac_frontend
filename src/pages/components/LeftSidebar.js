@@ -51,8 +51,8 @@ export default function LeftSidebar() {
                                 </Link>
                             </li>
                             <li className="yay-label">Inventory</li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/product-stock")}>
+                                <Link to="/product-stock">
                                     <span className="yay-icon">
                                         <StockOutlined />
                                     </span>
@@ -60,8 +60,8 @@ export default function LeftSidebar() {
                                     <span className="rui-yaybar-circle"></span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/product-order")}>
+                                <Link to="/product-order">
                                     <span className="yay-icon">
                                         <BorderlessTableOutlined />
                                     </span>
@@ -69,8 +69,8 @@ export default function LeftSidebar() {
                                     <span className="rui-yaybar-circle"></span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/order-draft")}>
+                                <Link to="/order-draft">
                                     <span className="yay-icon">
                                         <CodeSandboxOutlined />
                                     </span>

@@ -1,5 +1,8 @@
 import Dashboard from "../pages/private/Dashboard/index";
+import OrderDraft from "../pages/private/Order-Draft";
 import CreateOrder from "../pages/private/Order/index";
+import ProductOrder from "../pages/private/Product-Order";
+import ProductStock from "../pages/private/Product-Stock";
 import UpdateProfile from "../pages/private/Profile/UpdateProfile";
 
 const PrivateRoutes = [
@@ -21,6 +24,27 @@ const PrivateRoutes = [
         path: "update-profile",
         name: "Update Profile",
         component: UpdateProfile,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "product-stock",
+        name: "Product Stock",
+        component: ProductStock,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "product-order",
+        name: "Product Order",
+        component: ProductOrder,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "order-draft",
+        name: "Order Draft",
+        component: OrderDraft,
         layout: "/",
         exact: true
     },

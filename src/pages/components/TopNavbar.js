@@ -81,7 +81,7 @@ export default function TopNavbar() {
 
             <div className="container-fluid">
                 <div className="rui-navbar-content">
-                    <ul classNameName="nav">
+                    <ul className="nav">
                         {/* <li className="dropdown dropdown-hover dropdown-keep-open dropdown-triangle"><a href="#actions"
                                 className="dropdown-item" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false"><span data-feather="layers"
