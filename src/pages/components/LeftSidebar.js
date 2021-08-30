@@ -36,7 +36,7 @@ export default function LeftSidebar() {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="">
+                                <Link to="/create-order">
                                     <span className="yay-icon">
                                         <ShoppingCartOutlined />
                                     </span>

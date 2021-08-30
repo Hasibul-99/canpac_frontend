@@ -1,7 +1,11 @@
-import React, {Fragment, useEffect} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import logo from "../../assets/images/logo.svg";
 import avatar1 from "../../assets/images/avatar-1.png";
 import $ from "jquery";
+import { Menu, Dropdown, Modal } from 'antd';
+import { LogoutOutlined, UserOutlined, KeyOutlined } from '@ant-design/icons';
+import { Form, Input, Button } from "antd";
+import { Link } from 'react-router-dom';
 
 function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
@@ -12,6 +16,7 @@ function getWindowDimensions() {
 };
 
 export default function TopNavbar() {
+    const [changepassModal, setChangepassModal] = useState(false);
     const toggleContent = () => {
         if ($( "#main-wrapper" ).hasClass( "yay-hide" )) {
             $( "#main-wrapper" ).removeClass( "yay-hide" );
@@ -22,6 +27,34 @@ export default function TopNavbar() {
         }
     }
 
+    const menu = (
+        <Menu>
+          <Menu.Item>
+            <a rel="noopener noreferrer" onClick={() => {setChangepassModal(true)}}>
+                <KeyOutlined /> Change Password
+            </a>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to="/update-profile">
+                <UserOutlined /> Update Profile
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
+            <LogoutOutlined /> Sign Out
+            </a>
+          </Menu.Item>
+        </Menu>
+    );
+
+    const onFinish = (values) => {
+        console.log('Success:', values);
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
     useEffect(() => {
         function handleResize() {
             let {width} = getWindowDimensions();
@@ -30,12 +63,6 @@ export default function TopNavbar() {
             } else {
                 $('#left-sidebar-cici-4565').removeClass('yay-overlay')
             }
-
-            // if (width <= 614) {
-            //     $('#left-sidebar-cici-4565').removeClass('yay-hide-to-small')
-            // } else {
-            //     $('#left-sidebar-cici-4565').addClass('yay-hide-to-small');
-            // }
         } 
         
         handleResize();
@@ -92,12 +119,13 @@ export default function TopNavbar() {
                                 href="javascript:;"><span className="btn btn-custom-round"><span data-feather="message-circle"
                                         className="rui-icon rui-icon-stroke-1_5"></span></span></a></li>
                         <li className="dropdown dropdown-hover dropdown-triangle dropdown-keep-open">
-                            <a
-                                className="dropdown-item rui-navbar-avatar mnr-6" href="#" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+                        <Dropdown overlay={menu} placement="bottomRight" arrow>
+                            <a className="dropdown-item rui-navbar-avatar mnr-6">
                                     <img src={avatar1} alt="" />
                             </a>
-                            <ul className="nav dropdown-menu">
+                        </Dropdown>
+                            
+                            {/* <ul className="nav dropdown-menu">
                                 <li><a href="profile.html" className="nav-link"><span data-feather="plus-circle"
                                             className="rui-icon rui-icon-stroke-1_5"></span> <span>Create new Post</span> <span
                                             className="rui-nav-circle"></span></a></li>
@@ -110,7 +138,7 @@ export default function TopNavbar() {
                                 <li><a href="profile.html" className="nav-link"><span data-feather="log-out"
                                             className="rui-icon rui-icon-stroke-1_5"></span> <span>Exit</span> <span
                                             className="rui-nav-circle"></span></a></li>
-                            </ul>
+                            </ul> */}
                         </li>
                     </ul>
                 </div>
@@ -126,11 +154,12 @@ export default function TopNavbar() {
                     <img src={logo} alt="" width="45"/>
                 </a>
                 <div className="dropdown dropdown-triangle">
-                    <a className="dropdown-item rui-navbar-avatar" href="#"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <Dropdown overlay={menu} trigger={['click']}>
+                    <a className="dropdown-item rui-navbar-avatar" >
                             <img src={avatar1} alt=""/>
                     </a>
-                    <ul className="dropdown-menu nav">
+                </Dropdown>,
+                    {/* <ul className="dropdown-menu nav">
                         <li><a href="profile.html" className="nav-link"><span data-feather="plus-circle"
                                     className="rui-icon rui-icon-stroke-1_5"></span> <span>Create new Post</span> <span
                                     className="rui-nav-circle"></span></a></li>
@@ -143,7 +172,7 @@ export default function TopNavbar() {
                         <li><a href="profile.html" className="nav-link"><span data-feather="log-out"
                                     className="rui-icon rui-icon-stroke-1_5"></span> <span>Exit</span> <span
                                     className="rui-nav-circle"></span></a></li>
-                    </ul>
+                    </ul> */}
                 </div><button className="navbar-toggler rui-navbar-toggle" type="button" data-toggle="collapse"
                     data-target="#navbarMobile" aria-controls="navbarMobile" aria-expanded="false"
                     aria-label="Toggle navigation"><span></span></button>
@@ -175,6 +204,44 @@ export default function TopNavbar() {
                 </div>
             </div>
         </div>
+        
+        <Modal title="Basic Modal"
+            visible={changepassModal}
+            width="50vw"
+            onCancel={() => {setChangepassModal(false);}}
+            footer={false}
+        >
+            <Form style={{width: "100%", marginTop: "2rem"}}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                >
+                <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                    <Input.Password size="large" placeholder="Old Password"/>
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                    <Input.Password size="large" placeholder="Password"/>
+                </Form.Item>
+
+                <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                    <Input.Password size="large" placeholder="Confirm Password" />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
+                        Save
+                    </Button>
+                </Form.Item>
+            </Form>
+        </Modal>
         </Fragment>
     )
 }
