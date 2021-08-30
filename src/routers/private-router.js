@@ -3,6 +3,7 @@ import OrderDraft from "../pages/private/Order-Draft";
 import CreateOrder from "../pages/private/Order/index";
 import ProductOrder from "../pages/private/Product-Order";
 import ProductStock from "../pages/private/Product-Stock";
+import ProductDetails from "../pages/private/Produect-Details";
 import UpdateProfile from "../pages/private/Profile/UpdateProfile";
 
 const PrivateRoutes = [
@@ -45,6 +46,13 @@ const PrivateRoutes = [
         path: "order-draft",
         name: "Order Draft",
         component: OrderDraft,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "product-details/:productId",
+        name: "Product Details",
+        component: ProductDetails,
         layout: "/",
         exact: true
     },
