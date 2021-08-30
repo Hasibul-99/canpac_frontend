@@ -11,16 +11,16 @@ export default function Dashboard() {
             <div classNameName="rui-page-title">
                 <div classNameName="container-fluid">
                     <nav aria-label="breadcrumb">
-                        <ol classNameName="breadcrumb">
+                        <ol classNameName="breadcrumb" style={{"list-style-type": "none"}}>
                             <li classNameName="breadcrumb-item"> <strong>Name:</strong> Mr Brain Sung</li>
                         </ol>
-                        <ol classNameName="breadcrumb">
+                        <ol classNameName="breadcrumb" style={{"list-style-type": "none"}}>
                             <li classNameName="breadcrumb-item"> <strong>Company:</strong> King Show Vietnam Co., Ltd. </li>
                         </ol>
-                        <ol classNameName="breadcrumb">
+                        <ol classNameName="breadcrumb" style={{"list-style-type": "none"}}>
                             <li classNameName="breadcrumb-item"> <strong>Phone:</strong> 0272.3871807 </li>
                         </ol>
-                        <ol classNameName="breadcrumb">
+                        <ol classNameName="breadcrumb" style={{"list-style-type": "none"}}>
                             <li classNameName="breadcrumb-item"> <strong>Email:</strong> brain@kingshow.co </li>
                         </ol>
                     </nav>

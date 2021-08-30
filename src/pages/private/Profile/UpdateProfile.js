@@ -26,19 +26,19 @@ export default function UpdateProfile() {
 
     return (
         <Fragment>
-            <div class="rui-page-title">
-                <div class="container-fluid">
+            <div className="rui-page-title">
+                <div className="container-fluid">
                     <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><Link to="/">Home</Link></li>
+                        <ol className="breadcrumb">
+                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                         </ol>
                     </nav>
                     <h1>Update Profile</h1>
                 </div>
             </div>
-            <div class="row xs-gap">
-                <div class="col-sm">
-                    <div class="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4">
+            <div className="row xs-gap">
+                <div className="col-sm">
+                    <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4">
                         <Form style={{width: "100%", marginTop: "2rem"}}
                             layout={'vertical'}
                             onFinish={onFinish}
@@ -84,10 +84,10 @@ export default function UpdateProfile() {
                         </Form>
                     </div>
                 </div>
-                <div class="col-sm">
-                    <div class="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4">
+                <div className="col-sm">
+                    <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4">
                         <div className="rui-profile">
-                            <div class="rui-profile-img m-auto">
+                            <div className="rui-profile-img m-auto">
                                 <img src={demo} alt=""/>
                             </div>
                         </div>

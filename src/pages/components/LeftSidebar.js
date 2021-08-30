@@ -18,6 +18,12 @@ import { Link } from 'react-router-dom';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 // yay-overlay
 export default function LeftSidebar() {
+    const className = (location, path) => {
+        let className = "";
+        if (location === path) className = "yay-item-active";
+        return className;
+    };
+
     return (
             <div id="left-sidebar-cici-4565" className="yaybar yay-hide-to-small yay-shrink yay-gestures rui-yaybar">
                 <OverlayScrollbarsComponent options={{ scrollbars: { autoHide: 'scroll' } }}
@@ -26,7 +32,7 @@ export default function LeftSidebar() {
                     <div className="yaybar-wrap">
                         <ul>
                             <li className="yay-label">Get Started</li>
-                            <li className="yay-item-active">
+                            <li className={className(window.location.pathname, "/")}>
                                 <Link to="/">
                                     <span className="yay-icon">
                                         <HomeOutlined/>
@@ -35,7 +41,7 @@ export default function LeftSidebar() {
                                     <span className="rui-yaybar-circle"></span>
                                 </Link>
                             </li>
-                            <li>
+                            <li className={className(window.location.pathname, "/create-order")}>
                                 <Link to="/create-order">
                                     <span className="yay-icon">
                                         <ShoppingCartOutlined />
