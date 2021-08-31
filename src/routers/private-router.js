@@ -3,11 +3,14 @@ import LowStock from "../pages/private/Low-stock";
 import Merchents from "../pages/private/Merchents";
 import OrderDraft from "../pages/private/Order-Draft";
 import CreateOrder from "../pages/private/Order/index";
+import Permissions from "../pages/private/Permissions";
 import ProductDelivery from "../pages/private/Product-Delivery";
 import ProductOrder from "../pages/private/Product-Order";
 import ProductStock from "../pages/private/Product-Stock";
 import ProductDetails from "../pages/private/Produect-Details";
 import UpdateProfile from "../pages/private/Profile/UpdateProfile";
+import Roles from "../pages/private/Roles";
+import CreateRole from "../pages/private/Roles/Create-Role";
 import Users from "../pages/private/users";
 import WeeklyReport from "../pages/private/WeeklyReport";
 
@@ -93,6 +96,27 @@ const PrivateRoutes = [
         path: "merchents",
         name: "Merchents",
         component: Merchents,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "permissionts",
+        name: "Permissionts",
+        component: Permissions,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "roles",
+        name: "Roles",
+        component: Roles,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "create-role",
+        name: "Create Role",
+        component: CreateRole,
         layout: "/",
         exact: true
     },

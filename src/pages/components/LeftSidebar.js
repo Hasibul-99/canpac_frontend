@@ -134,8 +134,8 @@ export default function LeftSidebar() {
                             </li>
 
                             <li className="yay-label">Authentications</li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/roles")}>
+                                <Link to="/roles">
                                     <span className="yay-icon">
                                         <GroupOutlined />
                                     </span>
@@ -143,8 +143,8 @@ export default function LeftSidebar() {
                                     <span className="rui-yaybar-circle"></span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/permissionts")}>
+                                <Link to="/permissionts">
                                     <span className="yay-icon">
                                         <ForkOutlined />
                                     </span>
