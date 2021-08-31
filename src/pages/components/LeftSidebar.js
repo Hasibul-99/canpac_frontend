@@ -152,8 +152,8 @@ export default function LeftSidebar() {
                                     <span className="rui-yaybar-circle"></span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/users")}>
+                                <Link to="/users">
                                     <span className="yay-icon">
                                         <UsergroupAddOutlined />
                                     </span>
@@ -161,8 +161,8 @@ export default function LeftSidebar() {
                                     <span className="rui-yaybar-circle"></span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/merchents")}>
+                                <Link to="/merchents">
                                     <span className="yay-icon">
                                         <UserSwitchOutlined />
                                     </span>

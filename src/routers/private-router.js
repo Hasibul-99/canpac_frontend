@@ -1,5 +1,6 @@
 import Dashboard from "../pages/private/Dashboard/index";
 import LowStock from "../pages/private/Low-stock";
+import Merchents from "../pages/private/Merchents";
 import OrderDraft from "../pages/private/Order-Draft";
 import CreateOrder from "../pages/private/Order/index";
 import ProductDelivery from "../pages/private/Product-Delivery";
@@ -7,6 +8,7 @@ import ProductOrder from "../pages/private/Product-Order";
 import ProductStock from "../pages/private/Product-Stock";
 import ProductDetails from "../pages/private/Produect-Details";
 import UpdateProfile from "../pages/private/Profile/UpdateProfile";
+import Users from "../pages/private/users";
 import WeeklyReport from "../pages/private/WeeklyReport";
 
 const PrivateRoutes = [
@@ -77,6 +79,20 @@ const PrivateRoutes = [
         path: "weekly-report",
         name: "Weekly Report",
         component: WeeklyReport,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "users",
+        name: "Users",
+        component: Users,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "merchents",
+        name: "Merchents",
+        component: Merchents,
         layout: "/",
         exact: true
     },
