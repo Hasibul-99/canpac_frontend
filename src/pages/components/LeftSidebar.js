@@ -78,8 +78,8 @@ export default function LeftSidebar() {
                                     <span className="rui-yaybar-circle"></span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/low-stock")}>
+                                <Link to="/low-stock">
                                     <span className="yay-icon">
                                         <LineChartOutlined />
                                     </span>
@@ -87,8 +87,8 @@ export default function LeftSidebar() {
                                     <span className="rui-yaybar-circle"></span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/product-delivery")}>
+                                <Link to="/product-delivery">
                                     <span className="yay-icon">
                                         <FileDoneOutlined />
                                     </span>
@@ -123,8 +123,8 @@ export default function LeftSidebar() {
                                     <li><a href="element-tabs.html">Tabs</a></li>
                                 </ul>
                             </li> */}
-                            <li>
-                                <Link to="">
+                            <li className={className(window.location.pathname, "/weekly-report")}>
+                                <Link to="/weekly-report">
                                     <span className="yay-icon">
                                         <DiffOutlined />
                                     </span>
