@@ -66,11 +66,6 @@ export default function Permissions() {
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                        </ol>
-                    </nav>
                     <h1>Product Stock</h1>
                 </div>
             </div>
