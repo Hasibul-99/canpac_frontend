@@ -12,7 +12,7 @@ export const USER_UPDATE = "user/update";
 export const MERCHENT_LIST = "merchant/list";
 export const MERCHENT_SELT_SIGNUP = "merchant/self-signup";
 export const MERCHENT_CREATE = "merchant/create";
-export const MERCHENT_CREATE = "merchant/update";
+export const MERCHENT_UPDATE = "merchant/update";
 
 // PERMISSION 
 export const PERMISSION_LIST = "permission/list";

@@ -1,17 +1,20 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import { Form, Input, Button } from "antd";
-
-
 import "./style.scss";
+import {LOGIN} from "../../../scripts/api";
+import {postData} from "../../../scripts/api-service";
+import Cookies from "js-cookie";
 
 export default function SignIn() {
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const onFinish = async (values) => {
+        let res = await postData(LOGIN, values, 'no_token');
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        console.log("res", res);
+        if (res) {
+            Cookies.set("expressToken", res.data.data);
+            window.location = "/";
+        }
     };
 
     return (
@@ -28,20 +31,25 @@ export default function SignIn() {
 
                         <Form style={{width: "100%", marginTop: "2rem"}}
                             onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
                             >
                             <Form.Item
-                                name="username"
-                                rules={[{ required: true, message: 'Please input your username!' }]}
+                                name="email"
+                                rules={[
+                                    { required: true, message: 'Please input your email addresss!' },
+                                    {
+                                        pattern: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+                                        message: "Please enter a valid email address",
+                                    }
+                                ]}
                             >
-                                <Input size="large" />
+                                <Input size="large" placeholder="Email address" />
                             </Form.Item>
 
                             <Form.Item
                                 name="password"
                                 rules={[{ required: true, message: 'Please input your password!' }]}
                             >
-                                <Input.Password size="large"/>
+                                <Input.Password size="large" placeholder="Password"/>
                             </Form.Item>
 
                             <div className="row">

@@ -1,10 +1,16 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import {checkRes, alertPop} from "./helper"
 
 const base_url = process.env.REACT_APP_BASE;
 const token = Cookies.get("expressToken") || "";
 
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.post['Accept'] = 'application/json';
+
+
+const alert = (messages) => {
+  alertPop("error", messages ? messages : "Something went wrong");
+};
 
 /* query ---> api url to query with
    no_token ---> acts as a flag for no need to use token */
@@ -41,7 +47,6 @@ export const getData = async (query, no_token) => {
      no_token ---> acts as a flag for no need to use token */
 export const postData = async (query, data, no_token) => {
   try {
-    console.log(`${base_url}${query}`);
     let res = await axios({
       method: "post",
       url: `${base_url}${query}`,
@@ -52,23 +57,19 @@ export const postData = async (query, data, no_token) => {
           },
       data: data,
     });
-
-    return res;
-    // if (checkRes(res?.data.status)) {
-    //     // setUserProfile();
-    //     return res;
-    // } else {
-    //     toast.error(msg_undefined);
-    // }
+    if (checkRes(res?.data.code)) {
+      return res;
+    } else {
+      alert(res?.data?.message);
+    }
   } catch (error) {
-    console.log("error", error);
-    // checkRes(error.response.status);
-    // error.response && error.response.data && error.response.data.messages
-    //   ? error.response.data.messages.map((err) => {
-    //       // alertPop(error_status, err);
-    //       console.log("err", err);
-    //     })
-    //   : console.log("error", error); //errorHandle(error);
+    checkRes(error.response.status);
+    Array.isArray(error?.response?.data?.messages)
+      ? error.response.data.messages.map((err) => {
+          alertPop("error", err);
+          console.log("err", err);
+        })
+      : console.log("error", error); //errorHandle(error);
     return false;
   }
 };
