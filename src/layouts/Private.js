@@ -32,7 +32,9 @@ class Private extends Component {
     };
 
     processNavbar = () => {
-      $('#left-sidebar-cici-4565').removeClass('yay-overlay')
+      $('#left-sidebar-cici-4565').removeClass('yay-overlay');
+      $('#left-sidebar-cici-4565').css("opacity", 0);
+      $('#left-sidebar-cici-4565').css("z-index", 1);
     }
 
     render() {

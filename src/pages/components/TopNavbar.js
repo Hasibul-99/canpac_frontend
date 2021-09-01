@@ -20,10 +20,20 @@ export default function TopNavbar() {
     const toggleContent = () => {
         if ($( "#main-wrapper" ).hasClass( "yay-hide" )) {
             $( "#main-wrapper" ).removeClass( "yay-hide" );
-            $('#left-sidebar-cici-4565').css("z-index", 1004);
         } else {
             $( "#main-wrapper" ).addClass( "yay-hide" );
+        }
+    }
+
+    const mobileViewToggle = () => {
+        if ($( "#main-wrapper" ).hasClass( "yay-hide" )) {
+            $('#left-sidebar-cici-4565').css("z-index", 1004);
+            $('#left-sidebar-cici-4565').css("opacity", 0);
+            $( "#main-wrapper" ).removeClass( "yay-overlay" );
+        } else {
             $('#left-sidebar-cici-4565').css("z-index", 10000);
+            $('#left-sidebar-cici-4565').css("opacity", 1);
+            $( "#left-sidebar-cici-4565" ).addClass( "yay-overlay" );
         }
     }
 
@@ -147,7 +157,7 @@ export default function TopNavbar() {
 
         <div className="rui-navbar rui-navbar-mobile">
             <div className="rui-navbar-head">
-                <button onClick={toggleContent} className="rui-yaybar-toggle rui-yaybar-toggle-inverse yay-toggle"
+                <button onClick={() => {mobileViewToggle()}} className="rui-yaybar-toggle rui-yaybar-toggle-inverse yay-toggle"
                     type="button" aria-label="Toggle side navigation"><span></span>
                 </button>
                 <a className="rui-navbar-logo mr-auto" href="dashboard.html">
