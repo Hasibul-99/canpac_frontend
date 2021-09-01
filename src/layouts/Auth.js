@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 
 import routes from "../routers/auth-router";
 
@@ -12,7 +12,9 @@ class Auth extends Component {
     }
 
     componentWillMount() {
-      
+      if (Cookies.get("canpacToken")) {
+        window.location = "/";
+      }
     }
 
     getRoutes = routes => {

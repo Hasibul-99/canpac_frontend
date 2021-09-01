@@ -8,6 +8,7 @@ import {
 
 import PrivateLayout from "../layouts/Private";
 import AuthLayout from "../layouts/Auth";
+import authContextProvider from "../context/AuthContext";
 
 
 class App extends Component {
@@ -25,11 +26,13 @@ class App extends Component {
     render() {
         return (
             <>
-                <Switch>
-                    <Route path="/auth" render={props => <AuthLayout {...props} />}></Route> 
-                    <Route path="/" render={props => <PrivateLayout {...props} />}></Route>
-                    <Redirect path="*" to="/" /> 
-                </Switch>
+                <authContextProvider>
+                    <Switch>
+                        <Route path="/auth" render={props => <AuthLayout {...props} />}></Route> 
+                        <Route path="/" render={props => <PrivateLayout {...props} />}></Route>
+                        <Redirect path="*" to="/" /> 
+                    </Switch>
+                </authContextProvider>
             </>
         )
     }

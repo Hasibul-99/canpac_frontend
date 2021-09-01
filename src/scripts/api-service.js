@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import {checkRes, alertPop} from "./helper"
 
 const base_url = process.env.REACT_APP_BASE;
-const token = Cookies.get("expressToken") || "";
+const token = Cookies.get("canpacToken") || "";
 
 axios.defaults.headers.post['Accept'] = 'application/json';
 
@@ -50,10 +50,8 @@ export const postData = async (query, data, no_token) => {
     let res = await axios({
       method: "post",
       url: `${base_url}${query}`,
-      headers: no_token
-        ? {}
-        : {
-            'x-auth-token': `${token}`,
+      headers: no_token ? {} : {
+            'Authorization': `Bearer ${token}`,
           },
       data: data,
     });

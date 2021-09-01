@@ -6,6 +6,10 @@ import { Menu, Dropdown, Modal } from 'antd';
 import { LogoutOutlined, UserOutlined, KeyOutlined } from '@ant-design/icons';
 import { Form, Input, Button } from "antd";
 import { Link } from 'react-router-dom';
+import { CHANGE_PASSWORD } from "../../scripts/api";
+import { postData } from "../../scripts/api-service";
+import { alertPop } from "../../scripts/helper";
+import Cookies from "js-cookie";
 
 function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
@@ -57,12 +61,20 @@ export default function TopNavbar() {
         </Menu>
     );
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const onFinish = async (values) => {
+        if (values.password === values.password_confirmation) {
+            let res = await postData(CHANGE_PASSWORD, values);
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+            if (res) {
+                alertPop('success', 'Password changed successfully');
+                setTimeout(() => {
+                    Cookies.remove("canpacToken");
+                    window.location = "/auth/login";
+                }, 2000);
+            }
+        } else {
+            alertPop('error', 'Password and confirmation password not match!');
+        }
     };
 
     useEffect(() => {
@@ -215,7 +227,7 @@ export default function TopNavbar() {
             </div>
         </div>
         
-        <Modal title="Basic Modal"
+        <Modal title="Change Password"
             visible={changepassModal}
             width="50vw"
             onCancel={() => {setChangepassModal(false);}}
@@ -223,10 +235,9 @@ export default function TopNavbar() {
         >
             <Form style={{width: "100%", marginTop: "2rem"}}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
                 >
                 <Form.Item
-                    name="password"
+                    name="old_password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                 >
                     <Input.Password size="large" placeholder="Old Password"/>
@@ -239,7 +250,7 @@ export default function TopNavbar() {
                 </Form.Item>
 
                 <Form.Item
-                    name="password"
+                    name="password_confirmation"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                 >
                     <Input.Password size="large" placeholder="Confirm Password" />

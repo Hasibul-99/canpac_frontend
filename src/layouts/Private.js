@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import routes from "../routers/private-router";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import LeftSidebar from "../pages/components/LeftSidebar";
 import TopNavbar from "../pages/components/TopNavbar";
 import $ from "jquery";
@@ -13,7 +13,9 @@ class Private extends Component {
     }
 
     componentWillMount() {
-
+      if (!Cookies.get("canpacToken")) {
+        window.location = "/auth/login";
+      }
     }
 
     getRoutes = routes => {

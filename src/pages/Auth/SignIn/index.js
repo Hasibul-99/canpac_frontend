@@ -7,12 +7,11 @@ import {postData} from "../../../scripts/api-service";
 import Cookies from "js-cookie";
 
 export default function SignIn() {
+    
     const onFinish = async (values) => {
         let res = await postData(LOGIN, values, 'no_token');
-
-        console.log("res", res);
         if (res) {
-            Cookies.set("expressToken", res.data.data);
+            Cookies.set("canpacToken", res.data.data.access_token);
             window.location = "/";
         }
     };
@@ -63,7 +62,7 @@ export default function SignIn() {
 
                             <Form.Item>
                                 <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
-                                Submit
+                                    Login
                                 </Button>
                             </Form.Item>
                         </Form>
