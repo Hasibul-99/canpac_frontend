@@ -1,9 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
-import { ROLE_LIST } from "../../../scripts/api";
+import {Table, Space, Select, Modal, Button, Input, DatePicker  } from 'antd';
+import { ROLE_LIST, ROLE_DELETE } from "../../../scripts/api";
 import {postData} from "../../../scripts/api-service";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import {alertPop} from "../../../scripts/helper";
 
+const { confirm } = Modal;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -15,7 +18,7 @@ for (let i = 10; i < 36; i++) {
 export default function Roles() {
     const [roles, setRoles] = useState([]);
 
-      const columns = [
+    const columns = [
         {
           title: 'Name',
           dataIndex: 'name',
@@ -39,11 +42,40 @@ export default function Roles() {
             title: 'Action',
             render: (text, record) => (
                 <Space size="middle">
-                  <a>Update</a>
+                    <Button type="link" block>
+                        <Link to={'update-role/'+ record.id}>Update</Link>
+                    </Button>
+                    <Button type="link" danger onClick={() => showDeleteConfirm(record.id)} >
+                        Delete
+                    </Button>
                 </Space>
             )
         },
     ];
+
+    const showDeleteConfirm = (roleId) => {
+        confirm({
+            title: 'Are you sure delete this Role?',
+            icon: <ExclamationCircleOutlined />,
+            content: 'You will not get this Role back.',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+              let res = postData(ROLE_DELETE, {id: roleId});
+
+              if (res) {
+                alertPop("success", "Role Deleted Successfully");
+                setTimeout(() => {
+                    getRoles();
+                }, 500);
+              }
+            },
+            onCancel() {
+              console.log('Cancel');
+            },
+        });
+    }
 
     const getRoles = async () => {
         let res = await postData(ROLE_LIST, {});

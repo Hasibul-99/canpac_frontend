@@ -1,25 +1,29 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {Table, Space, Select, Form, Button, Input, Checkbox , Row, Col } from 'antd';
 import { postData } from '../../../scripts/api-service';
-import { PERMISSION_LIST, ROLE_CREATE } from '../../../scripts/api';
+import { PERMISSION_LIST, ROLE_UPDATE, ROLE_LIST } from '../../../scripts/api';
 import { alertPop } from '../../../scripts/helper';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-export default function CreateRole() {
+export default function UpdateRole() {
+    const formRef = React.createRef();
     const history = useHistory();
+    let { roleId } = useParams();
     const [permissions, setPermissions] = useState([]);
+    const [role, setRole] = useState();
 
     const onFinish = async (values) => {
         let {name, permissions} = values;
 
         let data = {
+            id: roleId,
             name: name,
             permissions: JSON.stringify(permissions)
         }
 
-        let res = await postData(ROLE_CREATE, data);
+        let res = await postData(ROLE_UPDATE, data);
         if (res) {
-            alertPop('success', "Role Created Successfully!");
+            alertPop('success', "Role Updated Successfully!");
             history.push('/roles');
         }
     };
@@ -29,20 +33,43 @@ export default function CreateRole() {
         if (res) setPermissions(res.data.data);
     }
 
+    const getRoles = async () => {
+        let res = await postData(ROLE_LIST, {});
+
+        if (res) {
+            let masterData = res?.data?.data || [];
+            let role = masterData.find(e => e.id == roleId);
+            setRole(role);
+        }
+    }
+
+    const onFill = () => {
+        formRef.current.setFieldsValue({
+            name: role?.name,
+            permissions: role.permissions.map(e => e.id),
+        });
+    }
+
     useEffect(() => {
-        getPermissions()
+        getPermissions();
+        getRoles();
     }, [])
+
+    useEffect(() => {
+        if (role) onFill()
+    }, [role])
 
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <h1>Create Role</h1>
+                    <h1>Update Role</h1>
                 </div>
             </div>
             <div className="rui-page-content">
                 <div className="container-fluid">
                     <Form style={{width: "100%"}}
+                        ref={formRef}
                         layout={'vertical'}
                         onFinish={onFinish}
                         >
@@ -61,7 +88,7 @@ export default function CreateRole() {
                                 <Form.Item
                                     label="Permissions"
                                     name="permissions"
-                                    rules={[{ required: true, message: "Required*" }]}
+                                    rules={[{ required: false }]}
                                 >
                                     <Checkbox.Group style={{ width: '100%', height: "350px", "overflowY": "scroll" }}>
                                         <Row>
@@ -81,7 +108,7 @@ export default function CreateRole() {
                                 <Form.Item>
                                     <Button className="btn-brand btn-block float-right" size="large" 
                                         type="primary" htmlType="submit">
-                                        Create Role
+                                        Update Role
                                     </Button>
                                 </Form.Item>
                             </div>

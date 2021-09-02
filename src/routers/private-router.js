@@ -13,6 +13,7 @@ import Roles from "../pages/private/Roles";
 import CreateRole from "../pages/private/Roles/Create-Role";
 import Users from "../pages/private/users";
 import WeeklyReport from "../pages/private/Report/WeeklyReport";
+import UpdateRole from "../pages/private/Roles/Update-role";
 
 const PrivateRoutes = [
     {
@@ -117,6 +118,13 @@ const PrivateRoutes = [
         path: "create-role",
         name: "Create Role",
         component: CreateRole,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "update-role/:roleId",
+        name: "Update Role",
+        component: UpdateRole,
         layout: "/",
         exact: true
     },

@@ -68,7 +68,7 @@ export default function UpdateProfile() {
     }, []);
 
     useEffect(() => {
-        onFill()
+        if (user) onFill()
     }, [user])
 
     return (
