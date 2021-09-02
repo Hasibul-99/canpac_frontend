@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import {Table, Space, Select, Form, Button, Input, DatePicker, Avatar, Image  } from 'antd';
+import {USER_LIST} from "../../../scripts/api";
+import {postData} from "../../../scripts/api-service";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -11,60 +13,45 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function Users() {
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
+    let [users, setUsers] = useState([]);
       
       const columns = [
         {
-          title: 'Order NO',
-          dataIndex: 'name',
-          key: 'name',
+            title: 'Name',
+            render: (text, record) => (
+                <div>
+                    {record?.thumb_image_url && <Avatar src={record?.thumb_image_url} />}
+                    <span className="ml-10">{record.name}</span>
+                </div>
+              )
         },
         {
-          title: 'Customer',
-          dataIndex: 'age',
-          key: 'age',
+          title: 'Email',
+          dataIndex: 'email',
+          key: 'email',
         },
         {
-          title: 'Product name',
-          dataIndex: 'key',
-          key: 'address',
+          title: 'Phone',
+          dataIndex: 'phone',
+          key: 'phone',
         },
         {
-            title: 'Date',
-            dataIndex: 'age',
-            key: 'address',
-        },
-        {
-            title: 'Order Quantity (can)',
-            dataIndex: 'age',
-            key: 'address',
+            title: 'Company Name',
+            dataIndex: 'company_name',
+            key: 'id',
         },
         {
             title: 'Status',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'status_title',
+            key: 'id',
         },
         {
             title: 'Approve',
             render: (text, record) => (
                 <Space size="middle">
-                  <a>Approve</a>
-                  <a>Cancel</a>
+                  <Link to={"/update-user/" + record.id}>Update</Link>
                 </Space>
-              )
+            )
         },
     ];
 
@@ -72,9 +59,15 @@ export default function Users() {
         console.log('Success:', values);
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+    const getUsersList = async (query = {}) => {
+        let res = await postData(USER_LIST, query);
+
+        if (res) setUsers(res.data.data);
     };
+
+    useEffect(() => {
+        getUsersList()
+    }, [])
 
     return (
         <Fragment>
@@ -91,20 +84,46 @@ export default function Users() {
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="">
+                    <div className="d-none">
                         <h3>Filter</h3>
                         <Form style={{width: "100%", marginTop: "2rem"}}
                             layout={'vertical'}
                             onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
                             >
-                            <div className="row xs-gap mt-20 px-20">
+                            <div className="row xs-gap mt-20">
                                 <div className="col  col-sm-12 col-lg-3 mb-10">
                                     <Form.Item
-                                        name="username"
+                                        name="name"
                                         rules={[{ required: false }]}
                                     >
-                                        <Input size="large" placeholder="Type Order no" />   
+                                        <Input size="large" placeholder="Seatch by Name" />   
+                                    </Form.Item>
+                                </div>
+
+                                <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <Form.Item
+                                        name="email"
+                                        rules={[{ required: false }]}
+                                    >
+                                        <Input size="large" placeholder="Seatch by Email" />   
+                                    </Form.Item>
+                                </div>
+
+                                <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <Form.Item
+                                        name="phone"
+                                        rules={[{ required: false }]}
+                                    >
+                                        <Input size="large" placeholder="Seatch by Phone" />   
+                                    </Form.Item>
+                                </div>
+
+                                <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <Form.Item
+                                        name="Company Name"
+                                        rules={[{ required: false }]}
+                                    >
+                                        <Input size="large" placeholder="Seatch by Company Name" />   
                                     </Form.Item>
                                 </div>
 
@@ -115,63 +134,18 @@ export default function Users() {
                                     >
                                         <Select
                                             size="large"
-                                            mode="multiple"
                                             allowClear
                                             style={{ width: '100%' }}
                                             placeholder="Select Status"
                                             >
-                                            {children}
+                                            <Option key={1} value="1">Active</Option>
+                                            <Option key={0} value="0">Inactive</Option>
                                         </Select>
-                                            
                                     </Form.Item>
                                 </div>
 
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Select
-                                            size="large"
-                                            mode="multiple"
-                                            allowClear
-                                            style={{ width: '100%' }}
-                                            placeholder="Select Customers"
-                                            >
-                                            {children}
-                                        </Select>
-                                            
-                                    </Form.Item>
-                                </div>
+                                <div className="col  col-sm-12 col-lg-3 mb-10"></div>
 
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Select
-                                            size="large"
-                                            mode="multiple"
-                                            allowClear
-                                            style={{ width: '100%' }}
-                                            placeholder="Select Models"
-                                            >
-                                            {children}
-                                        </Select>
-                                            
-                                    </Form.Item>
-                                </div>
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <RangePicker size="large" style={{width: "100%"}} />                                            
-                                    </Form.Item>
-                                </div>
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    
-                                </div>
                                 <div className="col col-sm-12 col-lg-3 mb-10">
                                     <Button className="btn-light btn-block" size="large" 
                                             type="primary" htmlType="submit" >
@@ -190,7 +164,7 @@ export default function Users() {
                             </div>
                         </Form>
                     </div>
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={users} columns={columns} />
                 </div>
             </div>
         </Fragment>

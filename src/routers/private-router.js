@@ -12,7 +12,7 @@ import UpdateProfile from "../pages/private/Profile/UpdateProfile";
 import Roles from "../pages/private/Roles";
 import CreateRole from "../pages/private/Roles/Create-Role";
 import Users from "../pages/private/users";
-import WeeklyReport from "../pages/private/WeeklyReport";
+import WeeklyReport from "../pages/private/Report/WeeklyReport";
 
 const PrivateRoutes = [
     {

@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {Fragment, useContext, useEffect, useState} from 'react'
 import logo from "../../assets/images/logo.svg";
 import avatar1 from "../../assets/images/avatar-1.png";
 import $ from "jquery";
@@ -10,6 +10,7 @@ import { CHANGE_PASSWORD } from "../../scripts/api";
 import { postData } from "../../scripts/api-service";
 import { alertPop } from "../../scripts/helper";
 import Cookies from "js-cookie";
+import { authContext } from "../../context/AuthContext";
 
 function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
@@ -20,6 +21,8 @@ function getWindowDimensions() {
 };
 
 export default function TopNavbar() {
+    const {user, getUserInfo, setUserInfo} = useContext(authContext);
+
     const [changepassModal, setChangepassModal] = useState(false);
     const toggleContent = () => {
         if ($( "#main-wrapper" ).hasClass( "yay-hide" )) {
@@ -60,6 +63,10 @@ export default function TopNavbar() {
           </Menu.Item>
         </Menu>
     );
+
+    useEffect(() => {
+        setUserInfo();
+    }, [])
 
     const onFinish = async (values) => {
         if (values.password === values.password_confirmation) {
@@ -143,7 +150,7 @@ export default function TopNavbar() {
                         <li className="dropdown dropdown-hover dropdown-triangle dropdown-keep-open">
                         <Dropdown overlay={menu} placement="bottomRight" arrow>
                             <a className="dropdown-item rui-navbar-avatar mnr-6">
-                                    <img src={avatar1} alt="" />
+                                    <img src={user?.thumb_image_url || avatar1} alt="" />
                             </a>
                         </Dropdown>
                             
@@ -178,7 +185,7 @@ export default function TopNavbar() {
                 <div className="dropdown dropdown-triangle">
                 <Dropdown overlay={menu} trigger={['click']}>
                     <a className="dropdown-item rui-navbar-avatar" >
-                            <img src={avatar1} alt=""/>
+                            <img src={user?.thumb_image_url || avatar1} alt=""/>
                     </a>
                 </Dropdown>,
                     {/* <ul className="dropdown-menu nav">
@@ -204,7 +211,7 @@ export default function TopNavbar() {
                 <div className="rui-navbar-content">
                     <ul className="nav">
                         
-                        <li className="dropdown dropdown-keep-open"><a className="dropdown-item" href="#" data-toggle="dropdown"
+                        {/* <li className="dropdown dropdown-keep-open"><a className="dropdown-item" href="#" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"><span data-feather="flag"
                                     className="rui-icon rui-icon-stroke-1_5"></span> <span>Language</span> <span
                                     className="rui-dropdown-circle"></span></a>
@@ -221,7 +228,7 @@ export default function TopNavbar() {
                                 <li><a href="#" className="rui-navbar-language"><span className="rui-navbar-language-img"><img
                                                 src="assets/images/spain.svg" alt=""/></span>Spain</a></li>
                             </ul>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </div>
