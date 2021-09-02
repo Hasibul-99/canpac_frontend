@@ -1,6 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import { MERCHENT_LIST } from "../../../scripts/api";
+import { postData } from "../../../scripts/api-service";
+import { useEffect } from 'react';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -11,58 +14,34 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function Merchents() {
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
+    const [marchents, setMarchents ] = useState();
       
-      const columns = [
+    const columns = [
         {
-          title: 'Order NO',
+          title: 'Name',
           dataIndex: 'name',
           key: 'name',
         },
         {
-          title: 'Customer',
-          dataIndex: 'age',
-          key: 'age',
+          title: 'Email',
+          dataIndex: 'email',
+          key: 'email',
         },
         {
-          title: 'Product name',
-          dataIndex: 'key',
-          key: 'address',
-        },
-        {
-            title: 'Date',
-            dataIndex: 'age',
-            key: 'address',
-        },
-        {
-            title: 'Order Quantity (can)',
-            dataIndex: 'age',
-            key: 'address',
+          title: 'Phone',
+          dataIndex: 'phone',
+          key: 'phone',
         },
         {
             title: 'Status',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'status_title',
+            key: 'status_title',
         },
         {
             title: 'Approve',
             render: (text, record) => (
                 <Space size="middle">
-                  <a>Approve</a>
-                  <a>Cancel</a>
+                  <a>Update</a>
                 </Space>
               )
         },
@@ -75,6 +54,16 @@ export default function Merchents() {
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
+
+    const getMarchents = async () => {
+        let res = await postData(MERCHENT_LIST, {});
+
+        if (res) setMarchents(res.data.data);
+    }
+
+    useEffect(() => {
+        getMarchents()
+    }, []);
 
     return (
         <Fragment>
@@ -91,7 +80,7 @@ export default function Merchents() {
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="">
+                    <div className="d-none">
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 px-20">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
@@ -155,7 +144,7 @@ export default function Merchents() {
                             </div>
                         </div>
                     </div>
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={marchents} columns={columns} />
                 </div>
             </div>
         </Fragment>

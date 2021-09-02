@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import { ROLE_LIST } from "../../../scripts/api";
+import {postData} from "../../../scripts/api-service";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -11,21 +13,8 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function Roles() {
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
-      
+    const [roles, setRoles] = useState([]);
+
       const columns = [
         {
           title: 'Name',
@@ -33,14 +22,18 @@ export default function Roles() {
           key: 'name',
         },
         {
-          title: 'Allies',
-          dataIndex: 'age',
+          title: 'Gyard Name',
+          dataIndex: 'guard_name',
           key: 'age',
         },
         {
-            title: 'Status',
-            dataIndex: 'age',
-            key: 'age',
+            title: 'Permissions',
+            render: (text, record) => (
+                <Space size="middle">
+                  <a>{record?.permissions?.length}</a>
+                </Space>
+            ),
+            key: 'id',
         },
         {
             title: 'Action',
@@ -48,36 +41,33 @@ export default function Roles() {
                 <Space size="middle">
                   <a>Update</a>
                 </Space>
-              )
+            )
         },
     ];
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const getRoles = async () => {
+        let res = await postData(ROLE_LIST, {});
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+        if (res) {
+            setRoles(res.data.data);
+        }
+    }
 
-
+    useEffect(() => {
+        getRoles()
+    }, [])
 
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                        </ol>
-                    </nav>
-                    <h1>Product Stock</h1>
+                    <h1>Roles</h1>
                 </div>
             </div>
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="">
+                    <div className="d-none">
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 px-20">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
@@ -141,7 +131,7 @@ export default function Roles() {
                             </div>
                         </div>
                     </div>
-                    <hr/>
+                    {/* <hr/> */}
                     <div className="my-20">
                         <Link to="/create-role">
                             <Button className="btn-brand btn-block float-right mb-20" size="large" 
@@ -149,7 +139,7 @@ export default function Roles() {
                         </Link>
                     </div>
 
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={roles} columns={columns} />
                 </div>
             </div>
         </Fragment>

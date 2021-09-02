@@ -1,6 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Modal } from 'antd';
+import { PERMISSION_LIST, PERMISSION_CREATE, PERMISSION_UPDATE } from "../../../scripts/api";
+import { postData } from "../../../scripts/api-service";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -12,22 +14,8 @@ for (let i = 10; i < 36; i++) {
 
 export default function Permissions() {
     const [changepassModal, setChangepassModal] = useState(false);
+    const [permissions, setPermissions]=  useState();
 
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
-      
       const columns = [
         {
           title: 'Name',
@@ -35,14 +23,9 @@ export default function Permissions() {
           key: 'name',
         },
         {
-          title: 'Allies',
-          dataIndex: 'age',
-          key: 'age',
-        },
-        {
-            title: 'Status',
-            dataIndex: 'age',
-            key: 'age',
+          title: 'Guard Name',
+          dataIndex: 'guard_name',
+          key: 'guard_name',
         },
         {
             title: 'Action',
@@ -62,17 +45,27 @@ export default function Permissions() {
         console.log('Failed:', errorInfo);
     };
 
+    const getPermissions = async () => {
+        let res = await postData(PERMISSION_LIST, {});
+
+        if (res) setPermissions(res?.data?.data)
+    }
+
+    useEffect(() => {
+        getPermissions()
+    }, []) 
+
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <h1>Product Stock</h1>
+                    <h1>Permissions</h1>
                 </div>
             </div>
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="">
+                    <div className="d-none">
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 px-20">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
@@ -142,11 +135,11 @@ export default function Permissions() {
                             type="primary" style={{width: "300px"}}>Create Permissions</Button>
                     </div>
                     
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={permissions} columns={columns} />
                 </div>
             </div>
 
-            <Modal title="Basic Modal"
+            <Modal title="Create Permission"
                 visible={changepassModal}
                 width="50vw"
                 onCancel={() => {setChangepassModal(false);}}
@@ -161,19 +154,6 @@ export default function Permissions() {
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
                         <Input size="large" placeholder="Name"/>
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
-                    >
-                        <Input size="large" placeholder="Allies"/>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
-                    >
-                        <Input size="large" placeholder="Status" />
                     </Form.Item>
 
                     <Form.Item>
