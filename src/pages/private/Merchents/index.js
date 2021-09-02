@@ -93,102 +93,67 @@ export default function Merchents() {
                 <div className="container-fluid">
                     <div className="">
                         <h3>Filter</h3>
-                        <Form style={{width: "100%", marginTop: "2rem"}}
-                            layout={'vertical'}
-                            onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
-                            >
-                            <div className="row xs-gap mt-20 px-20">
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Input size="large" placeholder="Type Order no" />   
-                                    </Form.Item>
-                                </div>
-
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Select
-                                            size="large"
-                                            mode="multiple"
-                                            allowClear
-                                            style={{ width: '100%' }}
-                                            placeholder="Select Status"
-                                            >
-                                            {children}
-                                        </Select>
-                                            
-                                    </Form.Item>
-                                </div>
-
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Select
-                                            size="large"
-                                            mode="multiple"
-                                            allowClear
-                                            style={{ width: '100%' }}
-                                            placeholder="Select Customers"
-                                            >
-                                            {children}
-                                        </Select>
-                                            
-                                    </Form.Item>
-                                </div>
-
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Select
-                                            size="large"
-                                            mode="multiple"
-                                            allowClear
-                                            style={{ width: '100%' }}
-                                            placeholder="Select Models"
-                                            >
-                                            {children}
-                                        </Select>
-                                            
-                                    </Form.Item>
-                                </div>
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <RangePicker size="large" style={{width: "100%"}} />                                            
-                                    </Form.Item>
-                                </div>
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    
-                                </div>
-                                <div className="col col-sm-12 col-lg-3 mb-10">
-                                    <Button className="btn-light btn-block" size="large" 
-                                            type="primary" htmlType="submit" >
-                                            Reset Filter
-                                    </Button>
-                                </div>
-
-                                <div className="col col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item>
-                                        <Button className="btn-brand btn-block float-right" size="large" 
-                                            type="primary" htmlType="submit">
-                                            Filter
-                                        </Button>
-                                    </Form.Item>
-                                </div>
+                        <div className="row xs-gap mt-20 px-20">
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                <Input size="large" placeholder="Name" />
                             </div>
-                        </Form>
+
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                
+                                    <Select
+                                        size="large"
+                                        mode="multiple"
+                                        allowClear
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Status"
+                                        >
+                                        {children}
+                                    </Select>
+                                        
+                            </div>
+
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <Select
+                                        size="large"
+                                        mode="multiple"
+                                        allowClear
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Customers"
+                                        >
+                                        {children}
+                                    </Select>
+                            </div>
+
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <Select
+                                        size="large"
+                                        // mode="multiple"
+                                        allowClear
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Models"
+                                        >
+                                        {children}
+                                    </Select>
+                            </div>
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <RangePicker size="large" style={{width: "100%"}} />
+                            </div>
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                
+                            </div>
+                            <div className="col col-sm-12 col-lg-3 mb-10">
+                                <Button className="btn-light btn-block" size="large" 
+                                        type="primary">
+                                        Reset Filter
+                                </Button>
+                            </div>
+                            <div className="col col-sm-12 col-lg-3 mb-10">
+                                <Button className="btn-brand btn-block float-right" size="large" 
+                                    type="primary">
+                                    Filter
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                     <Table dataSource={dataSource} columns={columns} />
                 </div>

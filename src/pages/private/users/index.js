@@ -73,12 +73,7 @@ export default function Users() {
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                        </ol>
-                    </nav>
-                    <h1>Product Stock</h1>
+                    <h1>User List</h1>
                 </div>
             </div>
 
@@ -86,83 +81,67 @@ export default function Users() {
                 <div className="container-fluid">
                     <div className="d-none">
                         <h3>Filter</h3>
-                        <Form style={{width: "100%", marginTop: "2rem"}}
-                            layout={'vertical'}
-                            onFinish={onFinish}
-                            >
-                            <div className="row xs-gap mt-20">
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="name"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Input size="large" placeholder="Seatch by Name" />   
-                                    </Form.Item>
-                                </div>
-
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="email"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Input size="large" placeholder="Seatch by Email" />   
-                                    </Form.Item>
-                                </div>
-
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="phone"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Input size="large" placeholder="Seatch by Phone" />   
-                                    </Form.Item>
-                                </div>
-
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="Company Name"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Input size="large" placeholder="Seatch by Company Name" />   
-                                    </Form.Item>
-                                </div>
-
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item
-                                        name="username"
-                                        rules={[{ required: false }]}
-                                    >
-                                        <Select
-                                            size="large"
-                                            allowClear
-                                            style={{ width: '100%' }}
-                                            placeholder="Select Status"
-                                            >
-                                            <Option key={1} value="1">Active</Option>
-                                            <Option key={0} value="0">Inactive</Option>
-                                        </Select>
-                                    </Form.Item>
-                                </div>
-
-                                <div className="col  col-sm-12 col-lg-3 mb-10"></div>
-
-                                <div className="col col-sm-12 col-lg-3 mb-10">
-                                    <Button className="btn-light btn-block" size="large" 
-                                            type="primary" htmlType="submit" >
-                                            Reset Filter
-                                    </Button>
-                                </div>
-
-                                <div className="col col-sm-12 col-lg-3 mb-10">
-                                    <Form.Item>
-                                        <Button className="btn-brand btn-block float-right" size="large" 
-                                            type="primary" htmlType="submit">
-                                            Filter
-                                        </Button>
-                                    </Form.Item>
-                                </div>
+                        <div className="row xs-gap mt-20 px-20">
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                <Input size="large" placeholder="Name" />
                             </div>
-                        </Form>
+
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                
+                                    <Select
+                                        size="large"
+                                        mode="multiple"
+                                        allowClear
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Status"
+                                        >
+                                        {children}
+                                    </Select>
+                                        
+                            </div>
+
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <Select
+                                        size="large"
+                                        mode="multiple"
+                                        allowClear
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Customers"
+                                        >
+                                        {children}
+                                    </Select>
+                            </div>
+
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <Select
+                                        size="large"
+                                        // mode="multiple"
+                                        allowClear
+                                        style={{ width: '100%' }}
+                                        placeholder="Select Models"
+                                        >
+                                        {children}
+                                    </Select>
+                            </div>
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                    <RangePicker size="large" style={{width: "100%"}} />
+                            </div>
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                
+                            </div>
+                            <div className="col col-sm-12 col-lg-3 mb-10">
+                                <Button className="btn-light btn-block" size="large" 
+                                        type="primary">
+                                        Reset Filter
+                                </Button>
+                            </div>
+                            <div className="col col-sm-12 col-lg-3 mb-10">
+                                <Button className="btn-brand btn-block float-right" size="large" 
+                                    type="primary">
+                                    Filter
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                     <Table dataSource={users} columns={columns} />
                 </div>
