@@ -55,9 +55,9 @@ export default function Roles() {
 
     const showDeleteConfirm = (roleId) => {
         confirm({
-            title: 'Are you sure delete this Role?',
+            title: 'Are you sure delete this role?',
             icon: <ExclamationCircleOutlined />,
-            content: 'You will not get this Role back.',
+            content: 'You will not get this role back.',
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',

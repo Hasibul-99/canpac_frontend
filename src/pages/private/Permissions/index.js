@@ -1,9 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Modal } from 'antd';
-import { PERMISSION_LIST, PERMISSION_CREATE, PERMISSION_UPDATE } from "../../../scripts/api";
+import { PERMISSION_LIST, PERMISSION_CREATE, PERMISSION_UPDATE, PERMISSION_DELETE } from "../../../scripts/api";
 import { postData } from "../../../scripts/api-service";
+import { alertPop } from '../../../scripts/helper';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
+const { confirm } = Modal;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -12,11 +15,50 @@ for (let i = 10; i < 36; i++) {
   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
 
-export default function Permissions() {
+export default function Permissions(permissionId) {
+    const formRef = React.createRef();
+    const formRefUpdate = React.createRef();
     const [changepassModal, setChangepassModal] = useState(false);
     const [permissions, setPermissions]=  useState();
+    const [updatePermission, setUpdatePermission] = useState();
+    const [selectedPermission, setSelectedPermission] = useState()
 
-      const columns = [
+    const showDeleteConfirm = (permissionId) => {
+        confirm({
+            title: 'Are you sure delete this permission?',
+            icon: <ExclamationCircleOutlined />,
+            content: 'You will not get this permission back.',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+              let res = postData(PERMISSION_DELETE, {id: permissionId});
+
+              if (res) {
+                alertPop("success", "Permission Deleted Successfully");
+                setTimeout(() => {
+                    getPermissions();
+                }, 500);
+              }
+            },
+            onCancel() {
+              console.log('Cancel');
+            },
+        });
+    };
+
+    const onFill = () => {
+        formRefUpdate.current.setFieldsValue({
+            name: "+",
+        });
+    }
+    const updatePermis = (permiss) => {
+        onFill();
+        setSelectedPermission(permiss);
+        setUpdatePermission(true);
+    }
+
+    const columns = [
         {
           title: 'Name',
           dataIndex: 'name',
@@ -31,23 +73,30 @@ export default function Permissions() {
             title: 'Action',
             render: (text, record) => (
                 <Space size="middle">
-                  <a>Update</a>
+                    <Button type="link" block onClick={() => updatePermis(record)}>
+                        Update
+                    </Button>
+                    <Button type="link" danger onClick={() => showDeleteConfirm(record.id)} >
+                        Delete
+                    </Button>
                 </Space>
               )
         },
     ];
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const onFinish = async (values) => {
+        let res = await postData(PERMISSION_CREATE, values)
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        if (res) {
+            alertPop('success', "Premission Created Successfully!");
+            getPermissions();
+            setChangepassModal(false);
+            formRef.current.resetFields();
+        }
     };
 
     const getPermissions = async () => {
         let res = await postData(PERMISSION_LIST, {});
-
         if (res) setPermissions(res?.data?.data)
     }
 
@@ -146,12 +195,12 @@ export default function Permissions() {
                 footer={false}
             >
                 <Form style={{width: "100%", marginTop: "2rem"}}
+                    ref={formRef}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
                     >
                     <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
+                        name="name"
+                        rules={[{ required: true, message: 'Please input name!' }]}
                     >
                         <Input size="large" placeholder="Name"/>
                     </Form.Item>
@@ -159,6 +208,32 @@ export default function Permissions() {
                     <Form.Item>
                         <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
                             Save
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal title="Update Permission"
+                visible={updatePermission}
+                width="50vw"
+                onCancel={() => {setUpdatePermission(false);}}
+                footer={false}
+            >
+                <Form style={{width: "100%", marginTop: "2rem"}}
+                    ref={formRefUpdate}
+                    onFinish={onFinish}
+                    >
+                    <Form.Item
+                        name="name"
+                        rules={[{ required: true, message: 'Please input name!' }]}
+                    >
+                        <Input size="large" placeholder="Name"/>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button className="btn-brand btn-block" size="large" type="primary"
+                             htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
+                            Update
                         </Button>
                     </Form.Item>
                 </Form>
