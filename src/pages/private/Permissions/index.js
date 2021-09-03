@@ -17,7 +17,8 @@ for (let i = 10; i < 36; i++) {
 
 export default function Permissions(permissionId) {
     const formRef = React.createRef();
-    const formRefUpdate = React.createRef();
+    const [form] = Form.useForm();
+    // const formRefUpdate = React.createRef();
     const [changepassModal, setChangepassModal] = useState(false);
     const [permissions, setPermissions]=  useState();
     const [updatePermission, setUpdatePermission] = useState();
@@ -47,15 +48,13 @@ export default function Permissions(permissionId) {
         });
     };
 
-    const onFill = () => {
-        formRefUpdate.current.setFieldsValue({
-            name: "+",
-        });
-    }
     const updatePermis = (permiss) => {
-        onFill();
         setSelectedPermission(permiss);
         setUpdatePermission(true);
+        
+        form.setFieldsValue({
+            name: permiss.name,
+        });
     }
 
     const columns = [
@@ -94,6 +93,24 @@ export default function Permissions(permissionId) {
             formRef.current.resetFields();
         }
     };
+
+    const onUpdateFinish = async (values) => {
+        let res = await postData(PERMISSION_UPDATE, {
+            id: selectedPermission.id,
+            name: values.name
+        });
+
+        if (res) {
+            alertPop('success', "Permission Updated Successfully!");
+            setSelectedPermission(null);
+            setUpdatePermission(false);
+            form.resetFields();
+
+            setTimeout(() => {
+                getPermissions();
+            }, 500)
+        }
+    }
 
     const getPermissions = async () => {
         let res = await postData(PERMISSION_LIST, {});
@@ -220,9 +237,9 @@ export default function Permissions(permissionId) {
                 footer={false}
             >
                 <Form style={{width: "100%", marginTop: "2rem"}}
-                    ref={formRefUpdate}
-                    onFinish={onFinish}
-                    >
+                    form={form}
+                    onFinish={onUpdateFinish}
+                >
                     <Form.Item
                         name="name"
                         rules={[{ required: true, message: 'Please input name!' }]}
@@ -237,6 +254,7 @@ export default function Permissions(permissionId) {
                         </Button>
                     </Form.Item>
                 </Form>
+
             </Modal>
         </Fragment>
     )
