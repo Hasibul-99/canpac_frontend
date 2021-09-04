@@ -59,6 +59,14 @@ export const postData = async (query, data, no_token) => {
       return res;
     } else {
       alert(res?.data?.message);
+      
+      if (res?.data?.errors && Object.keys(res.data.errors).length !== 0) {
+        let error = res.data.errors;
+
+        for (const prop in error) {
+          if (error[prop][0]) alert(error[prop][0])
+        }
+      }
     }
   } catch (error) {
     checkRes(error.response.status);

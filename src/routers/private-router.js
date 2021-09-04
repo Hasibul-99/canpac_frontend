@@ -14,6 +14,8 @@ import CreateRole from "../pages/private/Roles/Create-Role";
 import Users from "../pages/private/users";
 import WeeklyReport from "../pages/private/Report/WeeklyReport";
 import UpdateRole from "../pages/private/Roles/Update-role";
+import CreateUser from "../pages/private/users/CreateUser";
+import UpdateUser from "../pages/private/users/UpdateUser";
 
 const PrivateRoutes = [
     {
@@ -90,6 +92,20 @@ const PrivateRoutes = [
         path: "users",
         name: "Users",
         component: Users,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "users-create",
+        name: "Users Create",
+        component: CreateUser,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "update-user/:userId",
+        name: "Users Update",
+        component: UpdateUser,
         layout: "/",
         exact: true
     },

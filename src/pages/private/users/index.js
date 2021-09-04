@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Avatar, Image  } from 'antd';
 import {USER_LIST} from "../../../scripts/api";
 import {postData} from "../../../scripts/api-service";
+import { useHistory } from "react-router-dom";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -13,6 +14,7 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function Users() {
+    const history = useHistory();
     let [users, setUsers] = useState([]);
       
       const columns = [
@@ -143,6 +145,13 @@ export default function Users() {
                             </div>
                         </div>
                     </div>
+
+                    <hr/>
+                    <div className="my-20">
+                        <Button onClick={() => {history.push('/users-create')}} className="btn-brand btn-block float-right mb-20" size="large" 
+                            type="primary" style={{width: "300px"}}> Add User </Button>
+                    </div>
+
                     <Table dataSource={users} columns={columns} />
                 </div>
             </div>
