@@ -31,7 +31,7 @@ export default function UpdateUser() {
         
         if (file) data.append('image', file); 
         data.append('name', values.name);
-        if (values.email !== userInfo.email) data.append('email', values.email); 
+        data.append('email', values.email); 
         data.append('phone', values.phone); 
         data.append('comapny_name', values.comapny_name); 
         data.append('role', values.role);
@@ -41,9 +41,8 @@ export default function UpdateUser() {
         let res = await postData(USER_UPDATE, data);
 
         if (res) {
-            alertPop('success', "User Udated Successfully!")
+            alertPop('success', "User Updated Successfully!");
             history.push('/users');
-
         }
     };
 
