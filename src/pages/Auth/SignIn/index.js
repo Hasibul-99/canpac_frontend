@@ -7,7 +7,6 @@ import {postData} from "../../../scripts/api-service";
 import Cookies from "js-cookie";
 
 export default function SignIn() {
-    
     const onFinish = async (values) => {
         let res = await postData(LOGIN, values, 'no_token');
         if (res) {
@@ -73,7 +72,8 @@ export default function SignIn() {
                     </div>
                 </div>
                 <div className="mt-20 text-grey-5">
-                    Don&apos;t you have an account? <Link to="/sign-up" className="text-2">Sign Up</Link>
+                    Don&apos;t you have an account? 
+                    <Link to="/auth/signup" className="text-2"> Sign Up</Link>
                 </div>
             </div>
         </div>

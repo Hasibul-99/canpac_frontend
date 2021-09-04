@@ -1,14 +1,21 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import { Form, Input, Button } from "antd";
+import { postData } from '../../../scripts/api-service';
+import { MERCHENT_SELT_SIGNUP } from '../../../scripts/api';
+import { alertPop } from '../../../scripts/helper';
+import { useHistory } from "react-router-dom";
 
 export default function SignUp() {
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const history = useHistory();
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+    const onFinish = async (values) => {
+        let res = await postData(MERCHENT_SELT_SIGNUP, values);
+
+        if (res) {
+            alertPop('success', res?.data?.message);
+            history.push('/auth/login');
+        }
     };
 
     return (    
@@ -25,7 +32,6 @@ export default function SignUp() {
 
                         <Form style={{width: "100%", marginTop: "2rem"}}
                             onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
                             >
                             <Form.Item
                                 name="name"
@@ -35,24 +41,28 @@ export default function SignUp() {
                             </Form.Item>
 
                             <Form.Item
-                                name="name"
-                                rules={[{ required: true, message: 'Please input company name!' }]}
+                                name="email"
+                                rules={[{ required: true, message: 'Please input email!' },
+                                    {
+                                        pattern: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+                                        message: "Please enter a valid email address",
+                                    }]}
                             >
-                                <Input size="large" placeholder="Enter Company Name" />
+                                <Input size="large" placeholder="Enter email" />
                             </Form.Item>
 
                             <Form.Item
-                                name="name"
-                                rules={[{ required: true, message: 'Please input email!' }]}
-                            >
-                                <Input size="large" placeholder="Enter Email" />
-                            </Form.Item>
-
-                            <Form.Item
-                                name="name"
-                                rules={[{ required: true, message: 'Please input phone!' }]}
+                                name="phone"
+                                rules={[{ required: true, message: 'Please input Phone!' }]}
                             >
                                 <Input size="large" placeholder="Enter Phone" />
+                            </Form.Item>
+
+                            <Form.Item
+                                name="company_name"
+                                rules={[{ required: true, message: 'Please input company name!' }]}
+                            >
+                                <Input size="large" placeholder="Enter company name" />
                             </Form.Item>
 
                             <Form.Item
@@ -63,8 +73,8 @@ export default function SignUp() {
                             </Form.Item>
 
                             <Form.Item
-                                name="password"
-                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                name="password_confirmation"
+                                rules={[{ required: true, message: 'Please input your Confirm password!' }]}
                             >
                                 <Input.Password size="large" placeholder="Confirm Password" />
                             </Form.Item>
