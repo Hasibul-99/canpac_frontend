@@ -21,7 +21,7 @@ export default function UpdateProfile() {
         data.append('name', values.name);
         data.append('email', values.email); 
         data.append('phone', values.phone); 
-        data.append('comapny_name', values.comapny_name); 
+        data.append('company_name', values.company_name); 
 
         let res = await postData(USER_PROFILE, data);
 
@@ -42,7 +42,7 @@ export default function UpdateProfile() {
     const onFill = () => {
         formRef.current.setFieldsValue({
             name: user?.name,
-            comapny_name: user?.comapny_name,
+            company_name: user?.company_name,
             email: user?.email,
             phone: user?.phone,
         });
@@ -115,7 +115,7 @@ export default function UpdateProfile() {
                                     
                                     <Form.Item
                                         label="Company Name"
-                                        name="comapny_name"
+                                        name="company_name"
                                         rules={[{ required: false, message: 'Please input company name!' }]}
                                     >
                                         <Input size="large" placeholder="Enter Company Name" />

@@ -16,6 +16,8 @@ import WeeklyReport from "../pages/private/Report/WeeklyReport";
 import UpdateRole from "../pages/private/Roles/Update-role";
 import CreateUser from "../pages/private/users/CreateUser";
 import UpdateUser from "../pages/private/users/UpdateUser";
+import CreateMarchent from "../pages/private/Merchents/CreateMarchent";
+import UpdateMarchent from "../pages/private/Merchents/UpdateMarchent";
 
 const PrivateRoutes = [
     {
@@ -113,6 +115,20 @@ const PrivateRoutes = [
         path: "merchents",
         name: "Merchents",
         component: Merchents,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "create-merchents",
+        name: "Merchents Create",
+        component: CreateMarchent,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "update-merchents/:marchentId",
+        name: "Merchents Update",
+        component: UpdateMarchent,
         layout: "/",
         exact: true
     },

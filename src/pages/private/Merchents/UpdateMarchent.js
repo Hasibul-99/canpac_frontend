@@ -3,15 +3,15 @@ import { Form, Input, Button, Upload, Select } from "antd";
 import { alertPop, getBase64 } from '../../../scripts/helper';
 import { postData } from '../../../scripts/api-service';
 import { UploadOutlined } from '@ant-design/icons';
-import { ROLE_LIST, USER_CREATE, USER_LIST, USER_UPDATE } from '../../../scripts/api';
+import { MERCHENT_LIST, ROLE_LIST, USER_CREATE, USER_LIST, USER_UPDATE } from '../../../scripts/api';
 import demo from "../../../assets/images/avatar-1-profile.png";
 import { useHistory, useParams } from "react-router-dom";
 
 const { Option } = Select;
 
-export default function UpdateUser() {
+export default function UpdateMarchent() {
     const history = useHistory();
-    let { userId } = useParams();
+    let { marchentId } = useParams();
     const [form] = Form.useForm();
     const [file, setfile] = useState();
     const [imageBase64, setImageBase64] = useState();
@@ -26,7 +26,6 @@ export default function UpdateUser() {
     }
 
     const onFinish = async (values) => {
-        console.log("value", values);
         let data = new FormData();
         
         if (file) data.append('image', file); 
@@ -35,8 +34,10 @@ export default function UpdateUser() {
         data.append('phone', values.phone); 
         data.append('company_name', values.company_name); 
         data.append('role', values.role);
+        
+        data.append('sap_id', 1);
 
-        data.append('id', userId);
+        data.append('id', marchentId);
 
         let res = await postData(USER_UPDATE, data);
 
@@ -46,39 +47,36 @@ export default function UpdateUser() {
         }
     };
 
-    const getRoles = async () => {
-        let res = await postData(ROLE_LIST, {});
-        if (res) setRoles(res.data.data);
-    }
-
-    const getUsers = async () => {
-        let res = await postData(USER_LIST, {});
+    const getMerchentss = async () => {
+        let res = await postData(MERCHENT_LIST, {});
 
         if (res) {
             let masterData = res.data.data || [];
-            let user = masterData.find(use => use.id == userId);
-            setUserInfo(user);
-            form.setFieldsValue({
-                company_name: user.company_name,
-                email: user.email,
-                name: user.name,
-                phone: user.phone,
-                email: user.email,
-                role: user.roles[0].name,
-            });
+            let user = masterData.find(use => use.id == marchentId);
+            if (user) {
+                setUserInfo(user);
+
+                form.setFieldsValue({
+                    company_name: user.company_name,
+                    email: user.email,
+                    name: user.name,
+                    phone: user.phone,
+                    email: user.email,
+                    role: user.roles[0].name,
+                });
+            }
         }
     }
 
     useEffect(() => {
-        getRoles();
-        getUsers()
+        getMerchentss()
     }, [])
     
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <h1>Update User</h1>
+                    <h1>Update Merchant</h1>
                 </div>
             </div>
             <div className="rui-page-content">
@@ -118,7 +116,7 @@ export default function UpdateUser() {
                                     <Form.Item
                                         label="Company Name"
                                         name="company_name"
-                                        rules={[{ required: false, message: 'Please input company name!' }]}
+                                        rules={[{ required: true, message: 'Please input company name!' }]}
                                     >
                                         <Input size="large" placeholder="Enter Company Name" />
                                     </Form.Item>
@@ -140,7 +138,8 @@ export default function UpdateUser() {
                                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                                 }
                                             >
-                                                {roles && roles.map(per => <Option key={per.id} value={per.name}>{per.name}</Option>)}
+                                                <Option key={1} value="Merchant">Merchant</Option>
+                                                <Option key={2} value="Premium Merchant">Premium Merchant</Option>
                                             </Select>
                                     </Form.Item>
                                     <hr/>

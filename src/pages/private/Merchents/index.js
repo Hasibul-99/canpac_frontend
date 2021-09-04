@@ -1,9 +1,8 @@
-import React, { Fragment, useState } from 'react';
-import {Link} from "react-router-dom";
+import React, { Fragment, useState,useEffect } from 'react';
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
 import { MERCHENT_LIST } from "../../../scripts/api";
 import { postData } from "../../../scripts/api-service";
-import { useEffect } from 'react';
+import { useHistory, Link } from "react-router-dom";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -14,7 +13,8 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function Merchents() {
-    const [marchents, setMarchents ] = useState();
+    const history = useHistory();
+    const [marchents, setMerchents ] = useState();
       
     const columns = [
         {
@@ -41,7 +41,7 @@ export default function Merchents() {
             title: 'Approve',
             render: (text, record) => (
                 <Space size="middle">
-                  <a>Update</a>
+                  <Link to={`update-merchents/${record.id}`}>Update</Link>
                 </Space>
               )
         },
@@ -55,26 +55,21 @@ export default function Merchents() {
         console.log('Failed:', errorInfo);
     };
 
-    const getMarchents = async () => {
+    const getMerchents = async () => {
         let res = await postData(MERCHENT_LIST, {});
 
-        if (res) setMarchents(res.data.data);
+        if (res) setMerchents(res.data.data);
     }
 
     useEffect(() => {
-        getMarchents()
+        getMerchents()
     }, []);
 
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                        </ol>
-                    </nav>
-                    <h1>Product Stock</h1>
+                    <h1>Merchents</h1>
                 </div>
             </div>
 
@@ -144,6 +139,12 @@ export default function Merchents() {
                             </div>
                         </div>
                     </div>
+                    <hr/>
+                    <div className="my-20">
+                        <Button onClick={() => {history.push('/create-merchents')}} className="btn-brand btn-block float-right mb-20" size="large" 
+                            type="primary" style={{width: "300px"}}> Add Merchent </Button>
+                    </div>
+
                     <Table dataSource={marchents} columns={columns} />
                 </div>
             </div>

@@ -23,7 +23,7 @@ export default function CreateUser() {
         data.append('name', values.name);
         data.append('email', values.email); 
         data.append('phone', values.phone); 
-        data.append('comapny_name', values.comapny_name); 
+        data.append('company_name', values.company_name); 
         data.append('role', values.role); 
         data.append('password', values.password); 
         data.append('password_confirmation', values.password_confirmation);
@@ -93,7 +93,7 @@ export default function CreateUser() {
                                     
                                     <Form.Item
                                         label="Company Name"
-                                        name="comapny_name"
+                                        name="company_name"
                                         rules={[{ required: false, message: 'Please input company name!' }]}
                                     >
                                         <Input size="large" placeholder="Enter Company Name" />
