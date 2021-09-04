@@ -21,7 +21,7 @@ function getWindowDimensions() {
 };
 
 export default function TopNavbar() {
-    const {user, getUserInfo, setUserInfo} = useContext(authContext);
+    const {user, getUserInfo, setUserInfo, DeleteUserInfo } = useContext(authContext);
 
     const [changepassModal, setChangepassModal] = useState(false);
     const toggleContent = () => {
@@ -44,6 +44,12 @@ export default function TopNavbar() {
         }
     }
 
+    const logOut = () => {
+        DeleteUserInfo();
+        Cookies.remove("canpacToken");
+        window.location = "/auth/login";
+    };
+
     const menu = (
         <Menu>
           <Menu.Item>
@@ -57,8 +63,8 @@ export default function TopNavbar() {
             </Link>
           </Menu.Item>
           <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-            <LogoutOutlined /> Sign Out
+            <a rel="noopener noreferrer" onClick={() => logOut()}>
+                <LogoutOutlined /> Sign Out
             </a>
           </Menu.Item>
         </Menu>
@@ -75,8 +81,7 @@ export default function TopNavbar() {
             if (res) {
                 alertPop('success', 'Password changed successfully');
                 setTimeout(() => {
-                    Cookies.remove("canpacToken");
-                    window.location = "/auth/login";
+                    logOut();
                 }, 2000);
             }
         } else {

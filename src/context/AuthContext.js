@@ -9,8 +9,6 @@ const AuthContext = props => {
 
     useEffect(() => {
         setUser();
-
-        console.log("props", props);
     }, []);
 
     const setUserInfo = async () => {
@@ -24,12 +22,17 @@ const AuthContext = props => {
         return user;
     }
 
+    const DeleteUserInfo = () => {
+        setUser(null);
+    }
+
     return (
         <authContext.Provider
             value={{
                 user,
                 setUserInfo,
-                getUserInfo
+                getUserInfo,
+                DeleteUserInfo
             }}>
             {props.children}
         </authContext.Provider>
