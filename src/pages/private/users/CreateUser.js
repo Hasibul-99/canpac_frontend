@@ -78,7 +78,11 @@ export default function CreateUser() {
                                     <Form.Item
                                         label="Email"
                                         name="email"
-                                        rules={[{ required: true, message: 'Please input email!' }]}
+                                        rules={[{ required: true, message: 'Please input email!' },
+                                            {
+                                                pattern: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+                                                message: "Please enter a valid email address",
+                                            }]}
                                     >
                                         <Input size="large" placeholder="Enter Email" />
                                     </Form.Item>

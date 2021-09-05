@@ -54,7 +54,7 @@ export default function SignIn() {
                                 <div className="col-sm-6"></div>
                                 <div className="col-sm-6">
                                     <div className="d-flex justify-content-end">
-                                        <Link to="#" className="fs-13">Forget password?</Link>
+                                        <Link to="/auth/forget-password" className="fs-13">Forget password?</Link>
                                     </div>
                                 </div>
                             </div>

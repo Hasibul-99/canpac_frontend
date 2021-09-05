@@ -1,17 +1,21 @@
 import React, { Fragment, useState } from 'react'
 import {Link} from "react-router-dom";
 import { Form, Input, Button } from "antd";
+import {postData} from "../../../scripts/api-service";
+import {FORGET_PASSWORD_EMAIL} from "../../../scripts/api";
 
 export default function ForgetPassword() {
     const [isresetpassword, setResetPassword] = useState(1);
+    const [isLoading, setIsLoading] = useState();
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
         console.log('Success:', values);
-        setResetPassword(0);
-    };
+        // setResetPassword(0);
+        let res = await postData(FORGET_PASSWORD_EMAIL, values);
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        if (res) {
+            setIsLoading(true);
+        }
     };
 
     return (
@@ -29,11 +33,14 @@ export default function ForgetPassword() {
                                 </div>
                                 <Form style={{width: "100%", marginTop: "2rem"}}
                                     onFinish={onFinish}
-                                    onFinishFailed={onFinishFailed}
                                     >
                                     <Form.Item
                                         name="email"
-                                        rules={[{ required: true, message: 'Please input email!' }]}
+                                        rules={[{ required: true, message: 'Please input email!' },
+                                            {
+                                                pattern: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+                                                message: "Please enter a valid email address",
+                                            }]}
                                     >
                                         <Input size="large" placeholder="Email" />
                                     </Form.Item>
@@ -50,8 +57,7 @@ export default function ForgetPassword() {
                                 </div>
 
                                 <Form style={{width: "100%", marginTop: "2rem"}}
-                                    onFinish={onFinish}
-                                    onFinishFailed={onFinishFailed}
+                                    // onFinish={onFinish}
                                     >
                                     <Form.Item
                                         name="password"
