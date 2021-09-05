@@ -1,9 +1,12 @@
 import React, { Fragment, useState,useEffect } from 'react';
-import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
-import { MERCHENT_LIST } from "../../../scripts/api";
+import {Table, Space, Select, Form, Button, Input, DatePicker, Modal } from 'antd';
+import { MERCHENT_LIST, USER_STATUS_UPDATE } from "../../../scripts/api";
 import { postData } from "../../../scripts/api-service";
 import { useHistory, Link } from "react-router-dom";
+import { alertPop } from '../../../scripts/helper';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
+const { confirm } = Modal;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -41,11 +44,37 @@ export default function Merchents() {
             title: 'Approve',
             render: (text, record) => (
                 <Space size="middle">
-                  <Link to={`update-merchents/${record.id}`}>Update</Link>
+                    <Button type="link" onClick={() => updateStatus(record.id, record.status)}>Update Status</Button>
+                    <Link to={`update-merchents/${record.id}`}>Update</Link>
                 </Space>
               )
         },
     ];
+
+    
+    const updateStatus = (userId, statusId) => {
+        confirm({
+            title: 'Do you Want to update this user status',
+            icon: <ExclamationCircleOutlined />,
+            content: `${statusId == 1 ? "User will Inactive after this action" : "User will Active after this action" } `,
+            onOk() {
+              let res = postData(USER_STATUS_UPDATE, {
+                  id: userId,
+                  status: (statusId * 1) ? 0 : 1
+              });
+
+              if (res) {
+                  alertPop('success', 'Status updated successfull');
+                  setTimeout(() => {
+                    getMerchents();
+                  }, 500)  
+              }
+            },
+            onCancel() {
+              console.log('Cancel');
+            },
+        });
+    }
 
     const onFinish = (values) => {
         console.log('Success:', values);

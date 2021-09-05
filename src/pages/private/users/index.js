@@ -1,10 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker, Avatar, Image  } from 'antd';
-import {USER_LIST} from "../../../scripts/api";
+import {Table, Space, Select, Form, Button, Input, DatePicker, Avatar, Image, Modal  } from 'antd';
+import {USER_LIST, USER_STATUS_UPDATE} from "../../../scripts/api";
 import {postData} from "../../../scripts/api-service";
 import { useHistory } from "react-router-dom";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { alertPop } from '../../../scripts/helper';
 
+const { confirm } = Modal;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -51,11 +54,35 @@ export default function Users() {
             title: 'Approve',
             render: (text, record) => (
                 <Space size="middle">
-                  <Link to={"/update-user/" + record.id}>Update</Link>
+                    <Button type="link" onClick={() => updateStatus(record.id, record.status)}>Update Status</Button>
+                    <Link to={"/update-user/" + record.id}>Update</Link>
                 </Space>
             )
         },
     ];
+
+    const updateStatus = (userId, statusId) => {
+        confirm({
+            title: 'Do you Want to update this user status',
+            icon: <ExclamationCircleOutlined />,
+            content: `${statusId == 1 ? "User will Inactive after this action" : "User will Active after this action" } `,
+            onOk() {
+              let res = postData(USER_STATUS_UPDATE, {
+                  id: userId,
+                  status: (statusId * 1) ? 0 : 1
+              });
+
+              if (res) {
+                  alertPop('success', 'Status updated successfull');
+
+                  getUsersList();
+              }
+            },
+            onCancel() {
+              console.log('Cancel');
+            },
+        });
+    }
 
     const onFinish = (values) => {
         console.log('Success:', values);

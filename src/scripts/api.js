@@ -9,6 +9,7 @@ export const USER_CREATE = "user/create";
 export const USER_UPDATE = "user/update";
 export const FORGET_PASSWORD_EMAIL = "user/password/email";
 export const FORGET_PASSWORD_RESET = "user/password/reset";
+export const USER_STATUS_UPDATE = 'user/update-status';
 
 // MERCHENT 
 export const MERCHENT_LIST = "merchant/list";
