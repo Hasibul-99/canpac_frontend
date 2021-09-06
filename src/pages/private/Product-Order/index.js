@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import { postData } from '../../../scripts/api-service';
+import { ORDER_LIST } from '../../../scripts/api';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -11,6 +13,8 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function ProductOrder() {
+    const [orders, setOrders] = useState();
+
     const dataSource = [
         {
           key: '1',
@@ -71,26 +75,29 @@ export default function ProductOrder() {
         console.log('Success:', values);
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    const getProductOrder = async () => {
+        let res = await postData(ORDER_LIST, {})
+
+        if (res) {
+            setOrders(res.data.data);
+        }
+    }
+
+    useEffect(() => {
+        getProductOrder();
+    }, [])
 
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                        </ol>
-                    </nav>
-                    <h1>Product Stock</h1>
+                    <h1>Product Order</h1>
                 </div>
             </div>
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="">
+                    <div className="d-none">
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 px-20">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
@@ -154,7 +161,7 @@ export default function ProductOrder() {
                             </div>
                         </div>
                     </div>
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={orders} columns={columns} />
                 </div>
             </div>
         </Fragment>
