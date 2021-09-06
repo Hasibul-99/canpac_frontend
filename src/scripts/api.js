@@ -29,4 +29,14 @@ export const ROLE_CREATE = "role/create";
 export const ROLE_DELETE = "role/delete";
 export const ROLE_UPDATE = "role/update";
 
+// DROPDOWN 
+export const DROPDOWN_LIST = "dropdown-list";
+
+// ORDER
+export const ORDER_CREATE = "order/create";
+export const ORDER_VIEW = "order/view";
+export const ORDER_DRAFT = "order/draft";
+export const ORDER_LIST = "order/list";
+export const ORDER_APPROVE_OR_CANCEL = "order/approval";
+
 
