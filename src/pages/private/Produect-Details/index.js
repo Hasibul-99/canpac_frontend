@@ -11,8 +11,10 @@ import { DROPDOWN_LIST, ORDER_VIEW } from '../../../scripts/api';
 const { Option } = Select;
 
 export default function ProductDetails() {
+    const [form] = Form.useForm();
     let { orderId } = useParams();
     const [order, setOrder] = useState();
+    const [orderStatus, setOrderStatus] = useState();
 
     const onFinish = (values) => {
         console.log('Success:', values);
@@ -30,14 +32,21 @@ export default function ProductDetails() {
         });
 
         if (res) {
-            setOrder(res.data.data);
+            let masterData = res.data.data;
+            setOrder(masterData);
+            form.setFieldsValue({
+                status: masterData.status * 1,
+                ordered_quantity: masterData.ordered_quantity,
+            });
         }
     }
 
     const getOrderStatus = async () => {
         let res = await postData(DROPDOWN_LIST, {
             data_type: "order_status"
-        })
+        });
+
+        if (res) setOrderStatus(res.data.data)
     }
 
     useEffect(() => {
@@ -67,14 +76,15 @@ export default function ProductDetails() {
                     <div className="row">
                         <div className="col col-sm-12 col-lg-6 mb-10">
                             <Form style={{width: "100%", marginTop: "2rem"}}
+                                form={form}
                                 layout={'vertical'}
                                 onFinish={onFinish}
                                 onFinishFailed={onFinishFailed}
                                 >
                                 <Form.Item
                                     label="Update Status"
-                                    name="username"
-                                    rules={[{ required: true, message: 'Please input your username!' }]}
+                                    name="status"
+                                    rules={[{ required: true, message: 'Please input status!' }]}
                                 >
                                     <Select
                                         size="large"
@@ -85,16 +95,16 @@ export default function ProductDetails() {
                                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                     >
-                                        <Option value="jack">Jack</Option>
-                                        <Option value="lucy">Lucy</Option>
-                                        <Option value="tom">Tom</Option>
+                                        {
+                                            orderStatus?.length && orderStatus.map(status => <Option value={status.value} key={status.value}>{status.title}</Option>)
+                                        }
                                     </Select>
                                 </Form.Item>
 
                                 <Form.Item
                                     label="Delevary Quantity"
-                                    name="password"
-                                    rules={[{ required: true, message: 'Please input your password!' }]}
+                                    name="ordered_quantity"
+                                    rules={[{ required: true, message: 'Please input quantity!' }]}
                                 >
                                     <InputNumber placeholder="Select Quantity" size="large" min={1} max={2000}  style={{width: "100%"}}/>
                                 </Form.Item>
@@ -122,17 +132,21 @@ export default function ProductDetails() {
                         <h3 className="text-center">Order Histoy</h3>
 
                         <Timeline mode="alternate">
-                            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-                            <Timeline.Item color="green">Solve initial network problems 2015-09-01</Timeline.Item>
-    
-                            {/* {
-                                order?.history?.length && order.history.map(his => {
-                                    return <>
-                                        <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-                                        <Timeline.Item color="green">Solve initial network problems 2015-09-01</Timeline.Item>
-                                    </>
+                            {
+                                order?.history?.length && order.history.map((his, index) => {
+                                    return (
+                                        index % 2 == 0 
+                                        ? <Timeline.Item 
+                                            position='left'>
+                                                {his.description_en}
+                                            </Timeline.Item> :
+                                            <Timeline.Item color="green" 
+                                             position='right'>
+                                                {his.description_en}
+                                            </Timeline.Item>
+                                    )
                                 })
-                            } */}
+                            }
                         </Timeline>
                     </div>
                 </div>
