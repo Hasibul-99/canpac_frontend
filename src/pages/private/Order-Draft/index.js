@@ -1,7 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import {Table, Space, Select, Form, Button, Input, DatePicker, Modal  } from 'antd';
+import { postData } from '../../../scripts/api-service';
+import { ORDER_APPROVE_OR_CANCEL, ORDER_DRAFT } from '../../../scripts/api';
+import { alertPop, dateFormat } from '../../../scripts/helper';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
+const { confirm } = Modal;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
@@ -11,87 +16,132 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function OrderDraft() {
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
+    const [draftList, setDraftList] = useState();
+    const [approveModal, setApproveModal] = useState();
+    const [selectedOrder, setSelectedOrder] = useState();
       
-      const columns = [
+    const columns = [
         {
           title: 'Order NO',
-          dataIndex: 'name',
+          dataIndex: 'id',
           key: 'name',
         },
         {
           title: 'Customer',
-          dataIndex: 'age',
-          key: 'age',
+          key: 'merchant.id',
+          render: (text, record) => (
+            <span>
+                {record.merchant.name}
+            </span>
+            )
         },
         {
-          title: 'Product name',
-          dataIndex: 'key',
-          key: 'address',
+            title: 'Product name',
+            key: 'product.id',
+            render: (text, record) => (
+                <span>
+                    {record.product.product_name}
+                </span>
+            )
         },
         {
             title: 'Date',
-            dataIndex: 'age',
+            dataIndex: 'order_date_time',
             key: 'address',
+            render: (text, date) => (
+                <span>
+                    {dateFormat(date)}
+                </span>
+            )
         },
         {
             title: 'Order Quantity (can)',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'ordered_quantity',
+            key: 'ordered_quantity',
         },
         {
             title: 'Status',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'status_title',
+            key: 'status',
         },
         {
-            title: 'Approve',
+            title: 'Action',
             render: (text, record) => (
                 <Space size="middle">
-                  <a>Approve</a>
-                  <a>Cancel</a>
+                  <Button type="link" style={{color: "#725ec3"}} onClick={() => {setApproveModal(true); setSelectedOrder(record)}}> Approve </Button>
+                  <Button type="link" danger onClick={() => {confirmCancel(record.id)}}> Cancel </Button>
                 </Space>
-              )
+            )
         },
     ];
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const confirmCancel = (orderId) => {
+        confirm({
+            title: 'Are you sure, you want to cancel this order?',
+            icon: <ExclamationCircleOutlined />,
+            content: 'You will not get this order back.',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                postData(ORDER_APPROVE_OR_CANCEL, {
+                    id: orderId,
+                    status: 5
+                }).then(res => {
+                    if (res) {
+                        alertPop('success', "Order Canceled Successfully!");
+
+                        setTimeout(() => {
+                            getOrderDraft();
+                        }, 500)
+                    }
+                });
+
+            },
+            onCancel() {
+              console.log('Cancel');
+            },
+        });
+    }
+
+    const onFinish = async (values) => {
+        let res = await postData(ORDER_APPROVE_OR_CANCEL, {
+            id: selectedOrder.id,
+            status: 2,
+            sap_order_id: values.sap_order_id
+        });
+
+        if (res) {
+            alertPop("success", "Order Approved Successfully!");
+            setApproveModal(false);
+            setSelectedOrder(null);
+            getOrderDraft();
+        }
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    const getOrderDraft = async () => {
+        let res = await postData(ORDER_DRAFT, {});
+
+        if (res) {
+            setDraftList(res.data.data);
+        }
+    }
+
+    useEffect(() => {
+        getOrderDraft()
+    }, [])
 
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                        </ol>
-                    </nav>
-                    <h1>Product Stock</h1>
+                    <h1>Order Draft</h1>
                 </div>
             </div>
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="">
+                    <div className="d-none">
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 px-20">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
@@ -155,9 +205,33 @@ export default function OrderDraft() {
                             </div>
                         </div>
                     </div>
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={draftList} columns={columns} />
                 </div>
             </div>
+
+            <Modal title="Approve Order"
+                visible={approveModal}
+                width="50vw"
+                onCancel={() => {setApproveModal(false);}}
+                footer={false}
+            >
+                <Form style={{width: "100%", marginTop: "2rem"}}
+                    onFinish={onFinish}
+                    >
+                    <Form.Item
+                        name="sap_order_id"
+                        rules={[{ required: true, message: 'Please input SAP order on!' }]}
+                    >
+                        <Input size="large" placeholder="SAP order on"/>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
+                            Approve
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </Fragment>
     )
 }

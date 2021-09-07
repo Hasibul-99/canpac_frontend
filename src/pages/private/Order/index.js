@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 const { Option } = Select;
 
 export default function OrderCreate() {
+    const [form] = Form.useForm();
     const history = useHistory();
     const [product, setProduct] = useState([]);
 
@@ -17,7 +18,8 @@ export default function OrderCreate() {
 
         if (res) {
             alertPop('success', "Order Created Successfully!");
-            history.push('/product-order');
+            // history.push('/product-order');
+            form.resetFields();
         }
     };
 
@@ -46,6 +48,7 @@ export default function OrderCreate() {
             <div className="rui-page-content">
                 <div className="container-fluid">
                     <Form style={{width: "100%", marginTop: "2rem"}}
+                        form={form}
                         layout={'vertical'}
                         onFinish={onFinish}
                         >

@@ -3,11 +3,13 @@ import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
 import { postData } from '../../../scripts/api-service';
 import { ORDER_LIST } from '../../../scripts/api';
+import { dateFormat } from '../../../scripts/helper';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const children = [];
+
 for (let i = 10; i < 36; i++) {
   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
@@ -15,59 +17,57 @@ for (let i = 10; i < 36; i++) {
 export default function ProductOrder() {
     const [orders, setOrders] = useState();
 
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
-      
-      const columns = [
+    const columns = [
         {
           title: 'Order NO',
-          dataIndex: 'name',
+          dataIndex: 'id',
           key: 'name',
         },
         {
           title: 'Customer',
-          dataIndex: 'age',
-          key: 'age',
+          key: 'merchant.id',
+          render: (text, record) => (
+            <span>
+                {record.merchant.name}
+            </span>
+            )
         },
         {
-          title: 'Product name',
-          dataIndex: 'key',
-          key: 'address',
+            title: 'Product name',
+            key: 'product.id',
+            render: (text, record) => (
+                <span>
+                    {record.product.product_name}
+                </span>
+            )
         },
         {
             title: 'Date',
-            dataIndex: 'age',
+            dataIndex: 'order_date_time',
             key: 'address',
+            render: (text, date) => (
+                <span>
+                    {dateFormat(date)}
+                </span>
+            )
         },
         {
             title: 'Order Quantity (can)',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'ordered_quantity',
+            key: 'ordered_quantity',
         },
         {
             title: 'Status',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'status_title',
+            key: 'status',
         },
         {
-            title: 'Action',
+            title: 'Approve',
             render: (text, record) => (
                 <Space size="middle">
-                  <a>Update</a>
+                    <a>Update</a>
                 </Space>
-              )
+            )
         },
     ];
 
