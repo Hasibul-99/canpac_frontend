@@ -1,13 +1,19 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Select, Form, Button, InputNumber, Timeline   } from 'antd';
 import { ClockCircleOutlined } from '@ant-design/icons';
+import { useParams } from "react-router-dom";
 
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
+import { postData } from '../../../scripts/api-service';
+import { DROPDOWN_LIST, ORDER_VIEW } from '../../../scripts/api';
 
 const { Option } = Select;
 
 export default function ProductDetails() {
+    let { orderId } = useParams();
+    const [order, setOrder] = useState();
+
     const onFinish = (values) => {
         console.log('Success:', values);
     };
@@ -16,25 +22,44 @@ export default function ProductDetails() {
         console.log('Failed:', errorInfo);
     };
 
-    const quillChange = () => {
+    const quillChange = () => {}
 
-    } 
+    const getOrderDetails = async () => {
+        let res = await postData(ORDER_VIEW, {
+            id: orderId
+        });
+
+        if (res) {
+            setOrder(res.data.data);
+        }
+    }
+
+    const getOrderStatus = async () => {
+        let res = await postData(DROPDOWN_LIST, {
+            data_type: "order_status"
+        })
+    }
+
+    useEffect(() => {
+        getOrderDetails();
+        getOrderStatus();
+    }, [])
 
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <h1>Product Details</h1>
+                    <h1>Order Details</h1>
                 </div>
             </div>
             <div className="rui-page-content">
                 <div className="container-fluid">
                     <div className="Order-info">
-                        <h4><strong>Order ID: </strong>45678974651</h4>
-                        <h4><strong>Product: </strong>220ML FARCENT SHOE SPRAY THÁI LAN</h4>
-                        <h4><strong>Order Quantity: </strong>20000</h4>
-                        <h4><strong>Remaining Quantity: </strong>20000</h4>
-                        <h4><strong>Status: </strong>Active</h4>
+                        <h4><strong>Order ID: </strong>{order?.id}</h4>
+                        <h4><strong>Product: </strong>{order?.product?.product_name}</h4>
+                        <h4><strong>Order Quantity: </strong>{order?.ordered_quantity}</h4>
+                        <h4><strong>Remaining Quantity: </strong>{order?.remaining_quantity}</h4>
+                        <h4><strong>Status: </strong>{order?.status_title}</h4>
                     </div>
 
                     <hr/>
@@ -99,14 +124,15 @@ export default function ProductDetails() {
                         <Timeline mode="alternate">
                             <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
                             <Timeline.Item color="green">Solve initial network problems 2015-09-01</Timeline.Item>
-                            <Timeline.Item dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}>
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                            </Timeline.Item>
-                            <Timeline.Item color="red">Network problems being solved 2015-09-01</Timeline.Item>
-                            <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-                            <Timeline.Item dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}>
-                            Technical testing 2015-09-01
-                            </Timeline.Item>
+    
+                            {/* {
+                                order?.history?.length && order.history.map(his => {
+                                    return <>
+                                        <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
+                                        <Timeline.Item color="green">Solve initial network problems 2015-09-01</Timeline.Item>
+                                    </>
+                                })
+                            } */}
                         </Timeline>
                     </div>
                 </div>

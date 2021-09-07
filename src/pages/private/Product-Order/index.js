@@ -65,7 +65,7 @@ export default function ProductOrder() {
             title: 'Approve',
             render: (text, record) => (
                 <Space size="middle">
-                    <a>Update</a>
+                    <Link to={`/product-order-details/${record.id}`}>Update</Link>
                 </Space>
             )
         },

@@ -63,7 +63,7 @@ const PrivateRoutes = [
         exact: true
     },
     {
-        path: "product-details/:productId",
+        path: "product-order-details/:orderId",
         name: "Product Details",
         component: ProductDetails,
         layout: "/",
