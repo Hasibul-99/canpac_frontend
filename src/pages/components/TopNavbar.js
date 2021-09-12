@@ -11,6 +11,7 @@ import { postData } from "../../scripts/api-service";
 import { alertPop } from "../../scripts/helper";
 import Cookies from "js-cookie";
 import { authContext } from "../../context/AuthContext";
+import { useTranslation } from 'react-i18next';
 
 function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
@@ -21,6 +22,8 @@ function getWindowDimensions() {
 };
 
 export default function TopNavbar() {
+    const {t, i18n} = useTranslation();
+
     const {user, getUserInfo, setUserInfo, DeleteUserInfo } = useContext(authContext);
 
     const [changepassModal, setChangepassModal] = useState(false);
@@ -69,6 +72,25 @@ export default function TopNavbar() {
           </Menu.Item>
         </Menu>
     );
+
+    const languageMenu = (
+        <Menu>
+          <Menu.Item>
+            <a rel="noopener noreferrer" onClick={() => changeLanguage("en")}>
+                <KeyOutlined /> EN
+            </a>
+          </Menu.Item>
+          <Menu.Item>
+            <a onClick={() => changeLanguage("vn")}>
+                <UserOutlined /> VN
+            </a>
+          </Menu.Item>
+        </Menu>
+    )
+
+    const changeLanguage = (language) => {
+        i18n.changeLanguage(language);
+    };
 
     useEffect(() => {
         setUserInfo();
@@ -153,6 +175,11 @@ export default function TopNavbar() {
                                 href="javascript:;"><span className="btn btn-custom-round"><span data-feather="message-circle"
                                         className="rui-icon rui-icon-stroke-1_5"></span></span></a></li>
                         <li className="dropdown dropdown-hover dropdown-triangle dropdown-keep-open">
+                        
+                        {/* <Dropdown overlay={languageMenu} placement="bottomRight" arrow>
+                            <Button>{i18n.language}</Button>
+                        </Dropdown> */}
+
                         <Dropdown overlay={menu} placement="bottomRight" arrow>
                             <a className="dropdown-item rui-navbar-avatar mnr-6">
                                     <img src={user?.thumb_image_url || avatar1} alt="" />

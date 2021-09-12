@@ -3,16 +3,22 @@ import { Link } from 'react-router-dom';
 import VerticalBar from "./verticalBar";
 import DoughnutChart from "./Doughnut";
 import { Card } from 'antd';
+import { Trans, useTranslation } from 'react-i18next';
 
 
 export default function Dashboard() {
+    const {t, i18n} = useTranslation();
+
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
                     <nav aria-label="breadcrumb">
                         <ol className="breadcrumb" style={{"list-style-type": "none"}}>
-                            <li className="breadcrumb-item"> <strong>Name:</strong> Mr Brain Sung</li>
+                            <li className="breadcrumb-item"> <strong>
+                                {t("common.name")}:
+                                
+                                </strong> Mr Brain Sung</li>
                         </ol>
                         <ol className="breadcrumb" style={{"list-style-type": "none"}}>
                             <li className="breadcrumb-item"> <strong>Company:</strong> King Show Vietnam Co., Ltd. </li>

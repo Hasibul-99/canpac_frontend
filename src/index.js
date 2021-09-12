@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from "react-router-dom";
@@ -14,10 +14,13 @@ import "./assets/css/rootui.css";
 import "./assets/scss/main.scss";
 
 import App from "./routers/App"
+import "./i18n";
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <Suspense fallback={<div>Loading ...</div>}>
+      <App />
+    </Suspense>
   </BrowserRouter>,
   document.getElementById('root')
 );
