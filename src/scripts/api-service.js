@@ -1,12 +1,12 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import {checkRes, alertPop} from "./helper"
+import {checkRes, alertPop} from "./helper";
+import i18n from 'i18next'
 
 const base_url = process.env.REACT_APP_BASE;
 const token = Cookies.get("canpacToken") || "";
 
 axios.defaults.headers.post['Accept'] = 'application/json';
-
 
 const alert = (messages) => {
   alertPop("error", messages ? messages : "Something went wrong");
@@ -52,6 +52,7 @@ export const postData = async (query, data, no_token) => {
       url: `${base_url}${query}`,
       headers: no_token ? {} : {
             'Authorization': `Bearer ${token}`,
+            "lang": i18n?.language || 'en'
           },
       data: data,
     });
