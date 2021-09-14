@@ -77,12 +77,12 @@ export default function TopNavbar() {
         <Menu>
           <Menu.Item>
             <a rel="noopener noreferrer" onClick={() => changeLanguage("en")}>
-                <KeyOutlined /> EN
+                ENGLISH
             </a>
           </Menu.Item>
           <Menu.Item>
             <a onClick={() => changeLanguage("vn")}>
-                <UserOutlined /> VN
+                VIETNAMESE
             </a>
           </Menu.Item>
         </Menu>
@@ -174,32 +174,16 @@ export default function TopNavbar() {
                                 data-touch="false" data-close-existing="true" data-src="#messenger"
                                 href="javascript:;"><span className="btn btn-custom-round"><span data-feather="message-circle"
                                         className="rui-icon rui-icon-stroke-1_5"></span></span></a></li>
-                        <li className="dropdown dropdown-hover dropdown-triangle dropdown-keep-open">
                         
-                        {/* <Dropdown overlay={languageMenu} placement="bottomRight" arrow>
+                        <Dropdown className="mt-5" overlay={languageMenu} placement="bottomRight" arrow>
                             <Button>{i18n.language}</Button>
-                        </Dropdown> */}
-
+                        </Dropdown>
+                        <li className="dropdown dropdown-hover dropdown-triangle dropdown-keep-open">
                         <Dropdown overlay={menu} placement="bottomRight" arrow>
                             <a className="dropdown-item rui-navbar-avatar mnr-6">
                                     <img src={user?.thumb_image_url || avatar1} alt="" />
                             </a>
                         </Dropdown>
-                            
-                            {/* <ul className="nav dropdown-menu">
-                                <li><a href="profile.html" className="nav-link"><span data-feather="plus-circle"
-                                            className="rui-icon rui-icon-stroke-1_5"></span> <span>Create new Post</span> <span
-                                            className="rui-nav-circle"></span></a></li>
-                                <li><a href="profile.html" className="nav-link"><span data-feather="users"
-                                            className="rui-icon rui-icon-stroke-1_5"></span> <span>Manage Users</span> <span
-                                            className="rui-nav-circle"></span></a></li>
-                                <li><a href="profile.html" className="nav-link"><span data-feather="check-circle"
-                                            className="rui-icon rui-icon-stroke-1_5"></span> <span>Check Updates</span> <span
-                                            className="rui-nav-circle"></span></a></li>
-                                <li><a href="profile.html" className="nav-link"><span data-feather="log-out"
-                                            className="rui-icon rui-icon-stroke-1_5"></span> <span>Exit</span> <span
-                                            className="rui-nav-circle"></span></a></li>
-                            </ul> */}
                         </li>
                     </ul>
                 </div>
@@ -243,6 +227,9 @@ export default function TopNavbar() {
                 <div className="rui-navbar-content">
                     <ul className="nav">
                         
+                    <Dropdown className="mt-5 w-100" overlay={languageMenu} placement="bottomRight" arrow>
+                        <Button>{i18n.language}</Button>
+                    </Dropdown>
                         {/* <li className="dropdown dropdown-keep-open"><a className="dropdown-item" href="#" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"><span data-feather="flag"
                                     className="rui-icon rui-icon-stroke-1_5"></span> <span>Language</span> <span
