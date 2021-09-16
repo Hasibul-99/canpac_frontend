@@ -13,6 +13,9 @@ const options = {
       },
     ],
   },
+  plugins: {
+    legend: false,
+  }
 };
 
 export default function VerticalBar({quantity}) {
