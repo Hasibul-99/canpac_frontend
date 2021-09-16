@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import { postData } from '../../../scripts/api-service';
+import { PRODUCT_STOCK } from '../../../scripts/api';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -11,22 +13,9 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function ProductDelivery() {
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
+    const [products, setProducts] = useState();
       
-      const columns = [
+    const columns = [
         {
           title: 'Order NO',
           dataIndex: 'name',
@@ -39,7 +28,7 @@ export default function ProductDelivery() {
         },
         {
           title: 'Product name',
-          dataIndex: 'key',
+          dataIndex: 'product_name',
           key: 'address',
         },
         {
@@ -67,13 +56,17 @@ export default function ProductDelivery() {
         },
     ];
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const getProductDetails = async () => {
+        let res = await postData(PRODUCT_STOCK, {});
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+        if (res) {
+            setProducts(res.data.data);
+        }
+    }
+
+    useEffect(() => {
+        getProductDetails()
+    }, [])
 
     return (
         <Fragment>
@@ -92,7 +85,7 @@ export default function ProductDelivery() {
                 <div className="container-fluid">
                     <div className="">
                         <h3>Filter</h3>
-                        <div className="row xs-gap mt-20 px-20">
+                        <div className="row xs-gap mt-10 mb-30">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
                                 <Input size="large" placeholder="Name" />
                             </div>
@@ -154,7 +147,8 @@ export default function ProductDelivery() {
                             </div>
                         </div>
                     </div>
-                    <Table dataSource={dataSource} columns={columns} />
+
+                    <Table dataSource={products} columns={columns} />
                 </div>
             </div>
         </Fragment>

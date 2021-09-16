@@ -1,28 +1,20 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table} from 'antd';
+import { postData } from '../../../scripts/api-service';
+import { PRODUCT_STOCK_LOW } from '../../../scripts/api';
 
 export default function LowStock() {
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-      ];
-      
-      const columns = [
+  const [products, setProducts] = useState()
+
+    const columns = [
         {
           title: 'Product Name',
-          dataIndex: 'name',
-          key: 'name',
+          dataIndex: 'product',
+          key: 'id',
+          render: (record) => <>
+              { record.product_name }
+          </>
         },
         {
           title: 'Date',
@@ -31,22 +23,34 @@ export default function LowStock() {
         },
         {
           title: 'Quantity (can)',
-          dataIndex: 'key',
-          key: 'address',
+          dataIndex: 'low_stock',
+          key: 'low_stock',
         }
     ];
+
+    const getProducts = async () => {
+      let res = await postData(PRODUCT_STOCK_LOW, {});
+
+      if (res) {
+        setProducts(res.data.data);
+      }
+    }
+
+    useEffect(() => {
+      getProducts();
+    }, [])
     
     return (
         <Fragment>
             <div className="rui-page-title">
                 <div className="container-fluid">
-                    <h1>Product Stock</h1>
+                    <h1>Low Stock</h1>
                 </div>
             </div>
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={products} columns={columns} />
                 </div>
             </div>
         </Fragment>

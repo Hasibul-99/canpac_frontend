@@ -20,7 +20,7 @@ export default function ProductOrder() {
     const columns = [
         {
           title: 'Order NO',
-          dataIndex: 'id',
+          dataIndex: 'sap_order_id',
           key: 'name',
         },
         {

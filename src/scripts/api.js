@@ -36,7 +36,10 @@ export const DROPDOWN_LIST = "dropdown-list";
 export const ORDER_CREATE = "order/create";
 export const ORDER_VIEW = "order/view";
 export const ORDER_DRAFT = "order/draft";
-export const ORDER_LIST = "order/list";
+export const ORDER_LIST = "order/product-order";
 export const ORDER_APPROVE_OR_CANCEL = "order/approval";
 
 
+// Product
+export const PRODUCT_STOCK_LOW = "product/stock/low";
+export const PRODUCT_STOCK = "product/stock";
