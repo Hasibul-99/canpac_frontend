@@ -72,10 +72,10 @@ export default function Permissions(permissionId) {
             title: 'Action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button type="link" block onClick={() => updatePermis(record)}>
+                    <Button type="primary" className="btn-brand" block onClick={() => updatePermis(record)}>
                         Update
                     </Button>
-                    <Button type="link" danger onClick={() => showDeleteConfirm(record.id)} >
+                    <Button danger onClick={() => showDeleteConfirm(record.id)} >
                         Delete
                     </Button>
                 </Space>

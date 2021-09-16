@@ -41,11 +41,11 @@ export default function Roles() {
         {
             title: 'Action',
             render: (text, record) => (
-                <Space size="middle">
-                    <Button type="link" block>
+                <Space size="middle" >
+                    <Button type="primary" className="btn-brand">
                         <Link to={'update-role/'+ record.id}>Update</Link>
                     </Button>
-                    <Button type="link" danger onClick={() => showDeleteConfirm(record.id)} >
+                    <Button danger onClick={() => showDeleteConfirm(record.id)} >
                         Delete
                     </Button>
                 </Space>

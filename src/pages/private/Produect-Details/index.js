@@ -106,12 +106,12 @@ export default function ProductDetails() {
                                     name="ordered_quantity"
                                     rules={[{ required: true, message: 'Please input quantity!' }]}
                                 >
-                                    <InputNumber placeholder="Select Quantity" size="large" min={1} max={2000}  style={{width: "100%"}}/>
+                                    <InputNumber placeholder="Select Quantity" size="large" min={1} max={order.ordered_quantity}  style={{width: "100%"}}/>
                                 </Form.Item>
 
                                 <Form.Item>
                                     <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
-                                    Create Order
+                                    Update Order
                                     </Button>
                                 </Form.Item>
                             </Form>

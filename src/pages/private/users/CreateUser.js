@@ -4,7 +4,7 @@ import { alertPop, getBase64 } from '../../../scripts/helper';
 import { postData } from '../../../scripts/api-service';
 import { UploadOutlined } from '@ant-design/icons';
 import { ROLE_LIST, USER_CREATE } from '../../../scripts/api';
-import demo from "../../../assets/images/avatar-1-profile.png";
+import demo from "../../../assets/images/avatar-1.png";
 import { useHistory } from "react-router-dom";
 
 const { Option } = Select;

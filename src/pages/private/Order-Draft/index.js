@@ -21,11 +21,11 @@ export default function OrderDraft() {
     const [selectedOrder, setSelectedOrder] = useState();
       
     const columns = [
-        {
-          title: 'Order NO',
-          dataIndex: 'id',
-          key: 'name',
-        },
+        // {
+        //   title: 'Order NO',
+        //   dataIndex: 'id',
+        //   key: 'name',
+        // },
         {
           title: 'Customer',
           key: 'merchant.id',
@@ -67,9 +67,9 @@ export default function OrderDraft() {
         {
             title: 'Action',
             render: (text, record) => (
-                <Space size="middle">
-                  <Button type="link" style={{color: "#725ec3"}} onClick={() => {setApproveModal(true); setSelectedOrder(record)}}> Approve </Button>
-                  <Button type="link" danger onClick={() => {confirmCancel(record.id)}}> Cancel </Button>
+                <Space >
+                  <Button type="primary" className="btn-brand" onClick={() => {setApproveModal(true); setSelectedOrder(record)}}> Approve </Button>
+                  <Button type="primary" danger onClick={() => {confirmCancel(record.id)}}> Cancel </Button>
                 </Space>
             )
         },

@@ -18,7 +18,7 @@ export default function OrderCreate() {
 
         if (res) {
             alertPop('success', "Order Created Successfully!");
-            // history.push('/product-order');
+            history.push('/product-order');
             form.resetFields();
         }
     };

@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Input, Button, Upload } from "antd";
-import demo from "../../../assets/images/avatar-1-profile.png"
+import demo from "../../../assets/images/avatar-1.png"
 import { UploadOutlined } from '@ant-design/icons';
 import { authContext } from "../../../context/AuthContext";
 import { postData } from '../../../scripts/api-service';

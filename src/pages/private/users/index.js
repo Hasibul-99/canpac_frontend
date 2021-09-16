@@ -1,11 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker, Avatar, Image, Modal  } from 'antd';
-import {USER_LIST, USER_STATUS_UPDATE} from "../../../scripts/api";
+import {Table, Space, Select, Form, Button, Input, DatePicker, Avatar, Image, Modal, Tag, Switch } from 'antd';
+import {USER_LIST, USER_STATUS_UPDATE, EMAIL_CONFIRMATION_RESENT} from "../../../scripts/api";
 import {postData} from "../../../scripts/api-service";
 import { useHistory } from "react-router-dom";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { alertPop } from '../../../scripts/helper';
+import moment from "moment";
 
 const { confirm } = Modal;
 const { Option } = Select;
@@ -20,7 +21,17 @@ export default function Users() {
     const history = useHistory();
     let [users, setUsers] = useState([]);
       
-      const columns = [
+    const resendVerification = async (userId) => {
+        let res = await postData(EMAIL_CONFIRMATION_RESENT, {
+            id: userId
+        });
+
+        if (res) {
+            alertPop('success', "E-mail sented Successfully")
+        }
+    };
+
+    const columns = [
         {
             title: 'Name',
             render: (text, record) => (
@@ -46,16 +57,35 @@ export default function Users() {
             key: 'id',
         },
         {
-            title: 'Status',
-            dataIndex: 'status_title',
+            title: 'Email Verified',
             key: 'id',
+            render: (text, record) => <>
+                {
+                    !record.email_verified_at ? 
+                    <Button size="small" type="primary" className="btn-warning" onClick={() => resendVerification(record.id)}>Resend</Button> : 
+                    moment(record.email_verified_at).format("YYYY-MM-DD")
+                }
+            </>
+        },
+        {
+            title: 'Status',
+            key: 'id',
+            render: (text, record) => <>
+                {
+                    record.status_title === 'Inactive' ? 
+                    <Button size="small" type="primary" danger onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button> : 
+                    <Button size="small" type="primary" style={{backgroundColor: "#2fc787", borderColor: "#2fc787"}} onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button>
+                }
+            </>
         },
         {
             title: 'Approve',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button type="link" onClick={() => updateStatus(record.id, record.status)}>Update Status</Button>
-                    <Link to={"/update-user/" + record.id}>Update</Link>
+                    {/* <Button type="link" onClick={() => updateStatus(record.id, record.status)}>Update Status</Button> */}
+                    <Button type="primary" className="btn-brand">
+                        <Link to={"/update-user/" + record.id}>Update</Link>
+                    </Button>
                 </Space>
             )
         },

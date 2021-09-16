@@ -1,37 +1,39 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { Link } from 'react-router-dom';
 import VerticalBar from "./verticalBar";
 import DoughnutChart from "./Doughnut";
 import { Card } from 'antd';
 import { Trans, useTranslation } from 'react-i18next';
+import { authContext } from "../../../context/AuthContext";
 
 
 export default function Dashboard() {
     const {t, i18n} = useTranslation();
+    const {user, getUserInfo, setUserInfo} = useContext(authContext);
 
     return (
         <Fragment>
-            <div className="rui-page-title">
-                <div className="container-fluid">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb" style={{"list-style-type": "none"}}>
-                            <li className="breadcrumb-item"> <strong>
-                                {t("common.name")}:
-                                
-                                </strong> Mr Brain Sung</li>
-                        </ol>
-                        <ol className="breadcrumb" style={{"list-style-type": "none"}}>
-                            <li className="breadcrumb-item"> <strong>Company:</strong> King Show Vietnam Co., Ltd. </li>
-                        </ol>
-                        <ol className="breadcrumb" style={{"list-style-type": "none"}}>
-                            <li className="breadcrumb-item"> <strong>Phone:</strong> 0272.3871807 </li>
-                        </ol>
-                        <ol className="breadcrumb" style={{"list-style-type": "none"}}>
-                            <li className="breadcrumb-item"> <strong>Email:</strong> brain@kingshow.co </li>
-                        </ol>
-                    </nav>
+            {
+                user && <div className="rui-page-title">
+                    <div className="container-fluid">
+                        <nav aria-label="breadcrumb">
+                            <ol className="breadcrumb" style={{"list-style-type": "none"}}>
+                                <li className="breadcrumb-item"> <strong>
+                                    {t("common.name")}: </strong> {user?.name}</li>
+                            </ol>
+                            <ol className="breadcrumb" style={{"list-style-type": "none"}}>
+                                <li className="breadcrumb-item"> <strong>Company:</strong> {user.company_name} </li>
+                            </ol>
+                            <ol className="breadcrumb" style={{"list-style-type": "none"}}>
+                                <li className="breadcrumb-item"> <strong>Phone:</strong> {user.phone} </li>
+                            </ol>
+                            <ol className="breadcrumb" style={{"list-style-type": "none"}}>
+                                <li className="breadcrumb-item"> <strong>Email:</strong> {user.email} </li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
-            </div>
+            }
 
             <div className="rui-page-content">
                 <div className="container-fluid">

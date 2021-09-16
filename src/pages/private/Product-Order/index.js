@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import {Table, Space, Select, Form, Button, Input, DatePicker, Tag } from 'antd';
 import { postData } from '../../../scripts/api-service';
 import { ORDER_LIST } from '../../../scripts/api';
 import { dateFormat } from '../../../scripts/helper';
@@ -60,6 +60,11 @@ export default function ProductOrder() {
             title: 'Status',
             dataIndex: 'status_title',
             key: 'status',
+            render: (status) => (
+                <span>
+                    {status === 'Canceled' ? <Tag color="#f50">{status}</Tag> : <Tag color="#87d068">{status}</Tag>}
+                </span>
+            )
         },
         {
             title: 'Approve',
