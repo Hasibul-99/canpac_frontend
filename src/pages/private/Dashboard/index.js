@@ -1,15 +1,30 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import VerticalBar from "./verticalBar";
 import DoughnutChart from "./Doughnut";
 import { Card } from 'antd';
 import { Trans, useTranslation } from 'react-i18next';
 import { authContext } from "../../../context/AuthContext";
+import { postData } from '../../../scripts/api-service';
+import { DASHBOARD } from '../../../scripts/api';
 
 
 export default function Dashboard() {
     const {t, i18n} = useTranslation();
     const {user, getUserInfo, setUserInfo} = useContext(authContext);
+    const [dashboard, setDashboard] = useState();
+
+    const getDashboardData = async () => {
+        let res = await postData(DASHBOARD, {});
+
+        if (res) {
+            setDashboard(res.data.data);
+        }
+    };
+
+    useEffect(() => {
+        getDashboardData()
+    }, [])
 
     return (
         <Fragment>
@@ -37,32 +52,34 @@ export default function Dashboard() {
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="row xs-gap mt-20 px-20">
-                        <div className="col  col-sm-12 col-lg-3 mb-10">
-                            <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
-                                <h1>Product Stock</h1>
-                                <Link><h2>9500</h2></Link>
+                    {
+                        dashboard && <div className="row xs-gap mt-20 px-20">
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
+                                    <h1>Product Stock</h1>
+                                    <Link to="/product-stock"><h2>{dashboard.product_stock}</h2></Link>
+                                </div>
+                            </div>
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
+                                    <h1>Product Order</h1>
+                                    <Link to="/product-order"><h2>{dashboard.product_order}</h2></Link>
+                                </div>
+                            </div>
+                            <div className="col col-sm-12 col-lg-3 mb-10">
+                                <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
+                                    <h1>Low Stock</h1>
+                                    <Link to="/low-stock"><h2>{dashboard.low_stock}</h2></Link>
+                                </div>
+                            </div>
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
+                                    <h1>Product Delivery</h1>
+                                    <Link to="/product-delivery"><h2>{dashboard.product_delivery}</h2></Link>
+                                </div>
                             </div>
                         </div>
-                        <div className="col  col-sm-12 col-lg-3 mb-10">
-                            <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
-                                <h1>Product Order</h1>
-                                <Link><h2>25</h2></Link>
-                            </div>
-                        </div>
-                        <div className="col col-sm-12 col-lg-3 mb-10">
-                            <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
-                                <h1>Low Stock</h1>
-                                <Link><h2>6</h2></Link>
-                            </div>
-                        </div>
-                        <div className="col  col-sm-12 col-lg-3 mb-10">
-                            <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
-                                <h1>Product Delivery</h1>
-                                <Link><h2>95</h2></Link>
-                            </div>
-                        </div>
-                    </div>
+                    }
 
                     <div className="row xs-gap mt-20 px-20">
                         <div className="col col-sm-12 col-lg-6 mb-10">

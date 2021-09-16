@@ -43,3 +43,6 @@ export const ORDER_APPROVE_OR_CANCEL = "order/approval";
 // Product
 export const PRODUCT_STOCK_LOW = "product/stock/low";
 export const PRODUCT_STOCK = "product/stock";
+
+// DashBoard
+export const DASHBOARD = "dashboard";
