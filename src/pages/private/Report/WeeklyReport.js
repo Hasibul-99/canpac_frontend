@@ -1,12 +1,16 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import { postData } from '../../../scripts/api-service';
+import { WEEK_REPORT } from '../../../scripts/api';
 
 const { RangePicker } = DatePicker;
 
 
 
 export default function WeeklyReport() {
+    const [report, setReport] = useState();
+
     const dataSource = [
         {
           key: '1',
@@ -20,33 +24,33 @@ export default function WeeklyReport() {
           age: 42,
           address: '10 Downing Street',
         },
-      ];
+    ];
       
       const columns = [
         {
           title: 'Order NO',
-          dataIndex: 'name',
-          key: 'name',
+          dataIndex: 'sales_order_no',
+          key: 'sales_order_no',
         },
         {
           title: 'Customer',
-          dataIndex: 'age',
-          key: 'age',
+          dataIndex: 'Customer Name',
+          key: 'Customer ID',
         },
         {
           title: 'Product name',
-          dataIndex: 'key',
-          key: 'address',
+          dataIndex: 'Product name',
+          key: 'Product Code',
         },
         {
             title: 'Date',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'Production Due Date (ngày hoàn thành)',
+            key: 'Production Due Date (ngày hoàn thành)',
         },
         {
             title: 'Order Quantity (can)',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'Stock',
+            key: 'Stock',
         },
         {
             title: 'Status',
@@ -54,6 +58,18 @@ export default function WeeklyReport() {
             key: 'address',
         },
     ];
+
+    const getReport = async () => {
+      let res = await postData(WEEK_REPORT, {});
+
+      if (res) {
+        setReport(res.data.data);
+      }
+    }
+
+    useEffect(() => {
+      getReport()
+    }, [])
 
     return (
         <Fragment>
@@ -68,7 +84,7 @@ export default function WeeklyReport() {
                     <div className="mb-20">
                         <DatePicker size="large" picker="week" style={{width: "300px"}} />
                     </div>
-                    <Table dataSource={dataSource} columns={columns} />
+                    <Table dataSource={report} columns={columns} />
                 </div>
             </div>
         </Fragment>
