@@ -154,17 +154,15 @@ export default function Users() {
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                
-                                    <Select
-                                        size="large"
-                                        // mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Status"
-                                        >
-                                        {children}
-                                    </Select>
-                                        
+                                <Select
+                                    size="large"
+                                    // mode="multiple"
+                                    allowClear
+                                    style={{ width: '100%' }}
+                                    placeholder="Select Status"
+                                    >
+                                    {children}
+                                </Select>
                             </div>
 
                             <div className="col  col-sm-12 col-lg-6 mb-10">

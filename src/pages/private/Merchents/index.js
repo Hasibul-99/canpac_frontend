@@ -133,54 +133,34 @@ export default function Merchents() {
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="d-none">
+                <div className="">
                         <h3>Filter</h3>
-                        <div className="row xs-gap mt-20 px-20">
+                        <div className="row xs-gap mt-20 mb-20">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
                                 <Input size="large" placeholder="Name" />
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                
-                                    <Select
-                                        size="large"
-                                        mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Status"
-                                        >
-                                        {children}
-                                    </Select>
-                                        
+                                <Input size="large" placeholder="Email" />
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Select
-                                        size="large"
-                                        mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Customers"
-                                        >
-                                        {children}
-                                    </Select>
+                                <Input size="large" placeholder="Phone" />
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Select
-                                        size="large"
-                                        // mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Models"
-                                        >
-                                        {children}
-                                    </Select>
+                                <Select
+                                    size="large"
+                                    // mode="multiple"
+                                    allowClear
+                                    style={{ width: '100%' }}
+                                    placeholder="Select Status"
+                                    >
+                                    {children}
+                                </Select>
                             </div>
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <RangePicker size="large" style={{width: "100%"}} />
-                            </div>
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
+
+                            <div className="col  col-sm-12 col-lg-6 mb-10">
                                 
                             </div>
                             <div className="col col-sm-12 col-lg-3 mb-10">
