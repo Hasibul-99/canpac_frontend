@@ -5,27 +5,11 @@ import { postData } from '../../../scripts/api-service';
 import { WEEK_REPORT } from '../../../scripts/api';
 
 const { RangePicker } = DatePicker;
-
+const { Option } = Select;
 
 
 export default function WeeklyReport() {
-    const [report, setReport] = useState();
-
-    const dataSource = [
-        {
-          key: '1',
-          name: 'Mike',
-          age: 32,
-          address: '10 Downing Street',
-        },
-        {
-          key: '2',
-          name: 'John',
-          age: 42,
-          address: '10 Downing Street',
-        },
-    ];
-      
+    const [report, setReport] = useState();      
       const columns = [
         {
           title: 'Order NO',
@@ -79,10 +63,26 @@ export default function WeeklyReport() {
                 </div>
             </div>
 
+
             <div className="rui-page-content">
                 <div className="container-fluid">
                     <div className="mb-20">
-                        <DatePicker size="large" picker="week" style={{width: "300px"}} />
+                        <DatePicker size="large" className="mr-20" picker="week" style={{width: "300px"}} />
+
+                        <Select
+                          size="large"
+                          showSearch
+                          style={{ width: 200 }}
+                          placeholder="Select a person"
+                          optionFilterProp="children"
+                          filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                        >
+                          <Option value="jack">Jack</Option>
+                          <Option value="lucy">Lucy</Option>
+                          <Option value="tom">Tom</Option>
+                        </Select>
                     </div>
                     <Table dataSource={report} columns={columns} />
                 </div>

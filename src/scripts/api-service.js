@@ -70,7 +70,7 @@ export const postData = async (query, data, no_token) => {
       }
     }
   } catch (error) {
-    checkRes(error.response.status);
+    checkRes(error?.response?.status);
     Array.isArray(error?.response?.data?.messages)
       ? error.response.data.messages.map((err) => {
           alertPop("error", err);

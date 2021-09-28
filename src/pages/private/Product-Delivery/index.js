@@ -42,6 +42,16 @@ export default function ProductDelivery() {
             key: 'address',
         },
         {
+            title: 'Deliveried',
+            dataIndex: 'age',
+            key: 'address',
+        },
+        {
+            title: 'Remaining',
+            dataIndex: 'age',
+            key: 'address',
+        },
+        {
             title: 'Status',
             dataIndex: 'age',
             key: 'address',
