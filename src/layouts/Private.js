@@ -13,9 +13,9 @@ class Private extends Component {
     }
 
     componentWillMount() {
-      if (!Cookies.get("canpacToken")) {
-        window.location = "/auth/login";
-      }
+      // if (!Cookies.get("canpacToken")) {
+      //   window.location = "/auth/login";
+      // }
     }
 
     getRoutes = routes => {

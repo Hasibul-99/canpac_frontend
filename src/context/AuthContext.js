@@ -1,20 +1,26 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { USER_PROFILE } from "../scripts/api";
+import { USER_PROFILE, ROLE_LIST } from "../scripts/api";
 import { postData } from '../scripts/api-service';
 
 export const authContext = createContext();
 
 const AuthContext = props => {
     const [user, setUser] = useState();
+    const [permissions, setPermissions] = useState();
 
     useEffect(() => {
         setUser();
+        getPermissions();
     }, []);
+
+    const getPermissions = async () => {
+        let res = await postData(ROLE_LIST, {})
+
+        if (res) setPermissions(res.data.data[5].permissions);
+    }
 
     const setUserInfo = async () => {
         let res = await postData(USER_PROFILE, {});
-
-        console.log("ressss", res);
         setUser(res?.data?.data);
     }
 
@@ -32,7 +38,8 @@ const AuthContext = props => {
                 user,
                 setUserInfo,
                 getUserInfo,
-                DeleteUserInfo
+                DeleteUserInfo,
+                permissions
             }}>
             {props.children}
         </authContext.Provider>

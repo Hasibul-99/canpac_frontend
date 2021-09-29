@@ -12,9 +12,9 @@ class Auth extends Component {
     }
 
     componentWillMount() {
-      if (Cookies.get("canpacToken")) {
-        window.location = "/";
-      }
+      // if (Cookies.get("canpacToken")) {
+      //   window.location = "/";
+      // }
     }
 
     getRoutes = routes => {

@@ -99,71 +99,15 @@ export default function Roles() {
 
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="d-none">
+                    <div className="">
                         <h3>Filter</h3>
-                        <div className="row xs-gap mt-20 px-20">
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Name" />
-                            </div>
-
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                
-                                    <Select
-                                        size="large"
-                                        mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Status"
-                                        >
-                                        {children}
-                                    </Select>
-                                        
-                            </div>
-
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Select
-                                        size="large"
-                                        mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Customers"
-                                        >
-                                        {children}
-                                    </Select>
-                            </div>
-
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Select
-                                        size="large"
-                                        // mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Models"
-                                        >
-                                        {children}
-                                    </Select>
-                            </div>
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <RangePicker size="large" style={{width: "100%"}} />
-                            </div>
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                
-                            </div>
-                            <div className="col col-sm-12 col-lg-3 mb-10">
-                                <Button className="btn-light btn-block" size="large" 
-                                        type="primary">
-                                        Reset Filter
-                                </Button>
-                            </div>
-                            <div className="col col-sm-12 col-lg-3 mb-10">
-                                <Button className="btn-brand btn-block float-right" size="large" 
-                                    type="primary">
-                                    Filter
-                                </Button>
+                        <div className="row xs-gap mt-20 mb-20">
+                            <div className="col  col-sm-12 col-lg-4 mb-10">
+                                <Input size="large" placeholder="Type Role Name" />
                             </div>
                         </div>
                     </div>
-                    {/* <hr/> */}
+                    <hr/>
                     <div className="my-20">
                         <Link to="/create-role">
                             <Button className="btn-brand btn-block float-right mb-20" size="large" 

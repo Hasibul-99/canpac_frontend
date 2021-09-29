@@ -6,10 +6,11 @@ export const checkRes = (param) => {
   if (param === 200 || param === 201 || param === 212) {
     return true;
   } else if (param === 401) {
-    Cookies.remove("canpacToken");
-    window.location = "/auth/login";
+    // Cookies.remove("canpacToken");
+    // window.location = "/auth/login";
   } else if (param === 403) {
-    window.location = "/auth/login";
+    // Cookies.remove("canpacToken");
+    // window.location = "/auth/login";
   } else {
     return false;
   }
@@ -38,4 +39,11 @@ export const dateFormat = (date) => {
   if (date) {
       return moment(date).format('YYYY-MM-DD h:mm a');
   } else return null
+}
+
+export const checkUserPermission = (allow, permissions) => { 
+  if (allow && permissions?.length) {
+      let array = permissions.map(per => per.name);
+      return array.includes(allow);
+  } else return false
 }
