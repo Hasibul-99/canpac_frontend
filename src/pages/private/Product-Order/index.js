@@ -1,9 +1,10 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Tag } from 'antd';
 import { postData } from '../../../scripts/api-service';
 import { ORDER_LIST } from '../../../scripts/api';
-import { dateFormat } from '../../../scripts/helper';
+import { dateFormat, checkUserPermission } from '../../../scripts/helper';
+import { authContext } from '../../../context/AuthContext';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -15,7 +16,12 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function ProductOrder() {
+    const { permissions } = useContext(authContext);
     const [orders, setOrders] = useState();
+
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
 
     const columns = [
         {
@@ -68,13 +74,14 @@ export default function ProductOrder() {
         },
         {
             title: 'Approve',
+            key: 'update',
             render: (text, record) => (
                 <Space size="middle">
                     <Link to={`/product-order-details/${record.id}`}>Update</Link>
                 </Space>
             )
         },
-    ];
+    ].filter(item => !canView('Order - Details') ? item.key !== 'update' : item);
 
     const onFinish = (values) => {
         console.log('Success:', values);

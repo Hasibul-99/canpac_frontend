@@ -1,11 +1,12 @@
-import React, { Fragment, useState,useEffect } from 'react';
+import React, { Fragment, useState,useEffect, useContext } from 'react';
 import {Table, Space, Select, Form, Button, Input, DatePicker, Modal } from 'antd';
 import { MERCHENT_LIST, USER_STATUS_UPDATE, EMAIL_CONFIRMATION_RESENT } from "../../../scripts/api";
 import { postData } from "../../../scripts/api-service";
 import { useHistory, Link } from "react-router-dom";
-import { alertPop } from '../../../scripts/helper';
+import { alertPop, checkUserPermission } from '../../../scripts/helper';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from "moment";
+import { authContext } from '../../../context/AuthContext';
 
 const { confirm } = Modal;
 const { Option } = Select;
@@ -17,9 +18,14 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function Merchents() {
+    const { permissions } = useContext(authContext);
     const history = useHistory();
     const [marchents, setMerchents ] = useState();
-      
+    
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
+
     const columns = [
         {
           title: 'Name',
@@ -49,17 +55,20 @@ export default function Merchents() {
         },
         {
             title: 'Status',
-            key: 'id',
+            key: '',
             render: (text, record) => <>
                 {
                     record.status_title === 'Inactive' ? 
-                    <Button size="small" type="primary" danger onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button> : 
-                    <Button size="small" type="primary" style={{backgroundColor: "#2fc787", borderColor: "#2fc787"}} onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button>
+                    <Button size="small" type="primary" danger disabled={!canView('Merchant - Approval')}
+                        onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button> : 
+                    <Button size="small" type="primary" disabled={!canView('Merchant - Approval')} 
+                        style={{backgroundColor: "#2fc787", borderColor: "#2fc787"}} onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button>
                 }
             </>
         },
         {
             title: 'Approve',
+            key: 'update',
             render: (text, record) => (
                 <Space size="middle">
                     {/* <Button type="link" onClick={() => updateStatus(record.id, record.status)}>Update Status</Button> */}
@@ -69,7 +78,7 @@ export default function Merchents() {
                 </Space>
               )
         },
-    ];
+    ].filter(item => !canView('Merchant - Update') ? item.key !== 'update' : item);
 
     const resendVerification = async (userId) => {
         let res = await postData(EMAIL_CONFIRMATION_RESENT, {
@@ -179,8 +188,10 @@ export default function Merchents() {
                     </div>
                     <hr/>
                     <div className="my-20">
-                        <Button onClick={() => {history.push('/create-merchents')}} className="btn-brand btn-block float-right mb-20" size="large" 
-                            type="primary" style={{width: "300px"}}> Add Merchent </Button>
+                        {
+                            canView('Merchant - Creat') ? <Button onClick={() => {history.push('/create-merchents')}} className="btn-brand btn-block float-right mb-20" size="large" 
+                            type="primary" style={{width: "300px"}}> Add Merchent </Button> : ''
+                        }
                     </div>
 
                     <Table dataSource={marchents} columns={columns} />
