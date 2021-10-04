@@ -6,18 +6,19 @@ export const checkRes = (param) => {
   if (param === 200 || param === 201 || param === 212) {
     return true;
   } else if (param === 401) {
-    // Cookies.remove("canpacToken");
-    // window.location = "/auth/login";
+    Cookies.remove("canpacToken");
+    window.location = "/auth/login";
+    localStorage.removeItem('canpacPermissions');
   } else if (param === 403) {
-    // Cookies.remove("canpacToken");
-    // window.location = "/auth/login";
+    Cookies.remove("canpacToken");
+    window.location = "/auth/login";
+    localStorage.removeItem('canpacPermissions');
   } else {
     return false;
   }
 };
 
 export const alertPop = (type, data,title=null) => {
-  // message[type](data, 6);
   notification[type]({
       placement : 'bottomRight',
       message: title || `${type[0].toUpperCase()}${type.slice(1)}`,

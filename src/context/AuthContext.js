@@ -18,6 +18,7 @@ const AuthContext = props => {
             let masterData = res?.data?.data;
             setUser(masterData);
             setPermissions(masterData?.roles[0].permissions);
+            localStorage.setItem("canpacPermissions", JSON.stringify(masterData?.roles[0].permissions));
         }
     }
 

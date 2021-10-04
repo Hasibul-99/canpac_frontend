@@ -30,7 +30,7 @@ class App extends Component {
                     <Switch>
                         <Route path="/auth" render={props => <AuthLayout {...props} />}></Route> 
                         <Route path="/" render={props => <PrivateLayout {...props} />}></Route>
-                        <Redirect path="*" to="/" /> 
+                        <Redirect from="/" to="/" /> 
                     </Switch>
                 </AuthContext>
             </>

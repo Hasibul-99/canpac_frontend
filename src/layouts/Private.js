@@ -5,17 +5,22 @@ import Cookies from "js-cookie";
 import LeftSidebar from "../pages/components/LeftSidebar";
 import TopNavbar from "../pages/components/TopNavbar";
 import $ from "jquery";
+import AuthContext from "../context/AuthContext";
 
 class Private extends Component {
+    static contextType = AuthContext;
+
     constructor(props) {
         super(props);
         this.state = {}
     }
 
     componentWillMount() {
-      // if (!Cookies.get("canpacToken")) {
-      //   window.location = "/auth/login";
-      // }
+      if (!Cookies.get("canpacToken")) {
+        window.location = "/auth/login";
+      }
+
+      console.log("hello", localStorage.getItem("canpacPermissions"));
     }
 
     getRoutes = routes => {
@@ -40,6 +45,9 @@ class Private extends Component {
     }
 
     render() {
+      const permissions = this.context;
+
+      console.log("permissions", this.context);
         return (
             <div className="rui-navbar-autohide rui-section-lines rui-navbar-show" id="main-wrapper">
               <LeftSidebar></LeftSidebar>

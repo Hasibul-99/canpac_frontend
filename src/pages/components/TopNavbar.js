@@ -51,6 +51,7 @@ export default function TopNavbar() {
         DeleteUserInfo();
         Cookies.remove("canpacToken");
         window.location = "/auth/login";
+        localStorage.removeItem('canpacPermissions');
     };
 
     const menu = (
