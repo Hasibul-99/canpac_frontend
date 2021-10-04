@@ -18,8 +18,8 @@ export default function LowStock() {
         },
         {
           title: 'Date',
-          dataIndex: 'age',
-          key: 'age',
+          dataIndex: 'date',
+          key: 'date',
         },
         {
           title: 'Quantity (can)',

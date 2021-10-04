@@ -37,9 +37,9 @@ export default function WeeklyReport() {
             key: 'Stock',
         },
         {
-            title: 'Status',
-            dataIndex: 'age',
-            key: 'address',
+            title: 'Production Order',
+            dataIndex: 'Production Order',
+            key: 'Production Order',
         },
     ];
 

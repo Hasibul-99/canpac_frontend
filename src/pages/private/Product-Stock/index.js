@@ -21,16 +21,16 @@ export default function ProductDelivery() {
         dataIndex: 'product_name',
         key: 'address',
       },
-      {
-        title: 'Date',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: 'Printed Sheet (Body Blank)',
-        dataIndex: 'age',
-        key: 'age',
-      },
+    //   {
+    //     title: 'Date',
+    //     dataIndex: 'name',
+    //     key: 'name',
+    //   },
+    //   {
+    //     title: 'Printed Sheet (Body Blank)',
+    //     dataIndex: 'age',
+    //     key: 'age',
+    //   },
       {
           title: 'Can Stock',
           dataIndex: 'stock',

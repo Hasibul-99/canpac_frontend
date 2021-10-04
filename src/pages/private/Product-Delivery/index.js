@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
 import { postData } from '../../../scripts/api-service';
-import { PRODUCT_STOCK } from '../../../scripts/api';
+import { PRODUCT_DELIVARY } from '../../../scripts/api';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -67,7 +67,7 @@ export default function ProductDelivery() {
     ];
 
     const getProductDetails = async () => {
-        let res = await postData(PRODUCT_STOCK, {});
+        let res = await postData(PRODUCT_DELIVARY, {});
 
         if (res) {
             setProducts(res.data.data);

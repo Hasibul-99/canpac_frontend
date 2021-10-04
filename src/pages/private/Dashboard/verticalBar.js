@@ -23,7 +23,7 @@ export default function VerticalBar({quantity}) {
 
   useEffect(() => {
     let lables = quantity.map(qun => qun.product_name),
-        quan = quantity.map(qun => qun.quantity);
+        quan = quantity.map(qun => qun.stock);
 
     setChart({
       labels: lables,
