@@ -5,11 +5,10 @@ import Cookies from "js-cookie";
 import LeftSidebar from "../pages/components/LeftSidebar";
 import TopNavbar from "../pages/components/TopNavbar";
 import $ from "jquery";
-import AuthContext from "../context/AuthContext";
+import {checkUserPermission} from "../scripts/helper";
+import Page404 from "../pages/private/404";
 
 class Private extends Component {
-    static contextType = AuthContext;
-
     constructor(props) {
         super(props);
         this.state = {}
@@ -18,20 +17,25 @@ class Private extends Component {
     componentWillMount() {
       if (!Cookies.get("canpacToken")) {
         window.location = "/auth/login";
-      }
+      };
 
-      console.log("hello", localStorage.getItem("canpacPermissions"));
+      let permissions = JSON.parse(localStorage.getItem("canpacPermissions"));
+
+      console.log(permissions);
+      if (permissions?.length) {
+        this.setState({permissions: permissions})
+      }
     }
 
     getRoutes = routes => {
       return routes.map((prop, key) => {  
         if (prop.layout === "/") {
           return(<Route
-            exact
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />)
+              exact
+              path={prop.layout + prop.path}
+              component = {checkUserPermission( prop.permission, this.state.permissions ) ? prop.component : Page404}
+              key={key}
+            />)
         } else {
           return null;
         }
@@ -45,9 +49,6 @@ class Private extends Component {
     }
 
     render() {
-      const permissions = this.context;
-
-      console.log("permissions", this.context);
         return (
             <div className="rui-navbar-autohide rui-section-lines rui-navbar-show" id="main-wrapper">
               <LeftSidebar></LeftSidebar>

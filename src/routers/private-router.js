@@ -18,11 +18,13 @@ import CreateUser from "../pages/private/users/CreateUser";
 import UpdateUser from "../pages/private/users/UpdateUser";
 import CreateMarchent from "../pages/private/Merchents/CreateMarchent";
 import UpdateMarchent from "../pages/private/Merchents/UpdateMarchent";
+import Page404 from "../pages/private/404";
 
 const PrivateRoutes = [
     {
         path: "/",
         name: "Dashboard",
+        permission: "Dashboard Report",
         component: Dashboard,
         layout: "/",
         exact: true
@@ -30,6 +32,7 @@ const PrivateRoutes = [
     {
         path: "create-order",
         name: "Create Order",
+        permission: "Order - Creat",
         component: CreateOrder,
         layout: "/",
         exact: true
@@ -37,6 +40,7 @@ const PrivateRoutes = [
     {
         path: "update-profile",
         name: "Update Profile",
+        permission: "User - Profile | Update",
         component: UpdateProfile,
         layout: "/",
         exact: true
@@ -44,6 +48,7 @@ const PrivateRoutes = [
     {
         path: "product-stock",
         name: "Product Stock",
+        permission: 'Product - Stock',
         component: ProductStock,
         layout: "/",
         exact: true
@@ -51,6 +56,7 @@ const PrivateRoutes = [
     {
         path: "product-order",
         name: "Product Order",
+        permission: 'Product - Order',
         component: ProductOrder,
         layout: "/",
         exact: true
@@ -58,6 +64,7 @@ const PrivateRoutes = [
     {
         path: "order-draft",
         name: "Order Draft",
+        permission: 'Order - Draft',
         component: OrderDraft,
         layout: "/",
         exact: true
@@ -65,6 +72,7 @@ const PrivateRoutes = [
     {
         path: "product-order-details/:orderId",
         name: "Product Details",
+        permission: 'Product - Order',
         component: ProductDetails,
         layout: "/",
         exact: true
@@ -72,6 +80,7 @@ const PrivateRoutes = [
     {
         path: "low-stock",
         name: "Low Stock",
+        permission: 'Product - Low Stock',
         component: LowStock,
         layout: "/",
         exact: true
@@ -79,6 +88,7 @@ const PrivateRoutes = [
     {
         path: "product-delivery",
         name: "Product Delivery",
+        permission: 'Product - Delivery',
         component: ProductDelivery,
         layout: "/",
         exact: true
@@ -86,6 +96,7 @@ const PrivateRoutes = [
     {
         path: "weekly-report",
         name: "Weekly Report",
+        permission: 'Weekly Report',
         component: WeeklyReport,
         layout: "/",
         exact: true
@@ -93,6 +104,7 @@ const PrivateRoutes = [
     {
         path: "users",
         name: "Users",
+        permission: 'User - List',
         component: Users,
         layout: "/",
         exact: true
@@ -100,6 +112,7 @@ const PrivateRoutes = [
     {
         path: "users-create",
         name: "Users Create",
+        permission: 'User - Creat',
         component: CreateUser,
         layout: "/",
         exact: true
@@ -107,6 +120,7 @@ const PrivateRoutes = [
     {
         path: "update-user/:userId",
         name: "Users Update",
+        permission: 'User - Update',
         component: UpdateUser,
         layout: "/",
         exact: true
@@ -114,6 +128,7 @@ const PrivateRoutes = [
     {
         path: "merchents",
         name: "Merchents",
+        permission: 'Merchant - List',
         component: Merchents,
         layout: "/",
         exact: true
@@ -121,6 +136,7 @@ const PrivateRoutes = [
     {
         path: "create-merchents",
         name: "Merchents Create",
+        permission: 'Merchant - Creat',
         component: CreateMarchent,
         layout: "/",
         exact: true
@@ -128,6 +144,7 @@ const PrivateRoutes = [
     {
         path: "update-merchents/:marchentId",
         name: "Merchents Update",
+        permission: 'Merchant - Update',
         component: UpdateMarchent,
         layout: "/",
         exact: true
@@ -135,6 +152,7 @@ const PrivateRoutes = [
     {
         path: "permissionts",
         name: "Permissionts",
+        permission: 'Permission - List',
         component: Permissions,
         layout: "/",
         exact: true
@@ -142,6 +160,7 @@ const PrivateRoutes = [
     {
         path: "roles",
         name: "Roles",
+        permission: 'Role - List',
         component: Roles,
         layout: "/",
         exact: true
@@ -149,6 +168,7 @@ const PrivateRoutes = [
     {
         path: "create-role",
         name: "Create Role",
+        permission: 'Role - Creat',
         component: CreateRole,
         layout: "/",
         exact: true
@@ -156,7 +176,15 @@ const PrivateRoutes = [
     {
         path: "update-role/:roleId",
         name: "Update Role",
+        permission: 'Role - Update',
         component: UpdateRole,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "page-404",
+        name: "page 404",
+        component: Page404,
         layout: "/",
         exact: true
     },

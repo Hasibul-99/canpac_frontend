@@ -10,7 +10,7 @@ export default function SignIn() {
     const onFinish = async (values) => {
         let res = await postData(LOGIN, values, 'no_token');
         if (res) {
-            Cookies.set("canpacToken", res.data.data.access_token);
+            Cookies.set("canpacToken", res.data.data.access_token, { expires: 1 });
             window.location = "/";
         }
     };
