@@ -2,22 +2,20 @@ import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Tag } from 'antd';
 import { postData } from '../../../scripts/api-service';
-import { ORDER_LIST } from '../../../scripts/api';
+import { ORDER_LIST, DROPDOWN_LIST } from '../../../scripts/api';
 import { dateFormat, checkUserPermission } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-const children = [];
-
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
-
 export default function ProductOrder() {
     const { permissions } = useContext(authContext);
     const [orders, setOrders] = useState();
+    const [search, setSearch] = useState();
+    const [orderStatus, setOrderStatus] = useState();
+    const [customers, setCustomers] = useState();
+    const [productModel, setProductModel] = useState();
 
     const canView = (context) => {
         return checkUserPermission(context, permissions);
@@ -83,21 +81,93 @@ export default function ProductOrder() {
         },
     ].filter(item => !canView('Order - Details') ? item.key !== 'update' : item);
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
-
     const getProductOrder = async () => {
-        let res = await postData(ORDER_LIST, {})
+        let res = await postData(ORDER_LIST, search)
 
         if (res) {
             setOrders(res.data.data);
         }
+    };
+
+    const getCustomers = async () => {
+        let res = await postData(DROPDOWN_LIST, {
+            data_type: "customer"
+        })
+
+        if (res) {
+            setCustomers(res.data.data);
+        }
+    } 
+
+    const getOrderStatus = async () => {
+        let res = await postData(DROPDOWN_LIST, {
+            data_type: "order_status"
+        })
+
+        if (res) {
+            setOrderStatus(res.data.data);
+        }
+    };
+
+    const getPoductModel = async () => {
+        let res = await postData(DROPDOWN_LIST, {
+            data_type: "product_model"
+        });
+
+        if (res) {
+            setProductModel(res.data.data);
+        }
+    }
+
+    const searchOrder = (e) => {
+        setSearch(prevState => ({
+            ...prevState,
+            order_no: e.target.value
+        }))
+    };
+
+    const searchOrderStatus = (value) => {
+        setSearch(prevState => ({
+            ...prevState,
+            status: JSON.stringify(value)
+        }))
+    };
+
+    const searchProductModel = (value) => {
+        setSearch(prevState => ({
+            ...prevState,
+            product: JSON.stringify(value)
+        }))
+    };
+
+    const searchCustomer = (value) => {
+        setSearch(prevState => ({
+            ...prevState,
+            customer: JSON.stringify(value)
+        }))
+    };
+
+    const searchRange = (value, dateString) => {
+        setSearch(prevState => ({
+            ...prevState,
+            start_date: dateString[0]
+        }));
+        
+        setSearch(prevState => ({
+            ...prevState,
+            end_date: dateString[1]
+        }));
     }
 
     useEffect(() => {
-        getProductOrder();
+        getOrderStatus();
+        getCustomers();
+        getPoductModel();
     }, [])
+
+    useEffect(() => {
+        getProductOrder();
+    }, [search])
 
     return (
         <Fragment>
@@ -113,7 +183,7 @@ export default function ProductOrder() {
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 mb-20">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Type Order NO" />
+                                <Input size="large" placeholder="Type Order NO" onPressEnter={searchOrder}/>
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
@@ -123,10 +193,13 @@ export default function ProductOrder() {
                                         allowClear
                                         style={{ width: '100%' }}
                                         placeholder="Select Status"
+                                        onChange={searchOrderStatus}
                                         >
-                                        {children}
-                                    </Select>
-                                        
+                                        {
+                                            orderStatus?.length ?
+                                            orderStatus.map(status => <Option key={status.value} value={status.value}>{status.title}</Option>) : ''
+                                        }
+                                    </Select>  
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
@@ -136,39 +209,47 @@ export default function ProductOrder() {
                                         allowClear
                                         style={{ width: '100%' }}
                                         placeholder="Select Customers"
+                                        onChange={searchCustomer}
                                         >
-                                        {children}
+                                        {
+                                            customers?.length ?
+                                            customers.map(status => <Option key={status.value} value={status.value}>{status.title}</Option>) : ''
+                                        }
                                     </Select>
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
                                     <Select
                                         size="large"
-                                        // mode="multiple"
+                                        mode="multiple"
                                         allowClear
                                         style={{ width: '100%' }}
                                         placeholder="Products Models"
+                                        onChange={searchProductModel}
                                         >
-                                        {children}
+                                        {
+                                            productModel?.length ?
+                                            productModel.map(status => <Option key={status.id} value={status.id}>{status.product_name}</Option>) : ''
+                                        }
                                     </Select>
                             </div>
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <RangePicker size="large" style={{width: "100%"}} />
+                                    <RangePicker size="large" style={{width: "100%"}} onChange={searchRange}/>
                             </div>
                             <div className="col  col-sm-12 col-lg-3 mb-10">
                                 
                             </div>
                             <div className="col col-sm-12 col-lg-3 mb-10">
-                                <Button className="btn-light btn-block" size="large" 
+                                {/* <Button className="btn-light btn-block" size="large" 
                                         type="primary">
                                         Reset Filter
-                                </Button>
+                                </Button> */}
                             </div>
                             <div className="col col-sm-12 col-lg-3 mb-10">
-                                <Button className="btn-brand btn-block float-right" size="large" 
+                                {/* <Button className="btn-brand btn-block float-right" size="large" 
                                     type="primary">
                                     Filter
-                                </Button>
+                                </Button> */}
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { Select, Form, Button, InputNumber, Timeline   } from 'antd';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import { useParams } from "react-router-dom";
@@ -7,16 +7,22 @@ import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import { postData } from '../../../scripts/api-service';
 import { DROPDOWN_LIST, ORDER_VIEW, ORDER_UPDATE, ORDER_EMAIL } from '../../../scripts/api';
-import { alertPop } from '../../../scripts/helper';
+import { alertPop, checkUserPermission} from '../../../scripts/helper';
+import { authContext } from '../../../context/AuthContext';
 
 const { Option } = Select;
 
 export default function ProductDetails() {
+    const { permissions } = useContext(authContext);
     const [form] = Form.useForm();
     let { orderId } = useParams();
     const [order, setOrder] = useState();
     const [orderStatus, setOrderStatus] = useState();
     const [mailText, setMailText] = useState();
+
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
 
     const onFinish = async (values) => {
         let data = values;
@@ -89,60 +95,65 @@ export default function ProductDetails() {
                         <h4><strong>Status: </strong>{order?.status_title}</h4>
                     </div>
 
-                    <hr/>
+                    {
+                        canView('Product - Delivery | Update') ? <Fragment>
+                            <hr/>
 
-                    <div className="row">
-                        <div className="col col-sm-12 col-lg-6 mb-10">
-                            <Form style={{width: "100%", marginTop: "2rem"}}
-                                form={form}
-                                layout={'vertical'}
-                                onFinish={onFinish}
-                                >
-                                <Form.Item
-                                    label="Update Status"
-                                    name="status"
-                                    rules={[{ required: true, message: 'Please input status!' }]}
-                                >
-                                    <Select
-                                        size="large"
-                                        showSearch
-                                        placeholder="Process"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                    >
-                                        {
-                                            orderStatus?.length && orderStatus.map(status => <Option value={status.value} key={status.value}>{status.title}</Option>)
-                                        }
-                                    </Select>
-                                </Form.Item>
+                            <div className="row">
+                                <div className="col col-sm-12 col-lg-6 mb-10">
+                                    <Form style={{width: "100%", marginTop: "2rem"}}
+                                        form={form}
+                                        layout={'vertical'}
+                                        onFinish={onFinish}
+                                        >
+                                        <Form.Item
+                                            label="Update Status"
+                                            name="status"
+                                            rules={[{ required: true, message: 'Please input status!' }]}
+                                        >
+                                            <Select
+                                                size="large"
+                                                showSearch
+                                                placeholder="Process"
+                                                optionFilterProp="children"
+                                                filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                }
+                                            >
+                                                {
+                                                    orderStatus?.length && orderStatus.map(status => <Option value={status.value} key={status.value}>{status.title}</Option>)
+                                                }
+                                            </Select>
+                                        </Form.Item>
 
-                                <Form.Item
-                                    label="Delevary Quantity"
-                                    name="delivered_quantity"
-                                    rules={[{ required: true, message: 'Please input quantity!' }]}
-                                >
-                                    <InputNumber placeholder="Select Quantity" size="large" min={1} max={order?.ordered_quantity}  style={{width: "100%"}}/>
-                                </Form.Item>
+                                        <Form.Item
+                                            label="Delevary Quantity"
+                                            name="delivered_quantity"
+                                            rules={[{ required: true, message: 'Please input quantity!' }]}
+                                        >
+                                            <InputNumber placeholder="Select Quantity" size="large" min={1} max={order?.ordered_quantity}  style={{width: "100%"}}/>
+                                        </Form.Item>
 
-                                <Form.Item>
-                                    <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
-                                    Update Order
+                                        <Form.Item>
+                                            <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
+                                            Update Order
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
+                                </div>
+                                <div className="col col-sm-12 col-lg-6 mb-10">
+                                    <ReactQuill  onChange={quillChange} style={{height: "150px"}}/>
+
+                                    <Button className="btn-brand btn-block" size="large" type="primary" onClick={() => sendMail()}
+                                        style={{width: "100%", marginTop: "6rem"}} >
+                                        Send
                                     </Button>
-                                </Form.Item>
-                            </Form>
-                        </div>
-                        <div className="col col-sm-12 col-lg-6 mb-10">
-                            <ReactQuill  onChange={quillChange} style={{height: "150px"}}/>
+                                </div>
+                            </div>
 
-                            <Button className="btn-brand btn-block" size="large" type="primary" onClick={() => sendMail()}
-                                style={{width: "100%", marginTop: "6rem"}} >
-                                Send
-                            </Button>
-                        </div>
-                    </div>
-
+                        </Fragment> : ''
+                    }
+                    
                     <hr/>
 
                     <div className="order-history mt-50">
