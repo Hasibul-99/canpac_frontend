@@ -2,8 +2,8 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import "./style.scss";
-import {LOGIN} from "../../../scripts/api";
-import {postData} from "../../../scripts/api-service";
+import {LOGIN, USER_PROFILE} from "../../../scripts/api";
+import {postData, postDataProfile} from "../../../scripts/api-service";
 import Cookies from "js-cookie";
 
 export default function SignIn() {
@@ -11,9 +11,19 @@ export default function SignIn() {
         let res = await postData(LOGIN, values, 'no_token');
         if (res) {
             Cookies.set("canpacToken", res.data.data.access_token, { expires: 1 });
-            window.location = "/";
+            // window.location = "/";
+            setUserInfo(res.data.data.access_token);
         }
     };
+
+    const setUserInfo = async (token) => {
+        let res = await postDataProfile(USER_PROFILE, {}, token);
+        if (res) {
+            let masterData = res?.data?.data;
+            localStorage.setItem("canpacPermissions", JSON.stringify(masterData?.roles[0].permissions));
+            window.location = "/";
+        }
+    }
 
     return (
         <div className="rui-main">

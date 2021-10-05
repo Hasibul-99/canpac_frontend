@@ -6,7 +6,8 @@ import { useParams } from "react-router-dom";
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import { postData } from '../../../scripts/api-service';
-import { DROPDOWN_LIST, ORDER_VIEW } from '../../../scripts/api';
+import { DROPDOWN_LIST, ORDER_VIEW, ORDER_UPDATE, ORDER_EMAIL } from '../../../scripts/api';
+import { alertPop } from '../../../scripts/helper';
 
 const { Option } = Select;
 
@@ -15,16 +16,21 @@ export default function ProductDetails() {
     let { orderId } = useParams();
     const [order, setOrder] = useState();
     const [orderStatus, setOrderStatus] = useState();
+    const [mailText, setMailText] = useState();
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const onFinish = async (values) => {
+        let data = values;
+        data.id = orderId;
+
+        let res = await postData(ORDER_UPDATE, data);
+        if (res) {
+            alertPop('success', "Updated Successfully!");
+        }
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
-    const quillChange = () => {}
+    const quillChange = (value) => {
+        setMailText(value);
+    }
 
     const getOrderDetails = async () => {
         let res = await postData(ORDER_VIEW, {
@@ -47,6 +53,18 @@ export default function ProductDetails() {
         });
 
         if (res) setOrderStatus(res.data.data)
+    }
+
+    const sendMail = async () => {
+        let data = {
+            id: orderId,
+            text: mailText
+        };
+
+        let res = await postData(ORDER_EMAIL, data);
+        if (res) {
+            alertPop('success', "Sended Successfully!");
+        }
     }
 
     useEffect(() => {
@@ -79,7 +97,6 @@ export default function ProductDetails() {
                                 form={form}
                                 layout={'vertical'}
                                 onFinish={onFinish}
-                                onFinishFailed={onFinishFailed}
                                 >
                                 <Form.Item
                                     label="Update Status"
@@ -103,7 +120,7 @@ export default function ProductDetails() {
 
                                 <Form.Item
                                     label="Delevary Quantity"
-                                    name="ordered_quantity"
+                                    name="delivered_quantity"
                                     rules={[{ required: true, message: 'Please input quantity!' }]}
                                 >
                                     <InputNumber placeholder="Select Quantity" size="large" min={1} max={order?.ordered_quantity}  style={{width: "100%"}}/>
@@ -119,7 +136,7 @@ export default function ProductDetails() {
                         <div className="col col-sm-12 col-lg-6 mb-10">
                             <ReactQuill  onChange={quillChange} style={{height: "150px"}}/>
 
-                            <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" 
+                            <Button className="btn-brand btn-block" size="large" type="primary" onClick={() => sendMail()}
                                 style={{width: "100%", marginTop: "6rem"}} >
                                 Send
                             </Button>

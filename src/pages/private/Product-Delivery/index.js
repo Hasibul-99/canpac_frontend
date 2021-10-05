@@ -18,49 +18,57 @@ export default function ProductDelivery() {
     const columns = [
         {
           title: 'Order NO',
-          dataIndex: 'name',
-          key: 'name',
+          dataIndex: 'sap_order_id',
+          key: 'sap_order_id',
         },
         {
           title: 'Customer',
-          dataIndex: 'age',
-          key: 'age',
+          key: 'merchant_id',
+          render: (text, record) => (
+            <Space size="middle">
+              {record.merchant.name}
+            </Space>
+          )
         },
         {
           title: 'Product name',
-          dataIndex: 'product_name',
-          key: 'address',
+          key: 'product_id',
+          render: (text, record) => (
+            <Space size="middle">
+              {record.product.product_name}
+            </Space>
+          )
         },
         {
             title: 'Date',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'order_date_time',
+            key: 'order_date_time',
         },
         {
             title: 'Order Quantity (can)',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'ordered_quantity',
+            key: 'ordered_quantity',
         },
         {
             title: 'Deliveried',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'delivered_quantity',
+            key: 'delivered_quantity',
         },
         {
             title: 'Remaining',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'remaining_quantity',
+            key: 'remaining_quantity',
         },
         {
             title: 'Status',
-            dataIndex: 'age',
-            key: 'address',
+            dataIndex: 'status_title',
+            key: 'status_title',
         },
         {
             title: 'Action',
             render: (text, record) => (
                 <Space size="middle">
-                  <a>Update</a>
+                  <Link to={`/product-order-details/${record.id}`}>Update</Link>
                 </Space>
               )
         },

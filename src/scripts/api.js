@@ -39,6 +39,8 @@ export const ORDER_DRAFT = "order/draft";
 export const ORDER_LIST = "order/product-order";
 export const ORDER_APPROVE_OR_CANCEL = "order/approval";
 export const PRODUCT_DELIVARY = "order/product-delivery";
+export const ORDER_UPDATE = "order/update";
+export const ORDER_EMAIL = "order/email";
 
 
 // Product

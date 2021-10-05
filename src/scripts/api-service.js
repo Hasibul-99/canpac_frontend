@@ -161,3 +161,40 @@ export const deleteData = async (query, no_token) => {
     // return false;
   }
 };
+
+
+export const postDataProfile = async (query, data, token) => {
+  try {
+    let res = await axios({
+      method: "post",
+      url: `${base_url}${query}`,
+      headers: {
+            'Authorization': `Bearer ${token}`,
+            "lang": i18n?.language || 'en'
+          },
+      data: data,
+    });
+    if (checkRes(res?.data.code)) {
+      return res;
+    } else {
+      alert(res?.data?.message);
+      
+      if (res?.data?.errors && Object.keys(res.data.errors).length !== 0) {
+        let error = res.data.errors;
+
+        for (const prop in error) {
+          if (error[prop][0]) alert(error[prop][0])
+        }
+      }
+    }
+  } catch (error) {
+    checkRes(error?.response?.status);
+    Array.isArray(error?.response?.data?.messages)
+      ? error.response.data.messages.map((err) => {
+          alertPop("error", err);
+          console.log("err", err);
+        })
+      : console.log("error", error); //errorHandle(error);
+    return false;
+  }
+};
