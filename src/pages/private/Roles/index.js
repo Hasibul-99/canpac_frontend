@@ -17,6 +17,7 @@ for (let i = 10; i < 36; i++) {
 
 export default function Roles() {
     const [roles, setRoles] = useState([]);
+    const [search, setSearch] = useState({});
 
     const columns = [
         {
@@ -78,16 +79,23 @@ export default function Roles() {
     }
 
     const getRoles = async () => {
-        let res = await postData(ROLE_LIST, {});
+        let res = await postData(ROLE_LIST, search);
 
         if (res) {
             setRoles(res.data.data);
         }
-    }
+    };
+
+    const generateSearchObj = (name, value) => {
+        setSearch(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
+    };
 
     useEffect(() => {
         getRoles()
-    }, [])
+    }, [search])
 
     return (
         <Fragment>
@@ -103,7 +111,7 @@ export default function Roles() {
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 mb-20">
                             <div className="col  col-sm-12 col-lg-4 mb-10">
-                                <Input size="large" placeholder="Type Role Name" />
+                                <Input size="large" placeholder="Type Role Name" onPressEnter={(e) => generateSearchObj('name', e.target.value)}/>
                             </div>
                         </div>
                     </div>

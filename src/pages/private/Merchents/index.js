@@ -1,6 +1,6 @@
 import React, { Fragment, useState,useEffect, useContext } from 'react';
 import {Table, Space, Select, Form, Button, Input, DatePicker, Modal } from 'antd';
-import { MERCHENT_LIST, USER_STATUS_UPDATE, EMAIL_CONFIRMATION_RESENT } from "../../../scripts/api";
+import { MERCHENT_LIST, USER_STATUS_UPDATE, EMAIL_CONFIRMATION_RESENT, DROPDOWN_LIST } from "../../../scripts/api";
 import { postData } from "../../../scripts/api-service";
 import { useHistory, Link } from "react-router-dom";
 import { alertPop, checkUserPermission } from '../../../scripts/helper';
@@ -10,18 +10,14 @@ import { authContext } from '../../../context/AuthContext';
 
 const { confirm } = Modal;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
-
-const children = [];
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
 
 export default function Merchents() {
     const { permissions } = useContext(authContext);
     const history = useHistory();
     const [marchents, setMerchents ] = useState();
-    
+    const [search, setSearch] = useState();
+    const [roles, setRoles] = useState();
+
     const canView = (context) => {
         return checkUserPermission(context, permissions);
     };
@@ -114,23 +110,36 @@ export default function Merchents() {
         });
     }
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
     const getMerchents = async () => {
-        let res = await postData(MERCHENT_LIST, {});
+        let res = await postData(MERCHENT_LIST, search);
 
         if (res) setMerchents(res.data.data);
     }
 
+    const generateSearchObj = (name, value) => {
+        setSearch(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
+    };
+
+    const getRoles = async() => {
+        let res = await postData(DROPDOWN_LIST, {
+            data_type: "role"
+        })
+
+        if (res) {
+            setRoles(res.data.data);
+        }
+    }
+
+    useEffect(() => {
+        getRoles();
+    }, [])
+
     useEffect(() => {
         getMerchents()
-    }, []);
+    }, [search]);
 
     return (
         <Fragment>
@@ -146,43 +155,57 @@ export default function Merchents() {
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 mb-20">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Name" />
+                                <Input size="large" placeholder="Name" onPressEnter={(e) => generateSearchObj('name', e.target.value)} />
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Email" />
+                                <Input size="large" placeholder="Email" onPressEnter={(e) => generateSearchObj('email', e.target.value)} />
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Phone" />
+                                <Input size="large" placeholder="Phone" onPressEnter={(e) => generateSearchObj('mobile_number', e.target.value)} />
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
                                 <Select
                                     size="large"
-                                    // mode="multiple"
                                     allowClear
                                     style={{ width: '100%' }}
-                                    placeholder="Select Status"
+                                    placeholder="Search email verified"
+                                    onChange={(value) => generateSearchObj('email_verified', value)}
                                     >
-                                    {children}
+                                    <Option key={'Verifed'} value='verifed'>Verifed</Option>
+                                    <Option key={'not_verified'} value="not verified">Not Verified</Option>
                                 </Select>
                             </div>
 
-                            <div className="col  col-sm-12 col-lg-6 mb-10">
+                            <div className="col  col-sm-12 col-lg-3 mb-10">
+                                <Select
+                                    size="large"
+                                    allowClear
+                                    style={{ width: '100%' }}
+                                    placeholder="Search Status"
+                                    onChange={(value) => generateSearchObj('status', value)}
+                                    >
+                                    <Option key={1} value={"1"}>Active</Option>
+                                    <Option key={0} value={"0"}>Inactive</Option>
+                                </Select>
+                            </div>
+                            <div className="col col-sm-12 col-lg-3 mb-10">
+                                <Select
+                                    size="large"
+                                    allowClear
+                                    style={{ width: '100%' }}
+                                    placeholder="Search Role"
+                                    onChange={(value) => generateSearchObj('role', value)}
+                                    >
+                                        {
+                                            roles?.length && roles.map(role => <Option key={role.id} value={role.id}>{role.name}</Option>)
+                                        }
+                                </Select>
+                            </div>
+                            <div className="col col-sm-12 col-lg-3 mb-10">
                                 
-                            </div>
-                            <div className="col col-sm-12 col-lg-3 mb-10">
-                                <Button className="btn-light btn-block" size="large" 
-                                        type="primary">
-                                        Reset Filter
-                                </Button>
-                            </div>
-                            <div className="col col-sm-12 col-lg-3 mb-10">
-                                <Button className="btn-brand btn-block float-right" size="large" 
-                                    type="primary">
-                                    Filter
-                                </Button>
                             </div>
                         </div>
                     </div>

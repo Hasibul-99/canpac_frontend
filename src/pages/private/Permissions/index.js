@@ -22,7 +22,8 @@ export default function Permissions(permissionId) {
     const [changepassModal, setChangepassModal] = useState(false);
     const [permissions, setPermissions]=  useState();
     const [updatePermission, setUpdatePermission] = useState();
-    const [selectedPermission, setSelectedPermission] = useState()
+    const [selectedPermission, setSelectedPermission] = useState();
+    const [search, setSearch] = useState({});
 
     const showDeleteConfirm = (permissionId) => {
         confirm({
@@ -113,13 +114,20 @@ export default function Permissions(permissionId) {
     }
 
     const getPermissions = async () => {
-        let res = await postData(PERMISSION_LIST, {});
+        let res = await postData(PERMISSION_LIST, search);
         if (res) setPermissions(res?.data?.data)
     }
+    
+    const generateSearchObj = (name, value) => {
+        setSearch(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
+    };
 
     useEffect(() => {
         getPermissions()
-    }, []) 
+    }, [search]) 
 
     return (
         <Fragment>
@@ -135,7 +143,7 @@ export default function Permissions(permissionId) {
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 mb-20">
                             <div className="col  col-sm-12 col-lg-4 mb-10">
-                                <Input size="large" placeholder="Type Permission Name" />
+                                <Input size="large" placeholder="Type Permission Name" onPressEnter={(e) => generateSearchObj('name', e.target.value)}/>
                             </div>
                         </div>
                     </div>
