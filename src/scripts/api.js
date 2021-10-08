@@ -51,4 +51,5 @@ export const PRODUCT_STOCK = "product/stock";
 export const DASHBOARD = "dashboard";
 
 // Report 
-export const WEEK_REPORT = "report/weekly"
+export const WEEK_REPORT = "report/weekly";
+export const WEEKLY_REPORT_EXPORT = "report/weekly/export";

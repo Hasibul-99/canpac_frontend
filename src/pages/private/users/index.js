@@ -163,7 +163,7 @@ export default function Users() {
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Phone" onPressEnter={(e) => generateSearchObj('mobile_number', e.target.value)} />
+                                <Input size="large" placeholder="Phone" onPressEnter={(e) => generateSearchObj('phone', e.target.value)} />
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
@@ -185,10 +185,10 @@ export default function Users() {
                                     allowClear
                                     style={{ width: '100%' }}
                                     placeholder="Search Status"
-                                    onChange={(value) => generateSearchObj('status', value)}
+                                    onChange={(value) => generateSearchObj('status', [value])}
                                     >
-                                    <Option key={1} value={"1"}>Active</Option>
-                                    <Option key={0} value={"0"}>Inactive</Option>
+                                    <Option key={1} value={1}>Active</Option>
+                                    <Option key={0} value={0}>Inactive</Option>
                                 </Select>
                             </div>
                             <div className="col col-sm-12 col-lg-3 mb-10">
@@ -197,7 +197,7 @@ export default function Users() {
                                     allowClear
                                     style={{ width: '100%' }}
                                     placeholder="Search Role"
-                                    onChange={(value) => generateSearchObj('role', value)}
+                                    onChange={(value) => generateSearchObj('role', [value])}
                                     >
                                         {
                                             roles?.length && roles.map(role => <Option key={role.id} value={role.id}>{role.name}</Option>)

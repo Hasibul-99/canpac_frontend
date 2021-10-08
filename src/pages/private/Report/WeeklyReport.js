@@ -2,15 +2,21 @@ import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
 import { postData } from '../../../scripts/api-service';
-import { WEEK_REPORT } from '../../../scripts/api';
+import { WEEK_REPORT, WEEKLY_REPORT_EXPORT } from '../../../scripts/api';
+import moment from "moment";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 
 export default function WeeklyReport() {
-    const [report, setReport] = useState();      
-      const columns = [
+    const [report, setReport] = useState();
+    const [dateRange, setDateRange] = useState({
+      start_date: moment().startOf('week').format('YYYY-MM-DD'),
+      end_date: moment().endOf('week').format('YYYY-MM-DD')
+    });
+
+    const columns = [
         {
           title: 'Order NO',
           dataIndex: 'sales_order_no',
@@ -43,17 +49,35 @@ export default function WeeklyReport() {
         },
     ];
 
+    function onChange(data) {
+      if (data && data._d) {
+        setDateRange({
+          start_date: moment(data._d).startOf('week').format('YYYY-MM-DD'),
+          end_date: moment(data._d).endOf('week').format('YYYY-MM-DD')
+        })
+      }
+    }
+
     const getReport = async () => {
-      let res = await postData(WEEK_REPORT, {});
+      let res = await postData(WEEK_REPORT, dateRange);
 
       if (res) {
         setReport(res.data.data);
       }
     }
 
+    const generateReport = async () => {
+      console.log("hello");
+      let res = await postData(WEEKLY_REPORT_EXPORT, dateRange);
+
+      if (res) {
+        console.log(res.data);
+      }
+    }
+
     useEffect(() => {
       getReport()
-    }, [])
+    }, [dateRange])
 
     return (
         <Fragment>
@@ -67,22 +91,12 @@ export default function WeeklyReport() {
             <div className="rui-page-content">
                 <div className="container-fluid">
                     <div className="mb-20">
-                        <DatePicker size="large" className="mr-20" picker="week" style={{width: "300px"}} />
-
-                        <Select
-                          size="large"
-                          showSearch
-                          style={{ width: 200 }}
-                          placeholder="Select a person"
-                          optionFilterProp="children"
-                          filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                          }
-                        >
-                          <Option value="jack">Jack</Option>
-                          <Option value="lucy">Lucy</Option>
-                          <Option value="tom">Tom</Option>
-                        </Select>
+                        <DatePicker size="large" onChange={onChange} defaultValue={moment()} className="mr-20" 
+                          allowClear={false} picker="week" style={{width: "300px"}} />
+                          
+                        <div className="float-right">
+                          <Button type="primary" onClick={() => generateReport()}>Generate Reprot</Button>
+                        </div>
                     </div>
                     <Table dataSource={report} columns={columns} />
                 </div>

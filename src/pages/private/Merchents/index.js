@@ -163,7 +163,7 @@ export default function Merchents() {
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Phone" onPressEnter={(e) => generateSearchObj('mobile_number', e.target.value)} />
+                                <Input size="large" placeholder="Phone" onPressEnter={(e) => generateSearchObj('phone', e.target.value)} />
                             </div>
 
                             <div className="col  col-sm-12 col-lg-3 mb-10">
