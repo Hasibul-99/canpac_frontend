@@ -135,17 +135,7 @@ export default function OrderDraft() {
         if (res) {
             setCustomers(res.data.data);
         }
-    } 
-
-    const getOrderStatus = async () => {
-        let res = await postData(DROPDOWN_LIST, {
-            data_type: "order_status"
-        })
-
-        if (res) {
-            setOrderStatus(res.data.data);
-        }
-    };
+    }
 
     const getPoductModel = async () => {
         let res = await postData(DROPDOWN_LIST, {
@@ -198,7 +188,6 @@ export default function OrderDraft() {
     }
 
     useEffect(() => {
-        getOrderStatus();
         getCustomers();
         getPoductModel();
     }, [])
@@ -220,26 +209,6 @@ export default function OrderDraft() {
                     <div className="">
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-20 mb-20">
-                            {/* <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Type Order NO" onPressEnter={searchOrder}/>
-                            </div> */}
-
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Select
-                                        size="large"
-                                        mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Status"
-                                        onChange={searchOrderStatus}
-                                        >
-                                        {
-                                            orderStatus?.length ?
-                                            orderStatus.map(status => <Option key={status.value} value={status.value}>{status.title}</Option>) : ''
-                                        }
-                                    </Select>  
-                            </div>
-
                             <div className="col  col-sm-12 col-lg-3 mb-10">
                                     <Select
                                         size="large"

@@ -44,7 +44,11 @@ export default function CreateUser() {
 
     const getRoles = async () => {
         let res = await postData(ROLE_LIST, {});
-        if (res) setRoles(res.data.data);
+        
+        if (res) {
+            let masterData = res.data.data.filter(val => (val.name !== 'Merchant' && val.name !== "Premium Merchant"));
+            setRoles(masterData);
+        } 
     }
 
     useEffect(() => {

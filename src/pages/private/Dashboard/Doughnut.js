@@ -7,7 +7,14 @@ const DoughnutChart = ({products}) => {
 
   useEffect(() => {
     let labels = products.map(pro => pro.product.product_name),
-        quantity = products.map(pro => pro.quantity);
+        quantity = products.map(pro => pro.quantity),
+        backgroundColor = [];
+
+      products.forEach(val => {
+        var randomColor = Math.floor(Math.random()*16777215).toString(16);
+        console.log("randomColor", randomColor);
+        backgroundColor.push('#' + randomColor);
+      });
 
     setChart({
       labels: labels,
@@ -15,22 +22,23 @@ const DoughnutChart = ({products}) => {
         {
           label: '# Done',
           data: quantity,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-          ],
+          backgroundColor: backgroundColor,
+          // backgroundColor: [
+          //   'rgba(255, 99, 132, 0.2)',
+          //   'rgba(54, 162, 235, 0.2)',
+          //   'rgba(255, 206, 86, 0.2)',
+          //   'rgba(75, 192, 192, 0.2)',
+          //   'rgba(153, 102, 255, 0.2)',
+          //   'rgba(255, 159, 64, 0.2)',
+          // ],
+          // borderColor: [
+          //   'rgba(255, 99, 132, 1)',
+          //   'rgba(54, 162, 235, 1)',
+          //   'rgba(255, 206, 86, 1)',
+          //   'rgba(75, 192, 192, 1)',
+          //   'rgba(153, 102, 255, 1)',
+          //   'rgba(255, 159, 64, 1)',
+          // ],
           borderWidth: 1,
         },
       ],

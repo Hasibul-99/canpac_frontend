@@ -109,7 +109,8 @@ export default function ProductOrder() {
         })
 
         if (res) {
-            setOrderStatus(res.data.data);
+            let masterData = res.data.data.filter(val => val.title !== "Active");
+            setOrderStatus(masterData);
         }
     };
 

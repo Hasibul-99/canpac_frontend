@@ -23,7 +23,13 @@ export default function VerticalBar({quantity}) {
 
   useEffect(() => {
     let lables = quantity.map(qun => qun.product_name),
-        quan = quantity.map(qun => qun.stock);
+        quan = quantity.map(qun => qun.stock),
+        backgroundColor = [];
+
+        quantity.forEach(val => {
+          var randomColor = Math.floor(Math.random()*16777215).toString(16);
+          backgroundColor.push('#' + randomColor);
+        });
 
     setChart({
       labels: lables,
@@ -31,6 +37,7 @@ export default function VerticalBar({quantity}) {
         {
           label: 'Clear',
           data: quan,
+          backgroundColor: backgroundColor,
           // backgroundColor: [
           //   'rgba(255, 99, 132, 0.2)',
           //   'rgba(54, 162, 235, 0.2)',

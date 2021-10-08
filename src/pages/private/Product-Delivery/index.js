@@ -115,7 +115,8 @@ export default function ProductDelivery() {
         })
 
         if (res) {
-            setOrderStatus(res.data.data);
+            let masterData = res.data.data.filter(val => (val.title === 'Processing' || val.title === 'Delivered'))
+            setOrderStatus(masterData);
         }
     };
 
