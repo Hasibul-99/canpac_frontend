@@ -133,6 +133,13 @@ export default function Users() {
         if (res) setUsers(res.data.data);
     };
 
+    const statusSearch = (value) => {
+        generateSearchObj('status', value.length ? JSON.stringify(value) : null);
+    }
+    const sarchByRole = value => {
+        generateSearchObj('role', value.length ? JSON.stringify(value) : null)
+    }
+
     useEffect(() => {
         getRoles();
     }, []);
@@ -182,10 +189,11 @@ export default function Users() {
                             <div className="col  col-sm-12 col-lg-3 mb-10">
                                 <Select
                                     size="large"
+                                    mode="multiple"
                                     allowClear
                                     style={{ width: '100%' }}
                                     placeholder="Search Status"
-                                    onChange={(value) => generateSearchObj('status', [value])}
+                                    onChange={statusSearch}
                                     >
                                     <Option key={1} value={1}>Active</Option>
                                     <Option key={0} value={0}>Inactive</Option>
@@ -195,9 +203,10 @@ export default function Users() {
                                 <Select
                                     size="large"
                                     allowClear
+                                    mode="multiple"
                                     style={{ width: '100%' }}
                                     placeholder="Search Role"
-                                    onChange={(value) => generateSearchObj('role', [value])}
+                                    onChange={sarchByRole}
                                     >
                                         {
                                             roles?.length && roles.map(role => <Option key={role.id} value={role.id}>{role.name}</Option>)

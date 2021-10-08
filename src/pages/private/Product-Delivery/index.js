@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import {Table, Space, Select, Tag, Button, Input, DatePicker  } from 'antd';
 import { postData } from '../../../scripts/api-service';
 import { PRODUCT_DELIVARY, DROPDOWN_LIST } from '../../../scripts/api';
+import { dateFormat } from '../../../scripts/helper';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -47,6 +48,9 @@ export default function ProductDelivery() {
             title: 'Date',
             dataIndex: 'order_date_time',
             key: 'order_date_time',
+            render: (date) => (
+                <span>{dateFormat(date)}</span>
+            )
         },
         {
             title: 'Order Quantity (can)',
@@ -67,6 +71,15 @@ export default function ProductDelivery() {
             title: 'Status',
             dataIndex: 'status_title',
             key: 'status_title',
+            render: (status) => (
+                <span>
+                    { status === 'Canceled' ? 
+                        <Tag color="#f50">{status}</Tag> : 
+                      status === 'Delivered' ? <Tag color="#87d068">{status}</Tag> :
+                      status === 'Processing' ? <Tag color="#2db7f5">{status}</Tag> : 
+                      status === 'Approved' ? <Tag color="cyan">{status}</Tag> :  <Tag color="magenta">{status}</Tag>}
+                </span>
+            )
         },
         {
             title: 'Action',

@@ -66,7 +66,11 @@ export default function ProductOrder() {
             key: 'status',
             render: (status) => (
                 <span>
-                    {status === 'Canceled' ? <Tag color="#f50">{status}</Tag> : <Tag color="#87d068">{status}</Tag>}
+                    { status === 'Canceled' ? 
+                        <Tag color="#f50">{status}</Tag> : 
+                      status === 'Delivered' ? <Tag color="#87d068">{status}</Tag> :
+                      status === 'Processing' ? <Tag color="#2db7f5">{status}</Tag> : 
+                      status === 'Approved' ? <Tag color="cyan">{status}</Tag> :  <Tag color="magenta">{status}</Tag>}
                 </span>
             )
         },
