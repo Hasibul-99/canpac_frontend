@@ -115,7 +115,7 @@ export default function WeeklyReport() {
                           allowClear={false} picker="week" style={{width: "300px"}} />
                           
                         <div className="float-right">
-                          <Button type="primary" onClick={() => generateReport()}>Generate Reprot</Button>
+                          <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
                         </div>
                     </div>
                     <Table dataSource={report} columns={columns} />

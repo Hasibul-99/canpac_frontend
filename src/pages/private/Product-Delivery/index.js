@@ -273,9 +273,9 @@ export default function ProductDelivery() {
                         </div>
                     </div>
 
-                    <div className="float-right mb-20">
-                        <Button type="primary" onClick={() => generateReport()}>Generate Reprot</Button>
-                    </div>
+                    {/* <div className="float-right mb-20">
+                        <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
+                    </div> */}
 
                     <Table dataSource={products} columns={columns} />
                 </div>

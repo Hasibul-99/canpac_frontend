@@ -268,7 +268,7 @@ export default function ProductOrder() {
                     </div>
 
                     <div className="float-right mb-20">
-                        <Button type="primary" onClick={() => generateReport()}>Generate Reprot</Button>
+                        <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
                     </div>
                     <Table dataSource={orders} columns={columns} />
                 </div>
