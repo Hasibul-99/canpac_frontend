@@ -17,11 +17,11 @@ const alert = (messages) => {
 export const getData = async (query, no_token) => {
   try {
     let data = await axios.get(`${base_url}${query}`, {
-      headers: no_token
-        ? {}
-        : {
-          'x-auth-token': `${token}`,
-          },
+      headers: no_token ? {} : {
+        'Authorization': `Bearer ${token}`,
+        "lang": i18n?.language || 'en',
+        "responseType": "arraybuffer"
+      },
     });
     return data;
     // if (checkRes(data.status)) {

@@ -52,4 +52,8 @@ export const DASHBOARD = "dashboard";
 
 // Report 
 export const WEEK_REPORT = "report/weekly";
+
 export const WEEKLY_REPORT_EXPORT = "report/weekly/export";
+export const ORDER_DRAFT_EXPORT = "order/draft/export";
+export const ORDER_PRODUCT_EXPORT = "order/product-order/export";
+export const ORDER_PRODUCT_DELIVERY_EXPORT = "order/product-delivery/export";

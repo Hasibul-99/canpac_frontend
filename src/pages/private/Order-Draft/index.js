@@ -2,8 +2,8 @@ import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Modal  } from 'antd';
 import { postData } from '../../../scripts/api-service';
-import { ORDER_APPROVE_OR_CANCEL, ORDER_DRAFT, DROPDOWN_LIST } from '../../../scripts/api';
-import { alertPop, dateFormat } from '../../../scripts/helper';
+import { ORDER_APPROVE_OR_CANCEL, ORDER_DRAFT, DROPDOWN_LIST, ORDER_DRAFT_EXPORT } from '../../../scripts/api';
+import { alertPop, dateFormat, buildSearchQuery } from '../../../scripts/helper';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const { confirm } = Modal;
@@ -187,6 +187,14 @@ export default function OrderDraft() {
         }));
     }
 
+    const generateReport = () => {
+        const base_url = process.env.REACT_APP_BASE;
+        let query = buildSearchQuery(search);
+
+        let url = base_url + ORDER_DRAFT_EXPORT + `?${query}`;
+        window.open(url, '_blank'); 
+    }
+
     useEffect(() => {
         getCustomers();
         getPoductModel();
@@ -260,6 +268,10 @@ export default function OrderDraft() {
                             </div>
                         </div>
                     </div>
+                    <div className="float-right mb-20">
+                        <Button type="primary" onClick={() => generateReport()}>Generate Reprot</Button>
+                    </div>
+                    
                     <Table dataSource={draftList} columns={columns} />
                 </div>
             </div>

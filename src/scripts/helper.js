@@ -48,3 +48,13 @@ export const checkUserPermission = (allow, permissions) => {
       return array.includes(allow);
   } else return false
 }
+
+export const buildSearchQuery = (object = {}) => {
+  let query = "";
+
+  for (const [key, value] of Object.entries(object)) {
+      if (value) query = query + `&${key}=${value}`;
+  }
+
+  return query;
+}

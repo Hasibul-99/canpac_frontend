@@ -2,8 +2,8 @@ import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Tag } from 'antd';
 import { postData } from '../../../scripts/api-service';
-import { ORDER_LIST, DROPDOWN_LIST } from '../../../scripts/api';
-import { dateFormat, checkUserPermission } from '../../../scripts/helper';
+import { ORDER_LIST, DROPDOWN_LIST, ORDER_PRODUCT_EXPORT } from '../../../scripts/api';
+import { dateFormat, checkUserPermission, buildSearchQuery } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
 
 const { Option } = Select;
@@ -164,6 +164,14 @@ export default function ProductOrder() {
         }));
     }
 
+    const generateReport = () => {
+        const base_url = process.env.REACT_APP_BASE;
+        let query = buildSearchQuery(search);
+
+        let url = base_url + ORDER_PRODUCT_EXPORT + `?${query}`;
+        window.open(url, '_blank'); 
+    }
+
     useEffect(() => {
         getOrderStatus();
         getCustomers();
@@ -257,6 +265,10 @@ export default function ProductOrder() {
                                 </Button> */}
                             </div>
                         </div>
+                    </div>
+
+                    <div className="float-right mb-20">
+                        <Button type="primary" onClick={() => generateReport()}>Generate Reprot</Button>
                     </div>
                     <Table dataSource={orders} columns={columns} />
                 </div>

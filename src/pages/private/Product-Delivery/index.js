@@ -2,8 +2,8 @@ import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Tag, Button, Input, DatePicker  } from 'antd';
 import { postData } from '../../../scripts/api-service';
-import { PRODUCT_DELIVARY, DROPDOWN_LIST } from '../../../scripts/api';
-import { dateFormat } from '../../../scripts/helper';
+import { PRODUCT_DELIVARY, DROPDOWN_LIST, ORDER_PRODUCT_DELIVERY_EXPORT } from '../../../scripts/api';
+import { buildSearchQuery, dateFormat } from '../../../scripts/helper';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -170,6 +170,14 @@ export default function ProductDelivery() {
         }));
     }
 
+    const generateReport = () => {
+        const base_url = process.env.REACT_APP_BASE;
+        let query = buildSearchQuery(search);
+
+        let url = base_url + ORDER_PRODUCT_DELIVERY_EXPORT + `?${query}`;
+        window.open(url, '_blank'); 
+    }
+
     useEffect(() => {
         getOrderStatus();
         getCustomers();
@@ -263,6 +271,10 @@ export default function ProductDelivery() {
                                 </Button> */}
                             </div>
                         </div>
+                    </div>
+
+                    <div className="float-right mb-20">
+                        <Button type="primary" onClick={() => generateReport()}>Generate Reprot</Button>
                     </div>
 
                     <Table dataSource={products} columns={columns} />

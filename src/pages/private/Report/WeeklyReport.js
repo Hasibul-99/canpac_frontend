@@ -1,15 +1,19 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
-import { postData } from '../../../scripts/api-service';
-import { WEEK_REPORT, WEEKLY_REPORT_EXPORT } from '../../../scripts/api';
+import { postData, getData} from '../../../scripts/api-service';
+import { WEEK_REPORT, WEEKLY_REPORT_EXPORT, draft_report } from '../../../scripts/api';
 import moment from "moment";
+import { saveAs } from 'file-saver';
+import Cookies from "js-cookie";
+import { buildSearchQuery } from '../../../scripts/helper';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 
 export default function WeeklyReport() {
+  const token = Cookies.get("canpacToken") || "";
     const [report, setReport] = useState();
     const [dateRange, setDateRange] = useState({
       start_date: moment().startOf('week').format('YYYY-MM-DD'),
@@ -67,12 +71,28 @@ export default function WeeklyReport() {
     }
 
     const generateReport = async () => {
-      console.log("hello");
-      let res = await postData(WEEKLY_REPORT_EXPORT, dateRange);
+      // console.log("hello");
+      // let res = await getData( draft_report );
 
-      if (res) {
-        console.log(res.data);
-      }
+      // if (res) {
+      //   console.log(res.data);
+
+      //   let json = JSON.stringify(res.data)
+      //   let buffer = Buffer.from(JSON.parse(json))
+      //   let read = buffer.toString('utf8')
+      //   let blob = new Blob([read]);
+
+      //   console.log("blob", blob);
+
+      //   saveAs(blob, 'fileName.xlsx');
+      // }
+      // window.open(`https://canpac-inventory-backoffice.smartdemo.xyz/api/v1/report/weekly/export?api_token=${token}`, '_blank');
+      
+      const base_url = process.env.REACT_APP_BASE;
+      let query = buildSearchQuery(dateRange);
+
+      let url = base_url + WEEKLY_REPORT_EXPORT + `?${query}`;
+      window.open(url, '_blank'); 
     }
 
     useEffect(() => {
