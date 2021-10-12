@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
 import { postData, getData} from '../../../scripts/api-service';
@@ -6,14 +6,18 @@ import { WEEK_REPORT, WEEKLY_REPORT_EXPORT, draft_report } from '../../../script
 import moment from "moment";
 import { saveAs } from 'file-saver';
 import Cookies from "js-cookie";
-import { buildSearchQuery } from '../../../scripts/helper';
+import { buildSearchQuery, checkUserPermission } from '../../../scripts/helper';
+import { authContext } from '../../../context/AuthContext';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 
 export default function WeeklyReport() {
-  const token = Cookies.get("canpacToken") || "";
+    const { permissions } = useContext(authContext);
+
+    const token = Cookies.get("canpacToken") || "";
+    
     const [report, setReport] = useState();
     const [dateRange, setDateRange] = useState({
       start_date: moment().startOf('week').format('YYYY-MM-DD'),
@@ -61,6 +65,10 @@ export default function WeeklyReport() {
         })
       }
     }
+
+    const canView = (context) => {
+      return checkUserPermission(context, permissions);
+    };
 
     const getReport = async () => {
       let res = await postData(WEEK_REPORT, dateRange);
@@ -113,10 +121,12 @@ export default function WeeklyReport() {
                     <div className="mb-20">
                         <DatePicker size="large" onChange={onChange} defaultValue={moment()} className="mr-20" 
                           allowClear={false} picker="week" style={{width: "300px"}} />
-                          
-                        <div className="float-right">
-                          <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
-                        </div>
+                        {
+                          canView('Weekly Report | Export') ? <div className="float-right">
+                            <Button type="primary" className="btn-brand btn-block float-right mb-20" 
+                            onClick={() => generateReport()} size="large">Generate Report</Button>
+                          </div> : null
+                        }                        
                     </div>
                     <Table dataSource={report} columns={columns} />
                 </div>

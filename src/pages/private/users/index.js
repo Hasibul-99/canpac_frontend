@@ -1,17 +1,19 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Avatar, Image, Modal, Tag, Switch } from 'antd';
 import {USER_LIST, USER_STATUS_UPDATE, EMAIL_CONFIRMATION_RESENT, DROPDOWN_LIST} from "../../../scripts/api";
 import {postData} from "../../../scripts/api-service";
 import { useHistory } from "react-router-dom";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { alertPop } from '../../../scripts/helper';
+import { alertPop, checkUserPermission } from '../../../scripts/helper';
 import moment from "moment";
+import { authContext } from '../../../context/AuthContext';
 
 const { confirm } = Modal;
 const { Option } = Select;
 
 export default function Users() {
+    const { permissions } = useContext(authContext);
     const history = useHistory();
     let [users, setUsers] = useState([]);
     const [search, setSearch] = useState({});
@@ -25,6 +27,11 @@ export default function Users() {
         if (res) {
             alertPop('success', "E-mail sented Successfully")
         }
+    };
+
+    
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
     };
 
     const columns = [
@@ -69,17 +76,19 @@ export default function Users() {
             render: (text, record) => <>
                 {
                     record.status_title === 'Inactive' ? 
-                    <Button size="small" type="primary" danger onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button> : 
-                    <Button size="small" type="primary" style={{backgroundColor: "#2fc787", borderColor: "#2fc787"}} onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button>
+                    <Button size="small" type="primary" danger disabled={!canView('User - Approval')}
+                        onClick={() => updateStatus(record.id, record.status)}>{record.status_title}</Button> : 
+                    <Button size="small" type="primary" style={{backgroundColor: "#2fc787", borderColor: "#2fc787"}} 
+                    onClick={() => updateStatus(record.id, record.status)} disabled={!canView('User - Approval')}>{record.status_title}</Button>
                 }
             </>
         },
         {
-            title: 'Approve',
+            title: 'Action',
             render: (text, record) => (
                 <Space size="middle">
                     {/* <Button type="link" onClick={() => updateStatus(record.id, record.status)}>Update Status</Button> */}
-                    <Button type="primary" className="btn-brand">
+                    <Button type="primary" className="btn-brand" disabled={!canView('User - Update')}>
                         <Link to={"/update-user/" + record.id}>Update</Link>
                     </Button>
                 </Space>
@@ -220,10 +229,13 @@ export default function Users() {
                     </div>
 
                     <hr/>
-                    <div className="my-20">
-                        <Button onClick={() => {history.push('/users-create')}} className="btn-brand btn-block float-right mb-20" size="large" 
-                            type="primary" style={{width: "300px"}}> Add User </Button>
-                    </div>
+                    {
+                        canView('User - Creat') ? <div className="my-20">
+                            <Button onClick={() => {history.push('/users-create')}} className="btn-brand btn-block float-right mb-20" size="large" 
+                                type="primary" style={{width: "300px"}}> Add User </Button>
+                        </div> : ''
+                    }
+                    
 
                     <Table dataSource={users} columns={columns} />
                 </div>

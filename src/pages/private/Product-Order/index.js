@@ -226,7 +226,7 @@ export default function ProductOrder() {
                                         >
                                         {
                                             customers?.length ?
-                                            customers.map(status => <Option key={status.value} value={status.value}>{status.title}</Option>) : ''
+                                            customers.map(status => <Option key={status.id} value={status.id}>{status.name}</Option>) : ''
                                         }
                                     </Select>
                             </div>
@@ -267,9 +267,12 @@ export default function ProductOrder() {
                         </div>
                     </div>
 
-                    <div className="float-right mb-20">
-                        <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
-                    </div>
+                    {
+                        canView('Product - Order | Export Excel') ? <div className="float-right mb-20">
+                            <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
+                        </div> : ''
+                    }
+                    
                     <Table dataSource={orders} columns={columns} />
                 </div>
             </div>

@@ -1,9 +1,10 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Tag, Button, Input, DatePicker  } from 'antd';
 import { postData } from '../../../scripts/api-service';
 import { PRODUCT_DELIVARY, DROPDOWN_LIST, ORDER_PRODUCT_DELIVERY_EXPORT } from '../../../scripts/api';
-import { buildSearchQuery, dateFormat } from '../../../scripts/helper';
+import { buildSearchQuery, dateFormat, checkUserPermission } from '../../../scripts/helper';
+import { authContext } from '../../../context/AuthContext';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -14,6 +15,8 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function ProductDelivery() {
+    const { permissions } = useContext(authContext);
+
     const [products, setProducts] = useState();
     const [search, setSearch] = useState();
     const [orderStatus, setOrderStatus] = useState();
@@ -92,7 +95,7 @@ export default function ProductDelivery() {
     ];
 
     const getProductDetails = async () => {
-        let res = await postData(PRODUCT_DELIVARY, {});
+        let res = await postData(PRODUCT_DELIVARY, search);
 
         if (res) {
             setProducts(res.data.data);
@@ -107,7 +110,11 @@ export default function ProductDelivery() {
         if (res) {
             setCustomers(res.data.data);
         }
-    } 
+    }
+
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
 
     const getOrderStatus = async () => {
         let res = await postData(DROPDOWN_LIST, {
@@ -152,6 +159,7 @@ export default function ProductDelivery() {
     };
 
     const searchCustomer = (value) => {
+        console.log("value", value);
         setSearch(prevState => ({
             ...prevState,
             customer: JSON.stringify(value)
@@ -232,7 +240,7 @@ export default function ProductDelivery() {
                                         >
                                         {
                                             customers?.length ?
-                                            customers.map(status => <Option key={status.value} value={status.value}>{status.title}</Option>) : ''
+                                            customers.map(status => <Option key={status.id} value={status.id}>{status.name}</Option>) : ''
                                         }
                                     </Select>
                             </div>
@@ -273,9 +281,13 @@ export default function ProductDelivery() {
                         </div>
                     </div>
 
-                    {/* <div className="float-right mb-20">
-                        <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
-                    </div> */}
+                    {
+                        canView('Product - Delivery | Export') ? <>
+                            {/* <div className="float-right mb-20">
+                                <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
+                            </div> */}
+                        </> : ''
+                    }
 
                     <Table dataSource={products} columns={columns} />
                 </div>

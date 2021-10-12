@@ -1,10 +1,11 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext  } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Modal } from 'antd';
 import { PERMISSION_LIST, PERMISSION_CREATE, PERMISSION_UPDATE, PERMISSION_DELETE } from "../../../scripts/api";
 import { postData } from "../../../scripts/api-service";
-import { alertPop } from '../../../scripts/helper';
+import { alertPop, checkUserPermission } from '../../../scripts/helper';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { authContext } from '../../../context/AuthContext';
 
 const { confirm } = Modal;
 const { Option } = Select;
@@ -16,11 +17,12 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function Permissions(permissionId) {
+    const { permissions } = useContext(authContext);
     const formRef = React.createRef();
     const [form] = Form.useForm();
     // const formRefUpdate = React.createRef();
     const [changepassModal, setChangepassModal] = useState(false);
-    const [permissions, setPermissions]=  useState();
+    const [permissionList, setPermissions]=  useState();
     const [updatePermission, setUpdatePermission] = useState();
     const [selectedPermission, setSelectedPermission] = useState();
     const [search, setSearch] = useState({});
@@ -58,6 +60,10 @@ export default function Permissions(permissionId) {
         });
     }
 
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
+
     const columns = [
         {
           title: 'Name',
@@ -73,10 +79,11 @@ export default function Permissions(permissionId) {
             title: 'Action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button type="primary" className="btn-brand" block onClick={() => updatePermis(record)}>
+                    <Button type="primary" className="btn-brand" disabled={!canView('Permission - Update')}
+                        block onClick={() => updatePermis(record)}>
                         Update
                     </Button>
-                    <Button danger onClick={() => showDeleteConfirm(record.id)} >
+                    <Button danger onClick={() => showDeleteConfirm(record.id)} disabled={!canView('Permission - Delete')}>
                         Delete
                     </Button>
                 </Space>
@@ -148,12 +155,14 @@ export default function Permissions(permissionId) {
                         </div>
                     </div>
                     <hr/>
-                    <div className="my-20">
-                        <Button onClick={() => setChangepassModal(true)} className="btn-brand btn-block float-right mb-20" size="large" 
-                            type="primary" style={{width: "300px"}}>Create Permissions</Button>
-                    </div>
-                    
-                    <Table dataSource={permissions} columns={columns} />
+                    {
+                        canView('Permission - Creat') ? <div className="my-20">
+                            <Button onClick={() => setChangepassModal(true)} className="btn-brand btn-block float-right mb-20" size="large" 
+                                type="primary" style={{width: "300px"}}>Create Permissions</Button>
+                        </div> : ''
+                    }
+
+                    <Table dataSource={permissionList} columns={columns} />
                 </div>
             </div>
 

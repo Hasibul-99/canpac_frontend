@@ -1,10 +1,11 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Modal  } from 'antd';
 import { postData } from '../../../scripts/api-service';
 import { ORDER_APPROVE_OR_CANCEL, ORDER_DRAFT, DROPDOWN_LIST, ORDER_DRAFT_EXPORT } from '../../../scripts/api';
-import { alertPop, dateFormat, buildSearchQuery } from '../../../scripts/helper';
+import { alertPop, dateFormat, buildSearchQuery, checkUserPermission } from '../../../scripts/helper';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { authContext } from '../../../context/AuthContext';
 
 const { confirm } = Modal;
 const { Option } = Select;
@@ -16,6 +17,8 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function OrderDraft() {
+    const { permissions } = useContext(authContext);
+
     const [draftList, setDraftList] = useState();
     const [approveModal, setApproveModal] = useState();
     const [selectedOrder, setSelectedOrder] = useState();
@@ -67,8 +70,13 @@ export default function OrderDraft() {
             title: 'Action',
             render: (text, record) => (
                 <Space >
-                  <Button type="primary" className="btn-brand" onClick={() => {setApproveModal(true); setSelectedOrder(record)}}> Approve </Button>
-                  <Button type="primary" danger onClick={() => {confirmCancel(record.id)}}> Cancel </Button>
+                    {
+                        canView('Product - Order | Approval') ? <Button type="primary" className="btn-brand"
+                         onClick={() => {setApproveModal(true); setSelectedOrder(record)}}> Approve </Button> : ''
+                  
+                    }
+                    <Button type="primary" danger disabled={!canView('Product - Order | Approval')}
+                        onClick={() => {confirmCancel(record.id)}}> Cancel </Button> 
                 </Space>
             )
         },
@@ -194,6 +202,10 @@ export default function OrderDraft() {
         let url = base_url + ORDER_DRAFT_EXPORT + `?${query}`;
         window.open(url, '_blank'); 
     }
+    
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
 
     useEffect(() => {
         getCustomers();
@@ -228,7 +240,7 @@ export default function OrderDraft() {
                                         >
                                         {
                                             customers?.length ?
-                                            customers.map(status => <Option key={status.value} value={status.value}>{status.title}</Option>) : ''
+                                            customers.map(status => <Option key={status.id} value={status.id}>{status.name}</Option>) : ''
                                         }
                                     </Select>
                             </div>
@@ -268,9 +280,13 @@ export default function OrderDraft() {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="float-right mb-20">
-                        <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
-                    </div> */}
+                    {
+                        canView('Order - Draft | Export') ? <>
+                        <div className="float-right mb-20">
+                            <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
+                        </div>
+                        </> : ''
+                    }
                     
                     <Table dataSource={draftList} columns={columns} />
                 </div>

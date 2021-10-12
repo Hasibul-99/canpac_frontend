@@ -1,10 +1,11 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Modal, Button, Input, DatePicker  } from 'antd';
 import { ROLE_LIST, ROLE_DELETE } from "../../../scripts/api";
 import {postData} from "../../../scripts/api-service";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import {alertPop} from "../../../scripts/helper";
+import {alertPop, checkUserPermission} from "../../../scripts/helper";
+import { authContext } from '../../../context/AuthContext';
 
 const { confirm } = Modal;
 const { Option } = Select;
@@ -16,6 +17,7 @@ for (let i = 10; i < 36; i++) {
 }
 
 export default function Roles() {
+    const { permissions } = useContext(authContext);
     const [roles, setRoles] = useState([]);
     const [search, setSearch] = useState({});
 
@@ -43,16 +45,21 @@ export default function Roles() {
             title: 'Action',
             render: (text, record) => (
                 <Space size="middle" >
-                    <Button type="primary" className="btn-brand">
+                    <Button type="primary" className="btn-brand" disabled={!canView('Role - Update')}>
                         <Link to={'update-role/'+ record.id}>Update</Link>
                     </Button>
-                    <Button danger onClick={() => showDeleteConfirm(record.id)} >
+                    <Button danger onClick={() => showDeleteConfirm(record.id)} disabled={!canView('Role - Delete')}>
                         Delete
                     </Button>
                 </Space>
             )
         },
     ];
+
+    
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
 
     const showDeleteConfirm = (roleId) => {
         confirm({
@@ -116,13 +123,15 @@ export default function Roles() {
                         </div>
                     </div>
                     <hr/>
-                    <div className="my-20">
-                        <Link to="/create-role">
-                            <Button className="btn-brand btn-block float-right mb-20" size="large" 
-                                type="primary" style={{width: "300px"}}>Create Role</Button>
-                        </Link>
-                    </div>
-
+                    {
+                        canView("Role - Creat") ? <div className="my-20">
+                            <Link to="/create-role">
+                                <Button className="btn-brand btn-block float-right mb-20" size="large" 
+                                    type="primary" style={{width: "300px"}}>Create Role</Button>
+                            </Link>
+                        </div> : ''
+                    }
+                    
                     <Table dataSource={roles} columns={columns} />
                 </div>
             </div>

@@ -68,7 +68,7 @@ export default function Merchents() {
             render: (text, record) => (
                 <Space size="middle">
                     {/* <Button type="link" onClick={() => updateStatus(record.id, record.status)}>Update Status</Button> */}
-                    <Button type="primary" className="btn-brand">
+                    <Button type="primary" className="btn-brand"  disabled={!canView('Merchant - Update')} >
                         <Link to={`update-merchents/${record.id}`}>Update</Link>
                     </Button>
                 </Space>

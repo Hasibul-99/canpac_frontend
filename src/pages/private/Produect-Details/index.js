@@ -100,55 +100,61 @@ export default function ProductDetails() {
                             <hr/>
 
                             <div className="row">
-                                <div className="col col-sm-12 col-lg-6 mb-10">
-                                    <Form style={{width: "100%", marginTop: "2rem"}}
-                                        form={form}
-                                        layout={'vertical'}
-                                        onFinish={onFinish}
-                                        >
-                                        <Form.Item
-                                            label="Update Status"
-                                            name="status"
-                                            rules={[{ required: true, message: 'Please input status!' }]}
-                                        >
-                                            <Select
-                                                size="large"
-                                                showSearch
-                                                placeholder="Process"
-                                                optionFilterProp="children"
-                                                filterOption={(input, option) =>
-                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                }
+                                {
+                                    canView('Order - Creat') ? <div className="col col-sm-12 col-lg-6 mb-10">
+                                        <Form style={{width: "100%", marginTop: "2rem"}}
+                                            form={form}
+                                            layout={'vertical'}
+                                            onFinish={onFinish}
                                             >
-                                                {
-                                                    orderStatus?.length && orderStatus.map(status => <Option value={status.value} key={status.value}>{status.title}</Option>)
-                                                }
-                                            </Select>
-                                        </Form.Item>
+                                            <Form.Item
+                                                label="Update Status"
+                                                name="status"
+                                                rules={[{ required: true, message: 'Please input status!' }]}
+                                            >
+                                                <Select
+                                                    size="large"
+                                                    showSearch
+                                                    placeholder="Process"
+                                                    optionFilterProp="children"
+                                                    filterOption={(input, option) =>
+                                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                    }
+                                                >
+                                                    {
+                                                        orderStatus?.length && orderStatus.map(status => <Option value={status.value} key={status.value}>{status.title}</Option>)
+                                                    }
+                                                </Select>
+                                            </Form.Item>
 
-                                        <Form.Item
-                                            label="Delevary Quantity"
-                                            name="delivered_quantity"
-                                            rules={[{ required: true, message: 'Please input quantity!' }]}
-                                        >
-                                            <InputNumber placeholder="Select Quantity" size="large" min={1} max={order?.ordered_quantity}  style={{width: "100%"}}/>
-                                        </Form.Item>
+                                            <Form.Item
+                                                label="Delevary Quantity"
+                                                name="delivered_quantity"
+                                                rules={[{ required: true, message: 'Please input quantity!' }]}
+                                            >
+                                                <InputNumber placeholder="Select Quantity" size="large" min={1} max={order?.ordered_quantity}  style={{width: "100%"}}/>
+                                            </Form.Item>
 
-                                        <Form.Item>
-                                            <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
-                                            Update Order
-                                            </Button>
-                                        </Form.Item>
-                                    </Form>
-                                </div>
-                                <div className="col col-sm-12 col-lg-6 mb-10">
-                                    <ReactQuill  onChange={quillChange} style={{height: "150px"}}/>
+                                            <Form.Item>
+                                                <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
+                                                Update Order
+                                                </Button>
+                                            </Form.Item>
+                                        </Form>
+                                    </div> : ''
+                                }
+                                
+                                {
+                                    canView("Order - Details | E-mail Send") ? <div className="col col-sm-12 col-lg-6 mb-10">
+                                        <ReactQuill  onChange={quillChange} style={{height: "150px"}}/>
 
-                                    <Button className="btn-brand btn-block" size="large" type="primary" onClick={() => sendMail()}
-                                        style={{width: "100%", marginTop: "6rem"}} >
-                                        Send
-                                    </Button>
-                                </div>
+                                        <Button className="btn-brand btn-block" size="large" type="primary" onClick={() => sendMail()}
+                                            style={{width: "100%", marginTop: "6rem"}} >
+                                            Send
+                                        </Button>
+                                    </div> : ''
+                                }
+                                
                             </div>
 
                         </Fragment> : ''
@@ -156,27 +162,30 @@ export default function ProductDetails() {
                     
                     <hr/>
 
-                    <div className="order-history mt-50">
-                        <h3 className="text-center">Order Histoy</h3>
+                    {
+                        canView("Order - Details | History") ? <div className="order-history mt-50">
+                            <h3 className="text-center">Order Histoy</h3>
 
-                        <Timeline mode="alternate">
-                            {
-                                order?.history?.length && order.history.map((his, index) => {
-                                    return (
-                                        index % 2 == 0 
-                                        ? <Timeline.Item 
-                                            position='left'>
-                                                {his.description_en}
-                                            </Timeline.Item> :
-                                            <Timeline.Item color="green" 
-                                             position='right'>
-                                                {his.description_en}
-                                            </Timeline.Item>
-                                    )
-                                })
-                            }
-                        </Timeline>
-                    </div>
+                            <Timeline mode="alternate">
+                                {
+                                    order?.history?.length && order.history.map((his, index) => {
+                                        return (
+                                            index % 2 == 0 
+                                            ? <Timeline.Item 
+                                                position='left'>
+                                                    {his.description_en}
+                                                </Timeline.Item> :
+                                                <Timeline.Item color="green" 
+                                                position='right'>
+                                                    {his.description_en}
+                                                </Timeline.Item>
+                                        )
+                                    })
+                                }
+                            </Timeline>
+                        </div> : ''
+                    }
+                    
                 </div>
             </div>
         </Fragment>
