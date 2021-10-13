@@ -8,3 +8,14 @@
 .ant-upload-list {
     display: none;
 }
+
+.export-weekreprot {
+    .table-border th {
+        border: .5px solid black;
+        border-collapse: collapse;
+    }
+    .table-border td {
+        border: .5px solid black;
+        border-collapse: collapse;
+    }
+}

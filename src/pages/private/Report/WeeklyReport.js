@@ -8,6 +8,10 @@ import { saveAs } from 'file-saver';
 import Cookies from "js-cookie";
 import { buildSearchQuery, checkUserPermission } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
+import jsPDF from 'jspdf';
+import pdfMake from 'pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import htmlToPdfmake from 'html-to-pdfmake';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -23,6 +27,7 @@ export default function WeeklyReport() {
       start_date: moment().startOf('week').format('YYYY-MM-DD'),
       end_date: moment().endOf('week').format('YYYY-MM-DD')
     });
+    const [exportData, setExportData] = useState([]);
 
     const columns = [
         {
@@ -75,6 +80,20 @@ export default function WeeklyReport() {
 
       if (res) {
         setReport(res.data.data);
+        getReportData()
+      }
+    }
+
+    const getReportData = async () => {
+      let query = buildSearchQuery(dateRange);
+      let url = WEEKLY_REPORT_EXPORT + `?${query}`;
+      let res = await getData( url );
+
+      if (res) {
+        let masterData = res.data.data;
+
+        console.log("masterData", masterData);
+        setExportData(masterData || [])
       }
     }
 
@@ -96,11 +115,22 @@ export default function WeeklyReport() {
       // }
       // window.open(`https://canpac-inventory-backoffice.smartdemo.xyz/api/v1/report/weekly/export?api_token=${token}`, '_blank');
       
-      const base_url = process.env.REACT_APP_BASE;
-      let query = buildSearchQuery(dateRange);
+      // const base_url = process.env.REACT_APP_BASE;
+      // let query = buildSearchQuery(dateRange);
 
-      let url = base_url + WEEKLY_REPORT_EXPORT + `?${query}`;
-      window.open(url, '_blank'); 
+      // let url = base_url + WEEKLY_REPORT_EXPORT + `?${query}`;
+      // window.open(url, '_blank'); 
+
+      const doc = new jsPDF();
+         
+      //get table html
+      const pdfTable = document.getElementById('divToPrint');
+      //html to pdf format
+      var html = htmlToPdfmake(pdfTable.innerHTML);
+    
+      const documentDefinition = { content: html };
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      pdfMake.createPdf(documentDefinition).open();
     }
 
     useEffect(() => {
@@ -130,6 +160,59 @@ export default function WeeklyReport() {
                     </div>
                     <Table dataSource={report} columns={columns} />
                 </div>
+            </div>
+            
+            <div id="divToPrint" className="export-weekreprot">
+              <table>
+                  <tr>
+                      <td class="text-center" style={{textAlign: "center", border: "none" }}>
+                          <h3>CANPAC VIETNAM Co.,LTD.</h3>
+                          <p>Address (Ñòa chæ): No.09, Vsip II-A, 15 road, Viet Nam -Singapore Industrial Park II-A, Tan Uyen Town,
+                              Binh Duong Provine</p>
+                          <p>Tel (ÑT): 0650 380 1166 Fax: 0650.380 1169</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="text-center" style={{textAlign: "center", border: "none" }}>
+                          <br/>
+                          <h1>WEEKLY STOCK ADVICE</h1>
+                          <br/>
+                          <br/>
+                      </td>
+                  </tr>
+              </table>
+
+              <table class="table-border" border="0" cellspacing="0" >
+                  <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
+                      <th>No.</th>
+                      <th>Description</th>
+                      <th>Pending Printing order</th>
+                      <th>"Printed Sheet (Body Blank)"</th>
+                      <th>"Can Stock"</th>
+                      <th>Total of body blank & can stock</th>
+                      <th>"Weight Standard(+5g)"</th>
+                  </tr>
+                  <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
+                      <th>Stt</th>
+                      <th>Diễn Giải</th>
+                      <th>SL Đơn haøng in</th>
+                      <th>SL Taám Theùp ñaõ In</th>
+                      <th>"SL Lon TP"</th>
+                      <th>Tổng SL tấm theùp ñaõ in & lon TP</th>
+                      <th>"Trọng Lượng chuẩn(+5g) "</th>
+                  </tr>
+                  {
+                    exportData.map((data, i) => <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
+                        <td>{i + 1}</td>
+                        <td>{data.sales_order_no}</td>
+                        <td>AAA</td>
+                        <td>aaa</td>
+                        <td>AAA</td>
+                        <td>{i + 1}</td>
+                        <td>{i + 1}</td>
+                    </tr>)
+                  }
+              </table>
             </div>
         </Fragment>
     )
