@@ -1,18 +1,28 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Tag, Button, Input, DatePicker  } from 'antd';
-import { postData } from '../../../scripts/api-service';
+import { postData, getData } from '../../../scripts/api-service';
 import { PRODUCT_DELIVARY, DROPDOWN_LIST, ORDER_PRODUCT_DELIVERY_EXPORT } from '../../../scripts/api';
 import { buildSearchQuery, dateFormat, checkUserPermission } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
-
+import { CSVLink } from "react-csv";
+ 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-const children = [];
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
+
+const headers = [
+  { label: "Customer ID", key: "Customer ID" },
+  { label: "Customer name", key: "Customer name" },
+  { label: "Delivered Quanity", key: "Delivered Quanity" },
+  { label: "Order Number", key: "Order Number" },
+  { label: "Posting Date Time", key: "Posting Date Time" },
+  { label: "ItemCode", key: "ItemCode" },
+  { label: "Itemname", key: "Itemname" },
+  { label: "Quantity", key: "Quantity" },
+  { label: "Remaining Quanity", key: "Remaining Quanity" },
+  { label: "Status", key: "Status" },
+];
 
 export default function ProductDelivery() {
     const { permissions } = useContext(authContext);
@@ -22,6 +32,7 @@ export default function ProductDelivery() {
     const [orderStatus, setOrderStatus] = useState();
     const [customers, setCustomers] = useState();
     const [productModel, setProductModel] = useState();
+    const [exportData, setExportData] = useState([]);
 
     const columns = [
         {
@@ -99,6 +110,7 @@ export default function ProductDelivery() {
 
         if (res) {
             setProducts(res.data.data);
+            generateReport();
         }
     }
 
@@ -178,12 +190,15 @@ export default function ProductDelivery() {
         }));
     }
 
-    const generateReport = () => {
-        const base_url = process.env.REACT_APP_BASE;
+    const generateReport = async () => {
         let query = buildSearchQuery(search);
-
-        let url = base_url + ORDER_PRODUCT_DELIVERY_EXPORT + `?${query}`;
-        window.open(url, '_blank'); 
+        let url = ORDER_PRODUCT_DELIVERY_EXPORT + `?${query}`;
+        let res = await getData( url );
+        
+        if (res) {
+            let masterData = res.data.data;
+            setExportData(masterData || [])
+        }
     }
 
     useEffect(() => {
@@ -283,9 +298,13 @@ export default function ProductDelivery() {
 
                     {
                         canView('Product - Delivery | Export') ? <>
-                            {/* <div className="float-right mb-20">
-                                <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
-                            </div> */}
+                            <div className="float-right mb-20">
+                                <CSVLink data={exportData} headers={headers} target="_blank" filename={"Product-order-delivery.csv"}>
+                                    <Button type="primary" size="large">
+                                        Generate Report
+                                    </Button>
+                                </CSVLink>
+                            </div>
                         </> : ''
                     }
 

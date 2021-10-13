@@ -1,13 +1,27 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Tag } from 'antd';
-import { postData } from '../../../scripts/api-service';
+import { postData, getData } from '../../../scripts/api-service';
 import { ORDER_LIST, DROPDOWN_LIST, ORDER_PRODUCT_EXPORT } from '../../../scripts/api';
 import { dateFormat, checkUserPermission, buildSearchQuery } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
+import { CSVLink } from "react-csv";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
+
+const headers = [
+    { label: "Customer ID", key: "Customer ID" },
+    { label: "Customer name", key: "Customer name" },
+    { label: "Delivered Quanity", key: "Delivered Quanity" },
+    { label: "Order Number", key: "Order Number" },
+    { label: "Posting Date Time", key: "Posting Date Time" },
+    { label: "ItemCode", key: "ItemCode" },
+    { label: "Itemname", key: "Itemname" },
+    { label: "Quantity", key: "Quantity" },
+    { label: "Remaining Quanity", key: "Remaining Quanity" },
+    { label: "Status", key: "Status" },
+];
 
 export default function ProductOrder() {
     const { permissions } = useContext(authContext);
@@ -16,6 +30,7 @@ export default function ProductOrder() {
     const [orderStatus, setOrderStatus] = useState();
     const [customers, setCustomers] = useState();
     const [productModel, setProductModel] = useState();
+    const [exportData, setExportData] = useState([]);
 
     const canView = (context) => {
         return checkUserPermission(context, permissions);
@@ -90,6 +105,7 @@ export default function ProductOrder() {
 
         if (res) {
             setOrders(res.data.data);
+            generateReport();
         }
     };
 
@@ -164,12 +180,21 @@ export default function ProductOrder() {
         }));
     }
 
-    const generateReport = () => {
-        const base_url = process.env.REACT_APP_BASE;
-        let query = buildSearchQuery(search);
+    const generateReport = async () => {
+        // const base_url = process.env.REACT_APP_BASE;
+        // let query = buildSearchQuery(search);
 
-        let url = base_url + ORDER_PRODUCT_EXPORT + `?${query}`;
-        window.open(url, '_blank'); 
+        // let url = base_url + ORDER_PRODUCT_EXPORT + `?${query}`;
+        // window.open(url, '_blank'); 
+
+        let query = buildSearchQuery(search);
+        let url = ORDER_PRODUCT_EXPORT + `?${query}`;
+        let res = await getData( url );
+        
+        if (res) {
+            let masterData = res.data.data;
+            setExportData(masterData || [])
+        }
     }
 
     useEffect(() => {
@@ -269,7 +294,12 @@ export default function ProductOrder() {
 
                     {
                         canView('Product - Order | Export Excel') ? <div className="float-right mb-20">
-                            <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
+                            {/* <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button> */}
+                            <CSVLink data={exportData} headers={headers} target="_blank" filename={"Product-order.csv"}>
+                                <Button type="primary" size="large">
+                                    Generate Report
+                                </Button>
+                            </CSVLink>
                         </div> : ''
                     }
                     

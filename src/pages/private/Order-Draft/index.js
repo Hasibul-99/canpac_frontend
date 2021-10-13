@@ -1,11 +1,23 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker, Modal  } from 'antd';
-import { postData } from '../../../scripts/api-service';
+import { postData, getData } from '../../../scripts/api-service';
 import { ORDER_APPROVE_OR_CANCEL, ORDER_DRAFT, DROPDOWN_LIST, ORDER_DRAFT_EXPORT } from '../../../scripts/api';
 import { alertPop, dateFormat, buildSearchQuery, checkUserPermission } from '../../../scripts/helper';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { authContext } from '../../../context/AuthContext';
+
+import { CSVLink } from "react-csv";
+ 
+const headers = [
+  { label: "Customer ID", key: "Customer ID" },
+  { label: "Customer name", key: "Customer name" },
+  { label: "Posting Date Time", key: "Posting Date Time" },
+  { label: "ItemCode", key: "ItemCode" },
+  { label: "Itemname", key: "Itemname" },
+  { label: "Quantity", key: "Quantity" },
+];
+
 
 const { confirm } = Modal;
 const { Option } = Select;
@@ -26,6 +38,7 @@ export default function OrderDraft() {
     const [orderStatus, setOrderStatus] = useState();
     const [customers, setCustomers] = useState();
     const [productModel, setProductModel] = useState();
+    const [exportData, setExportData] = useState([]);
       
     const columns = [
         {
@@ -131,6 +144,7 @@ export default function OrderDraft() {
 
         if (res) {
             setDraftList(res.data.data);
+            generateReport();
         }
     }
 
@@ -195,12 +209,15 @@ export default function OrderDraft() {
         }));
     }
 
-    const generateReport = () => {
-        const base_url = process.env.REACT_APP_BASE;
+    const generateReport = async () => {
         let query = buildSearchQuery(search);
-
-        let url = base_url + ORDER_DRAFT_EXPORT + `?${query}`;
-        window.open(url, '_blank'); 
+        let url = ORDER_DRAFT_EXPORT + `?${query}`;
+        let res = await getData( url );
+        
+        if (res) {
+            let masterData = res.data.data;
+            setExportData(masterData || [])
+        }
     }
     
     const canView = (context) => {
@@ -283,7 +300,11 @@ export default function OrderDraft() {
                     {
                         canView('Order - Draft | Export') ? <>
                         <div className="float-right mb-20">
-                            <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button>
+                            <CSVLink data={exportData} headers={headers} target="_blank" filename={"order-draft.csv"}>
+                                <Button type="primary" size="large">
+                                    Generate Report
+                                </Button>
+                            </CSVLink>
                         </div>
                         </> : ''
                     }
