@@ -87,6 +87,19 @@ export default function LeftSidebar() {
                                     </Link>
                                 </li> : ''
                             }
+
+                                                        
+                            {
+                                canView('Order - Draft') ? <li className={className(window.location.pathname, "/order-draft")}>
+                                        <Link to="/order-draft">
+                                            <span className="yay-icon">
+                                                <CodeSandboxOutlined />
+                                            </span>
+                                            <span>Order Draft</span> 
+                                            <span className="rui-yaybar-circle"></span>
+                                        </Link>
+                                    </li> : ''
+                            }
                             
                             {
                                 canView('Product - Order') ? <li className={className(window.location.pathname, "/product-order")}>
@@ -98,18 +111,6 @@ export default function LeftSidebar() {
                                         <span className="rui-yaybar-circle"></span>
                                     </Link>
                                 </li> : ''
-                            }
-                            
-                            {
-                                canView('Order - Draft') ? <li className={className(window.location.pathname, "/order-draft")}>
-                                        <Link to="/order-draft">
-                                            <span className="yay-icon">
-                                                <CodeSandboxOutlined />
-                                            </span>
-                                            <span>Order Draft</span> 
-                                            <span className="rui-yaybar-circle"></span>
-                                        </Link>
-                                    </li> : ''
                             }
                             
                             {

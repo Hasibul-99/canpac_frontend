@@ -162,7 +162,7 @@ export default function WeeklyReport() {
                 </div>
             </div>
             
-            <div id="divToPrint" className="export-weekreprot">
+            <div id="divToPrint" className="d-none export-weekreprot">
               <table>
                   <tr>
                       <td class="text-center" style={{textAlign: "center", border: "none" }}>
