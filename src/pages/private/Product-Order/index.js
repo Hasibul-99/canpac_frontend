@@ -6,6 +6,7 @@ import { ORDER_LIST, DROPDOWN_LIST, ORDER_PRODUCT_EXPORT } from '../../../script
 import { dateFormat, checkUserPermission, buildSearchQuery } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
 import { CSVLink } from "react-csv";
+import moment from 'moment';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -295,8 +296,8 @@ export default function ProductOrder() {
                     {
                         canView('Product - Order | Export Excel') ? <div className="float-right mb-20">
                             {/* <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button> */}
-                            <CSVLink data={exportData} headers={headers} target="_blank" filename={"Product-order.csv"}>
-                                <Button type="primary" size="large">
+                            <CSVLink data={exportData} headers={headers} target="_blank" filename={`Product-order-${moment().format('YYYY-MM-DD--HH-mm-ss')}.csv`}>
+                                <Button type="primary" size="large" className="btn-brand btn-block float-right mb-20">
                                     Generate Report
                                 </Button>
                             </CSVLink>

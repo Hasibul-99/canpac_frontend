@@ -6,6 +6,7 @@ import { PRODUCT_DELIVARY, DROPDOWN_LIST, ORDER_PRODUCT_DELIVERY_EXPORT } from '
 import { buildSearchQuery, dateFormat, checkUserPermission } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
 import { CSVLink } from "react-csv";
+import moment from 'moment';
  
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -299,8 +300,8 @@ export default function ProductDelivery() {
                     {
                         canView('Product - Delivery | Export') ? <>
                             <div className="float-right mb-20">
-                                <CSVLink data={exportData} headers={headers} target="_blank" filename={"Product-order-delivery.csv"}>
-                                    <Button type="primary" size="large">
+                                <CSVLink data={exportData} headers={headers} target="_blank" filename={`Product-order-delivery-${moment().format('YYYY-MM-DD--HH-mm-ss')}.csv`}>
+                                    <Button type="primary" size="large" className="btn-brand btn-block float-right mb-20">
                                         Generate Report
                                     </Button>
                                 </CSVLink>

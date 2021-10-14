@@ -8,6 +8,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { authContext } from '../../../context/AuthContext';
 
 import { CSVLink } from "react-csv";
+import moment from 'moment';
  
 const headers = [
   { label: "Customer ID", key: "Customer ID" },
@@ -300,8 +301,8 @@ export default function OrderDraft() {
                     {
                         canView('Order - Draft | Export') ? <>
                         <div className="float-right mb-20">
-                            <CSVLink data={exportData} headers={headers} target="_blank" filename={"order-draft.csv"}>
-                                <Button type="primary" size="large">
+                            <CSVLink data={exportData} headers={headers} target="_blank" filename={`order-draft-${moment().format('YYYY-MM-DD--HH-mm-ss')}.csv`}>
+                                <Button type="primary" size="large" className="btn-brand btn-block float-right mb-20">
                                     Generate Report
                                 </Button>
                             </CSVLink>
