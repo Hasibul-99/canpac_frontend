@@ -12,6 +12,8 @@ import { alertPop } from "../../scripts/helper";
 import Cookies from "js-cookie";
 import { authContext } from "../../context/AuthContext";
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+
 
 function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
@@ -22,16 +24,21 @@ function getWindowDimensions() {
 };
 
 export default function TopNavbar() {
+    const location = useLocation();
     const {t, i18n} = useTranslation();
 
     const {user, getUserInfo, setUserInfo, DeleteUserInfo } = useContext(authContext);
 
     const [changepassModal, setChangepassModal] = useState(false);
+    const [showNav, setShowNav] = useState(true);
+
     const toggleContent = () => {
         if ($( "#main-wrapper" ).hasClass( "yay-hide" )) {
             $( "#main-wrapper" ).removeClass( "yay-hide" );
+            setShowNav(false);
         } else {
             $( "#main-wrapper" ).addClass( "yay-hide" );
+            setShowNav(true);
         }
     }
 
@@ -53,6 +60,15 @@ export default function TopNavbar() {
         window.location = "/auth/login";
         localStorage.removeItem('canpacPermissions');
     };
+
+    useEffect(() => {
+        if (location.pathname === "/") {
+            if (!($( "#main-wrapper" ).hasClass( "yay-hide" ))) $( "#main-wrapper" ).addClass( "yay-hide" );
+        } else {
+            if ($( "#main-wrapper" ).hasClass( "yay-hide" ) && showNav) $( "#main-wrapper" ).removeClass( "yay-hide" );
+        }
+
+    }, [location.pathname])
 
     const menu = (
         <Menu>
