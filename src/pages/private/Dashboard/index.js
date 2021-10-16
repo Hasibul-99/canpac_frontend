@@ -2,11 +2,13 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import VerticalBar from "./verticalBar";
 import DoughnutChart from "./Doughnut";
-import { Card, Skeleton  } from 'antd';
+import { Card, Skeleton, Button  } from 'antd';
 import { Trans, useTranslation } from 'react-i18next';
 import { authContext } from "../../../context/AuthContext";
 import { postData } from '../../../scripts/api-service';
 import { DASHBOARD } from '../../../scripts/api';
+import * as htmlToImage from 'html-to-image';
+import moment from 'moment';
 
 
 export default function Dashboard() {
@@ -21,6 +23,15 @@ export default function Dashboard() {
             setDashboard(res.data.data);
         }
     };
+
+    const generateReport = () => {
+        console.log("hello");
+
+        htmlToImage.toBlob(document.getElementById('my-node'))
+            .then(function (blob) {
+                window.saveAs(blob, `generale-report-${moment().format('YYYY-MM-DD--HH-mm-ss')}.png`);
+        });
+    }
 
     useEffect(() => {
         getDashboardData()
@@ -51,8 +62,13 @@ export default function Dashboard() {
                         </div>
                     </div>
                 }
+                
+                <div>
+                    <Button onClick={generateReport} type="primary" size="large" style={{width: "300px"}}
+                    className="btn-brand btn-block float-right mb-20">Generate Report</Button>
+                </div>
 
-                <div className="rui-page-content">
+                <div className="rui-page-content" id="my-node">
                     <div className="container-fluid">
                         {
                             dashboard && <div className="row xs-gap mt-20 px-20">
@@ -95,6 +111,7 @@ export default function Dashboard() {
                                 </Card>
                             </div>
                         </div>
+
                     </div>
                 </div>
                 </> : Skeleton

@@ -6502,6 +6502,11 @@ html-parse-stringify@^3.0.1:
   dependencies:
     void-elements "3.1.0"
 
+html-to-image@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/html-to-image/-/html-to-image-1.9.0.tgz#cb49bf9f4b37376771c85cfdd65863ae9420b268"
+  integrity sha512-9gaDCIYg62Ek07F2pBk76AHgYZ2gxq2YALU7rK3gNCqXuhu6cWzsOQqM7qGbjZiOzxGzrU1deDqZpAod2NEwbA==
+
 html-to-pdfmake@^2.3.4:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/html-to-pdfmake/-/html-to-pdfmake-2.3.4.tgz#1611c0eef82ea9a3bf3f25a3fd8a62a0127cbd78"
