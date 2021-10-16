@@ -45,17 +45,17 @@ export default function Dashboard() {
                     user && <div className="rui-page-title">
                         <div className="container-fluid">
                             <nav aria-label="breadcrumb">
-                                <ol className="breadcrumb" style={{"list-style-type": "none"}}>
+                                <ol className="breadcrumb" style={{"listStyleType": "none"}}>
                                     <li className="breadcrumb-item"> <strong>
                                         {t("common.name")}: </strong> {user?.name}</li>
                                 </ol>
-                                <ol className="breadcrumb" style={{"list-style-type": "none"}}>
+                                <ol className="breadcrumb" style={{"listStyleType": "none"}}>
                                     <li className="breadcrumb-item"> <strong>Company:</strong> {user.company_name} </li>
                                 </ol>
-                                <ol className="breadcrumb" style={{"list-style-type": "none"}}>
+                                <ol className="breadcrumb" style={{"listStyleType": "none"}}>
                                     <li className="breadcrumb-item"> <strong>Phone:</strong> {user.phone} </li>
                                 </ol>
-                                <ol className="breadcrumb" style={{"list-style-type": "none"}}>
+                                <ol className="breadcrumb" style={{"listStyleType": "none"}}>
                                     <li className="breadcrumb-item"> <strong>Email:</strong> {user.email} </li>
                                 </ol>
                             </nav>

@@ -176,9 +176,9 @@ export default function TopNavbar() {
                                 href="javascript:;"><span className="btn btn-custom-round"><span data-feather="message-circle"
                                         className="rui-icon rui-icon-stroke-1_5"></span></span></a></li>
                         
-                        <Dropdown className="mt-5" overlay={languageMenu} placement="bottomRight" arrow>
+                        {/* <Dropdown className="mt-5" overlay={languageMenu} placement="bottomRight" arrow>
                             <Button>{i18n.language}</Button>
-                        </Dropdown>
+                        </Dropdown> */}
                         <li className="dropdown dropdown-hover dropdown-triangle dropdown-keep-open">
                         <Dropdown overlay={menu} placement="bottomRight" arrow>
                             <a className="dropdown-item rui-navbar-avatar mnr-6">
