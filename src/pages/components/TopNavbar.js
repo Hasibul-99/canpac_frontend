@@ -35,10 +35,10 @@ export default function TopNavbar() {
     const toggleContent = () => {
         if ($( "#main-wrapper" ).hasClass( "yay-hide" )) {
             $( "#main-wrapper" ).removeClass( "yay-hide" );
-            setShowNav(false);
+            setShowNav(true);
         } else {
             $( "#main-wrapper" ).addClass( "yay-hide" );
-            setShowNav(true);
+            setShowNav(false);
         }
     }
 
