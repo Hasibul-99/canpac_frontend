@@ -1,8 +1,12 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
-import { postData } from '../../../scripts/api-service';
-import { PRODUCT_STOCK } from '../../../scripts/api';
+import { getData, postData } from '../../../scripts/api-service';
+import { PRODUCT_STOCK, PRODUCT_STOCK_EXPORT } from '../../../scripts/api';
+import { checkUserPermission } from '../../../scripts/helper';
+import { authContext } from '../../../context/AuthContext';
+import { CSVLink } from "react-csv";
+import moment from 'moment';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -12,8 +16,19 @@ for (let i = 10; i < 36; i++) {
   children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
 
+const headers = [
+    { label: "Product Code of SAP", key: "product_code_of_sap" },
+    { label: "Product name", key: "product_name" },
+    { label: "Quantity of Product Per Sheet", key: "quantity_of_product_per_sheet" },
+    { label: "Stock", key: "stock" },
+    { label: "Thickness", key: "thickness" },
+    { label: "Weight", key: "weight" },
+];
+
 export default function ProductDelivery() {
+    const { permissions } = useContext(authContext);
     const [products, setProducts] = useState();
+    const [exportData, setExportData] = useState([]);
       
     const columns = [
       {
@@ -58,11 +73,25 @@ export default function ProductDelivery() {
 
         if (res) {
             setProducts(res.data.data);
+
+            getProductExportData();
         }
     }
 
+    const getProductExportData = async () => {
+        let res = await getData(PRODUCT_STOCK_EXPORT);
+
+        if (res) {
+            setExportData(res?.data?.data || []);
+        }
+    };
+
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
+
     useEffect(() => {
-        getProductDetails()
+        getProductDetails();
     }, [])
 
     return (
@@ -72,6 +101,17 @@ export default function ProductDelivery() {
                     <h1>Product Stock</h1>
                 </div>
             </div>
+
+            {
+                canView('Product - Stock | Export') ? <div className="float-right mb-20 pt-10">
+                    {/* <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button> */}
+                    <CSVLink data={exportData} headers={headers} target="_blank" filename={`Product-Stock-${moment().format('YYYY-MM-DD--HH-mm-ss')}.csv`}>
+                        <Button type="primary" style={{width: "300px"}} size="large" className="btn-brand btn-block float-right mb-20">
+                            Generate Report
+                        </Button>
+                    </CSVLink>
+                </div> : ''
+            }
 
             <div className="rui-page-content">
                 <div className="container-fluid">

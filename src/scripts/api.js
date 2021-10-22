@@ -57,3 +57,7 @@ export const WEEKLY_REPORT_EXPORT = "report/weekly/export";
 export const ORDER_DRAFT_EXPORT = "order/draft/export";
 export const ORDER_PRODUCT_EXPORT = "order/product-order/export";
 export const ORDER_PRODUCT_DELIVERY_EXPORT = "order/product-delivery/export";
+export const PRODUCT_STOCK_EXPORT = "product/stock/export";
+export const PRODUCT_STOCK_LOW_EXPORT = "product/stock/low/export";
+
+
