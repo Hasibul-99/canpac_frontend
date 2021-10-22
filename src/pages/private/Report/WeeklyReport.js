@@ -12,6 +12,7 @@ import jsPDF from 'jspdf';
 import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import htmlToPdfmake from 'html-to-pdfmake';
+import TableToExcel from "@linways/table-to-excel";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -120,7 +121,7 @@ export default function WeeklyReport() {
 
       // let url = base_url + WEEKLY_REPORT_EXPORT + `?${query}`;
       // window.open(url, '_blank'); 
-
+// =======================================================================================================
       const doc = new jsPDF();
          
       //get table html
@@ -131,6 +132,48 @@ export default function WeeklyReport() {
       const documentDefinition = { content: html };
       pdfMake.vfs = pdfFonts.pdfMake.vfs;
       pdfMake.createPdf(documentDefinition).open();
+
+      // ===================================================================================================
+      // let filename ="hello",
+      //     tableID = "divToPrint";
+
+      // var downloadLink;
+      // var dataType = 'application/vnd.ms-excel';
+      // var tableSelect = document.getElementById(tableID);
+      // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+      
+      // // Specify file name
+      // filename = filename?filename+'.xlsx':'excel_data.xls';
+      
+      // // Create download link element
+      // downloadLink = document.createElement("a");
+      
+      // document.body.appendChild(downloadLink);
+      
+      // if(navigator.msSaveOrOpenBlob){
+      //     var blob = new Blob(['\ufeff', tableHTML], {
+      //         type: dataType
+      //     });
+      //     navigator.msSaveOrOpenBlob( blob, filename);
+      // }else{
+      //     // Create a link to the file
+      //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+      
+      //     // Setting the file name
+      //     downloadLink.download = filename;
+          
+      //     //triggering the function
+      //     downloadLink.click();
+      // }
+
+      // ========================================================================================
+
+      // TableToExcel.convert(document.getElementById("divToPrint"), {
+      //   name: "table1.xlsx",
+      //   sheet: {
+      //     name: "Sheet 1"
+      //   }
+      // });
     }
 
     useEffect(() => {
@@ -163,7 +206,7 @@ export default function WeeklyReport() {
             </div>
             
             <div id="divToPrint" className="d-none export-weekreprot">
-              <table>
+              <table style={{border: "3px"}}>
                   <tr>
                       <td class="text-center" style={{textAlign: "center", border: "none" }}>
                           <h3>CANPAC VIETNAM Co.,LTD.</h3>
@@ -171,6 +214,17 @@ export default function WeeklyReport() {
                               Binh Duong Provine</p>
                           <p>Tel (ÑT): 0650 380 1166 Fax: 0650.380 1169</p>
                       </td>
+                    {/* </tr>
+                    <tr>
+                      <td>
+                      <p>Address (Ñòa chæ): No.09, Vsip II-A, 15 road, Viet Nam -Singapore Industrial Park II-A, Tan Uyen Town,
+                              Binh Duong Provine</p>
+                      </td>
+                      </tr>
+                      <tr>
+                      <td>
+                      <p>Tel (ÑT): 0650 380 1166 Fax: 0650.380 1169</p>
+                      </td> */}
                   </tr>
                   <tr>
                       <td class="text-center" style={{textAlign: "center", border: "none" }}>

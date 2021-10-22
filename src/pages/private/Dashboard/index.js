@@ -25,8 +25,6 @@ export default function Dashboard() {
     };
 
     const generateReport = () => {
-        console.log("hello");
-
         htmlToImage.toBlob(document.getElementById('my-node'))
             .then(function (blob) {
                 window.saveAs(blob, `generale-report-${moment().format('YYYY-MM-DD--HH-mm-ss')}.png`);
