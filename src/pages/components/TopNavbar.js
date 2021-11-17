@@ -1,5 +1,5 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react'
-import logo from "../../assets/images/logo.svg";
+import logo from "../../assets/images/i-logo.png";
 import avatar1 from "../../assets/images/avatar-1.png";
 import $ from "jquery";
 import { Menu, Dropdown, Modal } from 'antd';
@@ -146,8 +146,8 @@ export default function TopNavbar() {
         <Fragment>
         <nav className="rui-navbar rui-navbar-top rui-navbar-sticky">
             <div className="rui-navbar-brand">
-                <a href="dashboard.html" className="rui-navbar-logo">
-                    <img src={logo} alt="" width="45" /> 
+                <a href="/" className="rui-navbar-logo">
+                    <img src={logo} alt="" width="90" /> 
                 </a>
                 <button className="yay-toggle rui-yaybar-toggle" type="button" onClick={toggleContent}><span></span></button>
             </div>
@@ -212,8 +212,8 @@ export default function TopNavbar() {
                 <button onClick={() => {mobileViewToggle()}} className="rui-yaybar-toggle rui-yaybar-toggle-inverse yay-toggle"
                     type="button" aria-label="Toggle side navigation"><span></span>
                 </button>
-                <a className="rui-navbar-logo mr-auto" href="dashboard.html">
-                    <img src={logo} alt="" width="45"/>
+                <a className="rui-navbar-logo mr-auto" href="/">
+                    <img src={logo} alt="" width="95"/>
                 </a>
                 <div className="dropdown dropdown-triangle">
                 <Dropdown overlay={menu} trigger={['click']}>
