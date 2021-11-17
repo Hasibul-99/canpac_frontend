@@ -13,6 +13,7 @@ import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import htmlToPdfmake from 'html-to-pdfmake';
 import TableToExcel from "@linways/table-to-excel";
+import reportData from "./week.json";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -94,6 +95,8 @@ export default function WeeklyReport() {
         let masterData = res.data.data;
 
         console.log("masterData", masterData);
+        console.log("reportData", reportData);
+      
         setExportData(masterData || [])
       }
     }
