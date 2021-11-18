@@ -298,6 +298,7 @@ export default function WeeklyReport() {
               </table>
               
               <br/>
+              <br/>
 
               <table class="table-border" border="0" cellspacing="0" >
                   <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
