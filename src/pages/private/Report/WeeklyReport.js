@@ -244,20 +244,8 @@ export default function WeeklyReport() {
                   <th>{exportData?.customer?.name}</th>
                 </tr>
                 <tr>
-                  <th>Attn:</th>
-                  <th>Mr. Brian Sung</th>
-                </tr>
-                <tr>
-                  <th>Cc:</th>
-                  <th>Mr. Dickie Sung</th>
-                </tr>
-                <tr>
-                  <th>Tel:</th>
+                  <th>Phone:</th>
                   <th>{exportData?.customer?.phone}</th>
-                </tr>
-                <tr>
-                  <th>Fax:</th>
-                  <th>0272. 3871615</th>
                 </tr>
                 <tr>
                   <th>Date:</th>
@@ -286,12 +274,15 @@ export default function WeeklyReport() {
                   {
                     exportData?.can_stock?.map((data, i) => <> 
                       <tr style={{border: ".5px solid black", borderCollapse: "collapse"}} key={'first-' + i}>
-                        <td>{data.DocNum}</td>
-                        <td>{data.ItemName}</td>
-                        <td>AAA</td>
-                        <td>aaa</td>
-                        <td>AAA</td>
                         <td>{i + 1}</td>
+                        <td>
+                          {data.ItemCode} <br/>
+                          {data.ItemName}
+                        </td>
+                        <td></td>
+                        <td>{data.CmpltQty}</td>
+                        <td>{data.SWeight1}</td>
+                        <td>{data.SWidth1}</td>
                       </tr>
                     </>)
                   }
@@ -315,10 +306,13 @@ export default function WeeklyReport() {
                   </tr>
                   {
                     exportData?.printed_sheet?.map((data, i) => <tr key={i} style={{border: ".5px solid black", borderCollapse: "collapse"}}>
-                        <td>{data.DocNum}</td>
-                        <td>{data.ItemName}</td>
-                        <td>AAA</td>
                         <td>{i + 1}</td>
+                        <td>
+                          {data.ItemCode} <br/>
+                          {data.ItemName}
+                        </td>
+                        <td></td>
+                        <td></td>
                     </tr>)
                   }
               </table>
