@@ -171,12 +171,12 @@ export default function WeeklyReport() {
 
       // ========================================================================================
 
-      TableToExcel.convert(document.getElementById("divToPrint"), {
-        name: "table1.xlsx",
-        sheet: {
-          name: "Sheet 1"
-        }
-      });
+      // TableToExcel.convert(document.getElementById("divToPrint"), {
+      //   name: "table1.xlsx",
+      //   sheet: {
+      //     name: "Sheet 1"
+      //   }
+      // });
     }
 
     useEffect(() => {
