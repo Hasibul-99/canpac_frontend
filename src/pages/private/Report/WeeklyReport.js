@@ -97,7 +97,7 @@ export default function WeeklyReport() {
         console.log("masterData", masterData);
         console.log("reportData", reportData);
       
-        setExportData(masterData || [])
+        setExportData(reportData.data || [])
       }
     }
 
@@ -171,12 +171,12 @@ export default function WeeklyReport() {
 
       // ========================================================================================
 
-      // TableToExcel.convert(document.getElementById("divToPrint"), {
-      //   name: "table1.xlsx",
-      //   sheet: {
-      //     name: "Sheet 1"
-      //   }
-      // });
+      TableToExcel.convert(document.getElementById("divToPrint"), {
+        name: "table1.xlsx",
+        sheet: {
+          name: "Sheet 1"
+        }
+      });
     }
 
     useEffect(() => {
@@ -208,7 +208,7 @@ export default function WeeklyReport() {
                 </div>
             </div>
             
-            <div id="divToPrint" className="d-none export-weekreprot">
+            <div id="divToPrint" className="export-weekreprot">
               <table style={{border: "3px"}}>
                   <tr>
                       <td class="text-center" style={{textAlign: "center", border: "none" }}>
@@ -234,38 +234,89 @@ export default function WeeklyReport() {
                           <br/>
                           <h1>WEEKLY STOCK ADVICE</h1>
                           <br/>
-                          <br/>
                       </td>
                   </tr>
               </table>
+
+              <table>
+                <tr>
+                  <th>To:</th>
+                  <th>{exportData?.customer?.name}</th>
+                </tr>
+                <tr>
+                  <th>Attn:</th>
+                  <th>Mr. Brian Sung</th>
+                </tr>
+                <tr>
+                  <th>Cc:</th>
+                  <th>Mr. Dickie Sung</th>
+                </tr>
+                <tr>
+                  <th>Tel:</th>
+                  <th>{exportData?.customer?.phone}</th>
+                </tr>
+                <tr>
+                  <th>Fax:</th>
+                  <th>0272. 3871615</th>
+                </tr>
+                <tr>
+                  <th>Date:</th>
+                  <th>{moment(exportData?.customer?.report_print_date).format("DD/MM/YYYY")}</th>
+                </tr>
+              </table>
+              <br/>
 
               <table class="table-border" border="0" cellspacing="0" >
                   <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
                       <th>No.</th>
                       <th>Description</th>
                       <th>Pending Printing order</th>
-                      <th>"Printed Sheet (Body Blank)"</th>
-                      <th>"Can Stock"</th>
-                      <th>Total of body blank & can stock</th>
-                      <th>"Weight Standard(+5g)"</th>
+                      <th>Can Stock</th>
+                      <th>Weight Standard(+5g)</th>
+                      <th>Thickness(mm)</th>
                   </tr>
                   <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
                       <th>Stt</th>
                       <th>Diễn Giải</th>
                       <th>SL Đơn haøng in</th>
-                      <th>SL Taám Theùp ñaõ In</th>
-                      <th>"SL Lon TP"</th>
-                      <th>Tổng SL tấm theùp ñaõ in & lon TP</th>
-                      <th>"Trọng Lượng chuẩn(+5g) "</th>
+                      <th>SL Lon TP</th>
+                      <th>Trọng Lượng chuẩn(+5g)</th>
+                      <th>Độ dày</th>
                   </tr>
                   {
-                    exportData.map((data, i) => <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
-                        <td>{i + 1}</td>
-                        <td>{data.sales_order_no}</td>
+                    exportData?.can_stock?.map((data, i) => <> 
+                      <tr style={{border: ".5px solid black", borderCollapse: "collapse"}} key={'first-' + i}>
+                        <td>{data.DocNum}</td>
+                        <td>{data.ItemName}</td>
                         <td>AAA</td>
                         <td>aaa</td>
                         <td>AAA</td>
                         <td>{i + 1}</td>
+                      </tr>
+                    </>)
+                  }
+              </table>
+              
+              <br/>
+
+              <table class="table-border" border="0" cellspacing="0" >
+                  <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
+                      <th>No.</th>
+                      <th>Description</th>
+                      <th>Printed Sheet (Body Blank)</th>
+                      <th>Total of body blank & can stock</th>
+                  </tr>
+                  <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
+                      <th>Stt</th>
+                      <th>Diễn Giải</th>
+                      <th>SL Taám Theùp ñaõ In</th>
+                      <th>Tổng SL tấm theùp ñaõ in & lon TP</th>
+                  </tr>
+                  {
+                    exportData?.printed_sheet?.map((data, i) => <tr key={i} style={{border: ".5px solid black", borderCollapse: "collapse"}}>
+                        <td>{data.DocNum}</td>
+                        <td>{data.ItemName}</td>
+                        <td>AAA</td>
                         <td>{i + 1}</td>
                     </tr>)
                   }

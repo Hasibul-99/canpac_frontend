@@ -2705,7 +2705,12 @@
             "SWeight1":null,
             "SWidth1":null
          }
-      ]
+      ],
+      "customer": {
+         "name": "Prof. Amir Dickinson",
+         "phone": "12831493831",
+         "report_print_date": "2021-11-18 00:05:57"
+     }
    },
    "message":"Weekly Report",
    "errors":null,
