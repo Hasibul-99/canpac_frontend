@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
 import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
 import { postData, getData} from '../../../scripts/api-service';
-import { WEEK_REPORT, WEEKLY_REPORT_EXPORT, draft_report } from '../../../scripts/api';
+import { WEEK_REPORT, WEEKLY_REPORT_EXPORT, draft_report, DROPDOWN_LIST } from '../../../scripts/api';
 import moment from "moment";
 import { saveAs } from 'file-saver';
 import Cookies from "js-cookie";
@@ -30,37 +30,56 @@ export default function WeeklyReport() {
       end_date: moment().endOf('week').format('YYYY-MM-DD')
     });
     const [exportData, setExportData] = useState([]);
+    const [customer, setCustomer] = useState();
 
     const columns = [
         {
           title: 'Order NO',
-          dataIndex: 'sales_order_no',
-          key: 'sales_order_no',
+          dataIndex: 'OriginNum',
+          key: 'OriginNum',
         },
         {
           title: 'Customer',
-          dataIndex: 'Customer Name',
-          key: 'Customer ID',
+          key: 'CardName',
+          render: (text, record) => (
+            <span>
+                {record.CardName} - {record.CardCode}
+            </span>
+          )
         },
         {
-          title: 'Product name',
-          dataIndex: 'Product name',
+          title: 'Product',
           key: 'Product Code',
+          render: (text, record) => (
+            <span>
+                {record.ItemName} - {record.ItemCode}
+            </span>
+          )
         },
         {
-            title: 'Date',
-            dataIndex: 'Production Due Date (ngày hoàn thành)',
-            key: 'Production Due Date (ngày hoàn thành)',
+            title: 'Production Due Date',
+            dataIndex: 'DueDate',
+            key: 'DueDate',
         },
         {
-            title: 'Order Quantity (can)',
-            dataIndex: 'Stock',
-            key: 'Stock',
+            title: 'Product Order',
+            dataIndex: 'PlannedQty',
+            key: 'PlannedQty',
         },
         {
-            title: 'Production Order',
-            dataIndex: 'Production Order',
-            key: 'Production Order',
+            title: 'Stock',
+            dataIndex: 'CmpltQty',
+            key: 'CmpltQty',
+        },
+        {
+          title: 'Weight',
+          dataIndex: 'SWeight1',
+          key: 'SWeight1',
+        },
+        {
+          title: 'Thickness',
+          dataIndex: 'SWidth1',
+          key: 'SWidth1',
         },
     ];
 
@@ -81,7 +100,15 @@ export default function WeeklyReport() {
       let res = await postData(WEEK_REPORT, dateRange);
 
       if (res) {
-        setReport(res.data.data);
+        // setReport(res.data.data);
+        let masterData = reportData.data;
+
+        let printed_sheet = masterData.printed_sheet;
+        let can_stock = masterData.can_stock;
+
+        console.log("printed_sheet", [...printed_sheet, ...can_stock]);
+
+        setReport([...printed_sheet, ...can_stock]); 
         getReportData()
       }
     }
@@ -102,39 +129,17 @@ export default function WeeklyReport() {
     }
 
     const generateReport = async () => {
-      // console.log("hello");
-      // let res = await getData( draft_report );
-
-      // if (res) {
-      //   console.log(res.data);
-
-      //   let json = JSON.stringify(res.data)
-      //   let buffer = Buffer.from(JSON.parse(json))
-      //   let read = buffer.toString('utf8')
-      //   let blob = new Blob([read]);
-
-      //   console.log("blob", blob);
-
-      //   saveAs(blob, 'fileName.xlsx');
-      // }
-      // window.open(`https://canpac-inventory-backoffice.smartdemo.xyz/api/v1/report/weekly/export?api_token=${token}`, '_blank');
-      
-      // const base_url = process.env.REACT_APP_BASE;
-      // let query = buildSearchQuery(dateRange);
-
-      // let url = base_url + WEEKLY_REPORT_EXPORT + `?${query}`;
-      // window.open(url, '_blank'); 
 // =======================================================================================================
-      const doc = new jsPDF();
+      // const doc = new jsPDF();
          
-      //get table html
-      const pdfTable = document.getElementById('divToPrint');
-      //html to pdf format
-      var html = htmlToPdfmake(pdfTable.innerHTML);
+      // //get table html
+      // const pdfTable = document.getElementById('divToPrint');
+      // //html to pdf format
+      // var html = htmlToPdfmake(pdfTable.innerHTML);
     
-      const documentDefinition = { content: html };
-      pdfMake.vfs = pdfFonts.pdfMake.vfs;
-      pdfMake.createPdf(documentDefinition).open();
+      // const documentDefinition = { content: html };
+      // pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      // pdfMake.createPdf(documentDefinition).open();
 
       // ===================================================================================================
       // let filename ="hello",
@@ -171,16 +176,31 @@ export default function WeeklyReport() {
 
       // ========================================================================================
 
-      // TableToExcel.convert(document.getElementById("divToPrint"), {
-      //   name: "table1.xlsx",
-      //   sheet: {
-      //     name: "Sheet 1"
-      //   }
-      // });
+      TableToExcel.convert(document.getElementById("divToPrint"), {
+        name: `Weekly-report-${moment().format('YYYY-MM-DD--HH-mm-ss')}.xlsx`,
+        sheet: {
+          name: "Sheet 1"
+        }
+      });
+    }
+
+    const sarchByCustomer = () => {
+
+    }
+
+    const getCustomer = async() => {
+      let res = await postData(DROPDOWN_LIST, {
+          data_type: "customer"
+      })
+
+      if (res) {
+        setCustomer(res.data.data);
+      }
     }
 
     useEffect(() => {
-      getReport()
+      getReport();
+      getCustomer();
     }, [dateRange])
 
     return (
@@ -195,89 +215,114 @@ export default function WeeklyReport() {
             <div className="rui-page-content">
                 <div className="container-fluid">
                     <div className="mb-20">
+                      <span>
                         <DatePicker size="large" onChange={onChange} defaultValue={moment()} className="mr-20" 
                           allowClear={false} picker="week" style={{width: "300px"}} />
+                      </span>
+                        
+                      <span className="">
+                            <Select
+                                size="large"
+                                allowClear
+                                mode="multiple"
+                                style={{ width: '300px' }}
+                                placeholder="Search Customer"
+                                onChange={sarchByCustomer}
+                                >
+                                    {
+                                        customer?.length && customer.map(role => <Option key={role.id} value={role.id}>{role.name}</Option>)
+                                    }
+                            </Select>
+                        </span>
                         {
                           canView('Weekly Report | Export') ? <div className="float-right">
                             <Button type="primary" className="btn-brand btn-block float-right mb-20" 
                             onClick={() => generateReport()} size="large">Generate Report</Button>
                           </div> : null
-                        }                        
+                        }    
+
+
                     </div>
                     <Table dataSource={report} columns={columns} />
                 </div>
             </div>
             
-            <div id="divToPrint" className="export-weekreprot">
+            <div id="divToPrint" className="export-weekreprot d-none" data-cols-width="10, 30, 20, 20, 30, 20">
               <table style={{border: "3px"}}>
                   <tr>
-                      <td class="text-center" style={{textAlign: "center", border: "none" }}>
+                      <td class="text-center font12" data-a-h="center" data-f-bold="true"
+                        style={{textAlign: "center", border: "none", width: "475.50pt" }} colspan="6">
                           <h3>CANPAC VIETNAM Co.,LTD.</h3>
-                          <p>Address (Ñòa chæ): No.09, Vsip II-A, 15 road, Viet Nam -Singapore Industrial Park II-A, Tan Uyen Town,
-                              Binh Duong Provine</p>
-                          <p>Tel (ÑT): 0650 380 1166 Fax: 0650.380 1169</p>
                       </td>
-                    {/* </tr>
+                    </tr>
                     <tr>
-                      <td>
+                      <td colspan="6" data-a-h="center">
                       <p>Address (Ñòa chæ): No.09, Vsip II-A, 15 road, Viet Nam -Singapore Industrial Park II-A, Tan Uyen Town,
                               Binh Duong Provine</p>
                       </td>
                       </tr>
                       <tr>
-                      <td>
+                      <td data-a-h="center" colspan="6">
                       <p>Tel (ÑT): 0650 380 1166 Fax: 0650.380 1169</p>
-                      </td> */}
+                      </td>
                   </tr>
                   <tr>
-                      <td class="text-center" style={{textAlign: "center", border: "none" }}>
+                    <td></td>
+                  </tr>
+                  <tr>
+                      <td data-f-bold="true" data-f-sz="14" colspan="7" data-a-h="center" class="text-center" style={{textAlign: "center", border: "none" }}>
                           <br/>
-                          <h1>WEEKLY STOCK ADVICE</h1>
+                            <h1>WEEKLY STOCK ADVICE</h1>
                           <br/>
                       </td>
+                  </tr>
+                  <tr>
+                    <td></td>
                   </tr>
               </table>
 
               <table>
                 <tr>
                   <th>To:</th>
-                  <th>{exportData?.customer?.name}</th>
+                  <th colspan="3">{exportData?.customer?.name}</th>
                 </tr>
                 <tr>
                   <th>Phone:</th>
-                  <th>{exportData?.customer?.phone}</th>
+                  <th colspan="3">{exportData?.customer?.phone}</th>
                 </tr>
                 <tr>
                   <th>Date:</th>
-                  <th>{moment(exportData?.customer?.report_print_date).format("DD/MM/YYYY")}</th>
+                  <th colspan="3">{moment(exportData?.customer?.report_print_date).format("DD/MM/YYYY")}</th>
+                </tr>
+                <tr>
+                    <td></td>
                 </tr>
               </table>
               <br/>
 
-              <table class="table-border" border="0" cellspacing="0" >
-                  <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
-                      <th>No.</th>
-                      <th>Description</th>
-                      <th>Pending Printing order</th>
-                      <th>Can Stock</th>
-                      <th>Weight Standard(+5g)</th>
-                      <th>Thickness(mm)</th>
+              <table  class="table-border" border="0" cellspacing="0">
+                  <tr data-height="60" data-b-a-s="BORDER_STYLES">
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">No.</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle" rowspan="1">Description</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Pending Printing order</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Can Stock</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Weight Standard(+5g)</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Thickness(mm)</th>
                   </tr>
-                  <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
-                      <th>Stt</th>
-                      <th>Diễn Giải</th>
-                      <th>SL Đơn haøng in</th>
-                      <th>SL Lon TP</th>
-                      <th>Trọng Lượng chuẩn(+5g)</th>
-                      <th>Độ dày</th>
+                  <tr data-height="60" data-b-a-s="BORDER_STYLES">
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Stt</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Diễn Giải</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Đơn haøng in</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Lon TP</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Trọng Lượng chuẩn(+5g)</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Độ dày</th>
                   </tr>
                   {
                     exportData?.can_stock?.map((data, i) => <> 
-                      <tr style={{border: ".5px solid black", borderCollapse: "collapse"}} key={'first-' + i}>
+                      <tr key={'first-' + i}>
                         <td>{i + 1}</td>
                         <td>
-                          {data.ItemCode} <br/>
-                          {data.ItemName}
+                          {data.ItemName} - {data.ItemCode} 
                         </td>
                         <td></td>
                         <td>{data.CmpltQty}</td>
@@ -286,32 +331,36 @@ export default function WeeklyReport() {
                       </tr>
                     </>)
                   }
+
+                  <tr>
+                    <td></td>
+                    <td></td>
+                  </tr>
               </table>
               
               <br/>
               <br/>
 
-              <table class="table-border" border="0" cellspacing="0" >
-                  <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
-                      <th>No.</th>
-                      <th>Description</th>
-                      <th>Printed Sheet (Body Blank)</th>
-                      <th>Total of body blank & can stock</th>
+              <table class="table-border" border="0" data-b-r-s="medium">
+                  <tr data-height="60" data-b-r-s="medium">
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">No.</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Description</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Printed Sheet (Body Blank)</th>
+                      <th data-b-a-s="medium" data-b-r-s="medium" data-f-bold="true" data-a-v="middle">Total of body blank & can stock</th>
                   </tr>
-                  <tr style={{border: ".5px solid black", borderCollapse: "collapse"}}>
-                      <th>Stt</th>
-                      <th>Diễn Giải</th>
-                      <th>SL Taám Theùp ñaõ In</th>
-                      <th>Tổng SL tấm theùp ñaõ in & lon TP</th>
+                  <tr data-height="60">
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Stt</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Diễn Giải</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Taám Theùp ñaõ In</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Tổng SL tấm theùp ñaõ in & lon TP</th>
                   </tr>
                   {
                     exportData?.printed_sheet?.map((data, i) => <tr key={i} style={{border: ".5px solid black", borderCollapse: "collapse"}}>
-                        <td>{i + 1}</td>
-                        <td>
-                          {data.ItemCode} <br/>
-                          {data.ItemName}
+                        <td class="xl89">{i + 1}</td>
+                        <td className="xl88" width="500" style={{width: "500px"}}>
+                          {data.ItemName} - {data.ItemCode} 
                         </td>
-                        <td></td>
+                        <td>{data.CmpltQty}</td>
                         <td></td>
                     </tr>)
                   }
