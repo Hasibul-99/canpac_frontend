@@ -257,13 +257,12 @@ export default function WeeklyReport() {
                     </tr>
                     <tr>
                       <td colspan="6" data-a-h="center">
-                      <p>Address (Ñòa chæ): No.09, Vsip II-A, 15 road, Viet Nam -Singapore Industrial Park II-A, Tan Uyen Town,
-                              Binh Duong Provine</p>
+                      <p>Address (Địa chỉ): No.09, Vsip II-A, 15 road, Viet Nam -Singapore Industrial Park II-A, Tan Uyen Town, Binh Duong Provine</p>
                       </td>
                       </tr>
                       <tr>
                       <td data-a-h="center" colspan="6">
-                      <p>Tel (ÑT): 0650 380 1166 Fax: 0650.380 1169</p>
+                      <p>Tel (ĐT): 0650 380 1166 Fax: 0650.380 1169</p>
                       </td>
                   </tr>
                   <tr>
