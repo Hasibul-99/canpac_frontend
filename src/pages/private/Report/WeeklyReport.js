@@ -312,7 +312,7 @@ export default function WeeklyReport() {
                   <tr data-height="60" data-b-a-s="BORDER_STYLES">
                       <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Stt</th>
                       <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Diễn Giải</th>
-                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Đơn haøng in</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Đơn hàng in</th>
                       <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Lon TP</th>
                       <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Trọng Lượng chuẩn(+5g)</th>
                       <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Độ dày</th>
@@ -351,8 +351,8 @@ export default function WeeklyReport() {
                   <tr data-height="60">
                       <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Stt</th>
                       <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Diễn Giải</th>
-                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Taám Theùp ñaõ In</th>
-                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Tổng SL tấm theùp ñaõ in & lon TP</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Tấm Thép đã in</th>
+                      <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Tổng SL tấm thép đã in & lon TP</th>
                   </tr>
                   {
                     exportData?.printed_sheet?.map((data, i) => <tr key={i} style={{border: ".5px solid black", borderCollapse: "collapse"}}>
