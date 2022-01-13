@@ -67,7 +67,7 @@ export default function OrderCreate() {
                                 }
                             >
                                 {
-                                    product?.length && product.map(pro => <Option value={pro.id} key={pro.id}>{pro.product_name}</Option>)
+                                    product?.length && product.map(pro => <Option value={pro.id} key={pro.id}>{pro?.product_name}</Option>)
                                 }
                             </Select>
                         </Form.Item>

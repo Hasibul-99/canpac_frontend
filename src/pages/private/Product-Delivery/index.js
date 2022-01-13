@@ -55,7 +55,7 @@ export default function ProductDelivery() {
           key: 'product_id',
           render: (text, record) => (
             <Space size="middle">
-              {record.product.product_name}
+              {record?.product?.product_name}
             </Space>
           )
         },
@@ -272,7 +272,7 @@ export default function ProductDelivery() {
                                         >
                                         {
                                             productModel?.length ?
-                                            productModel.map(status => <Option key={status.id} value={status.id}>{status.product_name}</Option>) : ''
+                                            productModel.map(status => <Option key={status.id} value={status.id}>{status?.product_name}</Option>) : ''
                                         }
                                     </Select>
                             </div>

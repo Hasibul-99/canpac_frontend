@@ -26,7 +26,7 @@ export default function LowStock() {
           dataIndex: 'product',
           key: 'id',
           render: (record) => <>
-              { record.product_name }
+              { record?.product_name }
           </>
         },
         {

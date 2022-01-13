@@ -57,7 +57,7 @@ export default function ProductOrder() {
             key: 'product.id',
             render: (text, record) => (
                 <span>
-                    {record.product.product_name}
+                    {record?.product?.product_name}
                 </span>
             )
         },
@@ -268,7 +268,7 @@ export default function ProductOrder() {
                                         >
                                         {
                                             productModel?.length ?
-                                            productModel.map(status => <Option key={status.id} value={status.id}>{status.product_name}</Option>) : ''
+                                            productModel.map(status => <Option key={status.id} value={status.id}>{status?.product_name}</Option>) : ''
                                         }
                                     </Select>
                             </div>
