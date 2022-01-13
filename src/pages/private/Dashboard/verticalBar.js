@@ -22,8 +22,8 @@ export default function VerticalBar({quantity}) {
   const [chart, setChart] = useState();
 
   useEffect(() => {
-    let lables = quantity.map(qun => qun.product_name),
-        quan = quantity.map(qun => qun.stock),
+    let lables = quantity.map(qun => qun?.product_name),
+        quan = quantity.map(qun => qun?.stock),
         backgroundColor = [];
 
         quantity.forEach(val => {

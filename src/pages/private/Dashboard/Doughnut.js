@@ -6,8 +6,8 @@ const DoughnutChart = ({products}) => {
   const [chart, setChart] = useState()
 
   useEffect(() => {
-    let labels = products.map(pro => pro.product.product_name),
-        quantity = products.map(pro => pro.quantity),
+    let labels = products.map(pro => pro?.product?.product_name),
+        quantity = products.map(pro => pro?.quantity),
         backgroundColor = [];
 
       products.forEach(val => {
