@@ -101,7 +101,8 @@ export default function WeeklyReport() {
 
       if (res) {
         // setReport(res.data.data);
-        let masterData = reportData.data;
+        // let masterData = reportData.data;
+        let masterData = res.data.data;
 
         let printed_sheet = masterData.printed_sheet;
         let can_stock = masterData.can_stock;
@@ -124,7 +125,7 @@ export default function WeeklyReport() {
         console.log("masterData", masterData);
         console.log("reportData", reportData);
       
-        setExportData(reportData.data || [])
+        setExportData(masterData || [])
       }
     }
 
