@@ -1,7 +1,15 @@
-import React, { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Fragment, useContext } from 'react'
+import { Link } from 'react-router-dom';
+import { authContext } from "../../context/AuthContext";
+import { checkUserPermission } from "../../scripts/helper";
 
 export default function Page404() {
+    const { permissions } = useContext(authContext);
+
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
+
     return (
         <Fragment>
             <div class="rui-page-preloader" role="status">
@@ -23,11 +31,16 @@ export default function Page404() {
                     <div class="row text-center">
                         <div class="col-12"></div>
                         <div class="col-12">
-                            <h1 class="mnb-30">404</h1>
-                            <p class="display-2 mb-50 text-grey-5">Page Not Found</p>
-                            <div>
-                                <Link to="/" class="btn btn-brand btn-long">Back Home</Link>
-                            </div>
+                            {
+                                window.location.pathname === '/' && permissions?.length && !canView('Dashboard Report') ? <h3>There seems to be a problem with your access to the Dashboard data report. Although this is possible for non-Premium Merchants. For access, please contact us.</h3> : <Fragment>
+                                    <h1 class="mnb-30">404</h1>
+                                    <p class="display-2 mb-50 text-grey-5">Page Not Found</p>
+                                    <div>
+                                        <Link to="/" class="btn btn-brand btn-long">Back Home</Link>
+                                    </div>
+                                </Fragment>
+                            } 
+                            
                         </div>
                         <div class="col-12">
                             <div class="rui-footer pt-30 pb-25">

@@ -3,7 +3,7 @@ import { Form, Input, Button, Upload, Select } from "antd";
 import { alertPop, getBase64 } from '../../../scripts/helper';
 import { postData } from '../../../scripts/api-service';
 import { UploadOutlined } from '@ant-design/icons';
-import { MERCHENT_LIST, ROLE_LIST, USER_CREATE, USER_LIST, USER_UPDATE } from '../../../scripts/api';
+import { MERCHENT_LIST, ROLE_LIST, USER_CREATE, USER_LIST, MERCHENT_UPDATE } from '../../../scripts/api';
 import demo from "../../../assets/images/avatar-1.png";
 import { useHistory, useParams } from "react-router-dom";
 
@@ -17,6 +17,7 @@ export default function UpdateMarchent() {
     const [imageBase64, setImageBase64] = useState();
     const [roles, setRoles] = useState();
     const [ userInfo, setUserInfo ] = useState();
+    const [selectedRole, setSelectedRole] = useState('Merchant')
 
 
     const profilePreview = async ({file}) => {
@@ -34,16 +35,15 @@ export default function UpdateMarchent() {
         data.append('phone', values.phone); 
         data.append('company_name', values.company_name); 
         data.append('role', values.role);
-        
-        data.append('sap_id', 1);
+        data.append('sap_id', values.sap_id);
 
         data.append('id', marchentId);
 
-        let res = await postData(USER_UPDATE, data);
+        let res = await postData(MERCHENT_UPDATE, data);
 
         if (res) {
-            alertPop('success', "User Updated Successfully!");
-            history.push('/users');
+            alertPop('success', "Marchent Updated Successfully!");
+            history.push('/merchents');
         }
     };
 
@@ -63,7 +63,10 @@ export default function UpdateMarchent() {
                     phone: user.phone,
                     email: user.email,
                     role: user.roles[0].name,
+                    sap_id: user.sap_id
                 });
+
+                setSelectedRole(user.roles[0].name);
             }
         }
     }
@@ -134,6 +137,7 @@ export default function UpdateMarchent() {
                                                 showSearch
                                                 placeholder="Select a role"
                                                 optionFilterProp="children"
+                                                onChange={(e) => setSelectedRole(e)}
                                                 filterOption={(input, option) =>
                                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                                 }
@@ -142,6 +146,17 @@ export default function UpdateMarchent() {
                                                 <Option key={2} value="Premium Merchant">Premium Merchant</Option>
                                             </Select>
                                     </Form.Item>
+                                    
+                                    {
+                                        selectedRole === 'Premium Merchant' ? <Form.Item
+                                            label="SAP Id"
+                                            name="sap_id"
+                                            rules={[{ required: true, message: 'Please input SAP Id!' }]}
+                                        >
+                                            <Input size="large" placeholder="Enter SAP Id" />
+                                        </Form.Item> : ''
+                                    }
+                                    
                                     <hr/>
 
                                     <div className="rui-profile mt-10">

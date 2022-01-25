@@ -3,7 +3,7 @@ import { Form, Input, Button, Upload, Select } from "antd";
 import { alertPop, getBase64 } from '../../../scripts/helper';
 import { postData } from '../../../scripts/api-service';
 import { UploadOutlined } from '@ant-design/icons';
-import { ROLE_LIST, USER_CREATE } from '../../../scripts/api';
+import { ROLE_LIST, DROPDOWN_LIST, USER_CREATE } from '../../../scripts/api';
 import demo from "../../../assets/images/avatar-1.png";
 import { useHistory } from "react-router-dom";
 
@@ -43,7 +43,9 @@ export default function CreateUser() {
     }
 
     const getRoles = async () => {
-        let res = await postData(ROLE_LIST, {});
+        let res = await postData(DROPDOWN_LIST, {
+            data_type: "role"
+        })
         
         if (res) {
             let masterData = res.data.data.filter(val => (val.name !== 'Merchant' && val.name !== "Premium Merchant"));

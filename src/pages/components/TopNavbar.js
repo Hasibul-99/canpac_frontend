@@ -8,7 +8,7 @@ import { Form, Input, Button } from "antd";
 import { Link } from 'react-router-dom';
 import { CHANGE_PASSWORD } from "../../scripts/api";
 import { postData } from "../../scripts/api-service";
-import { alertPop } from "../../scripts/helper";
+import { alertPop, checkUserPermission } from "../../scripts/helper";
 import Cookies from "js-cookie";
 import { authContext } from "../../context/AuthContext";
 import { useTranslation } from 'react-i18next';
@@ -27,7 +27,7 @@ export default function TopNavbar() {
     const location = useLocation();
     const {t, i18n} = useTranslation();
 
-    const {user, getUserInfo, setUserInfo, DeleteUserInfo } = useContext(authContext);
+    const {user, getUserInfo, setUserInfo, DeleteUserInfo, permissions } = useContext(authContext);
 
     const [changepassModal, setChangepassModal] = useState(false);
     const [showNav, setShowNav] = useState(true);
@@ -61,6 +61,10 @@ export default function TopNavbar() {
         localStorage.removeItem('canpacPermissions');
     };
 
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
+
     useEffect(() => {
         if (location.pathname === "/") {
             if (!($( "#main-wrapper" ).hasClass( "yay-hide" ))) $( "#main-wrapper" ).addClass( "yay-hide" );
@@ -72,11 +76,13 @@ export default function TopNavbar() {
 
     const menu = (
         <Menu>
-          <Menu.Item>
-            <a rel="noopener noreferrer" onClick={() => {setChangepassModal(true)}}>
-                <KeyOutlined /> Change Password
-            </a>
-          </Menu.Item>
+            {
+                !canView('User - Change Password') ? <Menu.Item>
+                    <a rel="noopener noreferrer" onClick={() => {setChangepassModal(true)}}>
+                        <KeyOutlined /> Change Password
+                    </a>
+                </Menu.Item> : ''
+            }
           <Menu.Item>
             <Link to="/update-profile">
                 <UserOutlined /> Update Profile

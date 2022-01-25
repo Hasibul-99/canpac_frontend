@@ -70,30 +70,45 @@ export default function Dashboard() {
                     <div className="container-fluid">
                         {
                             dashboard && <div className="row xs-gap mt-20 px-20">
-                                <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
-                                        <h1>Product Stock</h1>
-                                        <Link to="/product-stock"><h2>{dashboard.product_stock}</h2></Link>
-                                    </div>
-                                </div>
+                                {
+                                    getUserInfo()?.roles[0].name !== 'Premium Merchant' ? <div className="col  col-sm-12 col-lg-3 mb-10">
+                                        <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
+                                            <h1>Product Stock</h1>
+                                            <Link to="/product-stock"><h2>{dashboard.product_stock}</h2></Link>
+                                        </div>
+                                    </div> : ''
+                                }
+                                
                                 <div className="col  col-sm-12 col-lg-3 mb-10">
                                     <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
                                         <h1>Product Order</h1>
                                         <Link to="/product-order"><h2>{dashboard.product_order}</h2></Link>
                                     </div>
                                 </div>
-                                <div className="col col-sm-12 col-lg-3 mb-10">
-                                    <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
-                                        <h1>Low Stock</h1>
-                                        <Link to="/low-stock"><h2>{dashboard.low_stock}</h2></Link>
-                                    </div>
-                                </div>
+                                {
+                                    getUserInfo()?.roles[0].name !== 'Premium Merchant' ? <div className="col col-sm-12 col-lg-3 mb-10">
+                                        <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
+                                            <h1>Low Stock</h1>
+                                            <Link to="/low-stock"><h2>{dashboard.low_stock}</h2></Link>
+                                        </div>
+                                    </div> : ''
+                                }
+                                
                                 <div className="col  col-sm-12 col-lg-3 mb-10">
                                     <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
                                         <h1>Product Delivery</h1>
                                         <Link to="/product-delivery"><h2>{dashboard.product_delivery}</h2></Link>
                                     </div>
                                 </div>
+                                {
+                                    getUserInfo()?.roles[0].name === 'Premium Merchant' ? <div className="col  col-sm-12 col-lg-3 mb-10">
+                                        <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
+                                            <h1>Product Order Draft</h1>
+                                            <Link to="/product-delivery"><h2>{dashboard.product_order_draft}</h2></Link>
+                                        </div>
+                                    </div> : ''
+                                }
+                                
                             </div>
                         }
 

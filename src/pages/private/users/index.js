@@ -132,7 +132,9 @@ export default function Users() {
         })
 
         if (res) {
-            setRoles(res.data.data);
+            // setRoles(res.data.data);
+            let masterData = res.data.data.filter(val => (val.name !== 'Merchant' && val.name !== "Premium Merchant"));
+            setRoles(masterData);
         }
     }
 

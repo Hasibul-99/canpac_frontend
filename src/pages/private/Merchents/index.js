@@ -4,7 +4,7 @@ import { MERCHENT_LIST, USER_STATUS_UPDATE, EMAIL_CONFIRMATION_RESENT, DROPDOWN_
 import { postData } from "../../../scripts/api-service";
 import { useHistory, Link } from "react-router-dom";
 import { alertPop, checkUserPermission } from '../../../scripts/helper';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, CrownOutlined } from '@ant-design/icons';
 import moment from "moment";
 import { authContext } from '../../../context/AuthContext';
 
@@ -24,6 +24,16 @@ export default function Merchents() {
 
     const columns = [
         {
+            title: '',
+            key: 'name',
+            render: (text, record) => <>
+                {
+                    record.sap_id && 
+                    record?.roles[0].name === 'Premium Merchant' ? <CrownOutlined style={{color: "red", fontSize: '2rem'}} /> : ''
+                }
+            </>
+        },
+        {
           title: 'Name',
           dataIndex: 'name',
           key: 'name',
@@ -37,6 +47,11 @@ export default function Merchents() {
           title: 'Phone',
           dataIndex: 'phone',
           key: 'phone',
+        },
+        {
+            title: 'SAP ID',
+            dataIndex: 'sap_id',
+            key: 'sap_id',
         },
         {
             title: 'Email Verified',
@@ -129,7 +144,9 @@ export default function Merchents() {
         })
 
         if (res) {
-            setRoles(res.data.data);
+            // setRoles(res.data.data);
+            let masterData = res.data.data.filter(val => (val.name === 'Merchant' || val.name === "Premium Merchant"));
+            setRoles(masterData);
         }
     }
 
