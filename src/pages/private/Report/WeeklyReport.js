@@ -20,7 +20,7 @@ const { Option } = Select;
 
 
 export default function WeeklyReport() {
-    const { permissions } = useContext(authContext);
+    const { permissions, getUserInfo } = useContext(authContext);
 
     const token = Cookies.get("canpacToken") || "";
     
@@ -31,6 +31,7 @@ export default function WeeklyReport() {
     });
     const [exportData, setExportData] = useState([]);
     const [customer, setCustomer] = useState();
+    const [selectedCustomer, setSelectedCustomer] = useState();
 
     const columns = [
         {
@@ -97,7 +98,10 @@ export default function WeeklyReport() {
     };
 
     const getReport = async () => {
-      let res = await postData(WEEK_REPORT, dateRange);
+      let data = dateRange;
+      data.customer = selectedCustomer;
+
+      let res = await postData(WEEK_REPORT, data);
 
       if (res) {
         // setReport(res.data.data);
@@ -116,7 +120,7 @@ export default function WeeklyReport() {
 
     const getReportData = async () => {
       let query = buildSearchQuery(dateRange);
-      let url = WEEKLY_REPORT_EXPORT + `?${query}`;
+      let url = WEEKLY_REPORT_EXPORT + `?${query}&customer=${selectedCustomer}`;
       let res = await getData( url );
 
       if (res) {
@@ -200,9 +204,16 @@ export default function WeeklyReport() {
     }
 
     useEffect(() => {
-      getReport();
-      getCustomer();
-    }, [dateRange])
+      if (canView('Weekly Report | Filter By Customer')) {
+        getCustomer();
+      } else {
+        selectedCustomer(getUserInfo().id);
+      }
+    }, [])
+
+    useEffect(() => {
+      if (customer) getReport();
+    }, [dateRange, customer])
 
     return (
         <Fragment>
@@ -222,7 +233,8 @@ export default function WeeklyReport() {
                       </span>
                         
                       <span className="">
-                            <Select
+                          {
+                            canView('Weekly Report | Filter By Customer') ? <Select
                                 size="large"
                                 allowClear
                                 mode="multiple"
@@ -233,7 +245,9 @@ export default function WeeklyReport() {
                                     {
                                         customer?.length && customer.map(role => <Option key={role.id} value={role.id}>{role.name}</Option>)
                                     }
-                            </Select>
+                            </Select> : ''
+                          }
+                            
                         </span>
                         {
                           canView('Weekly Report | Export') ? <div className="float-right">
