@@ -5,17 +5,15 @@ import moment from 'moment';
 export const checkRes = (param) => {
   if (param === 200 || param === 201 || param === 212) {
     return true;
-  } 
-  // else if (param === 401) {
-  //   Cookies.remove("canpacToken");
-  //   window.location = "/auth/login";
-  //   localStorage.removeItem('canpacPermissions');
-  // } else if (param === 403) {
-  //   Cookies.remove("canpacToken");
-  //   window.location = "/auth/login";
-  //   localStorage.removeItem('canpacPermissions');
-  // } 
-  else {
+  } else if (param === 401) {
+    Cookies.remove("canpacToken");
+    window.location = "/auth/login";
+    localStorage.removeItem('canpacPermissions');
+  } else if (param === 403) {
+    Cookies.remove("canpacToken");
+    window.location = "/auth/login";
+    localStorage.removeItem('canpacPermissions');
+  } else {
     return false;
   }
 };
