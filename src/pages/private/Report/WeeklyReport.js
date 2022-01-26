@@ -20,7 +20,7 @@ const { Option } = Select;
 
 
 export default function WeeklyReport() {
-    const { permissions, getUserInfo } = useContext(authContext);
+    const { user, permissions, getUserInfo } = useContext(authContext);
 
     const token = Cookies.get("canpacToken") || "";
     
@@ -114,7 +114,10 @@ export default function WeeklyReport() {
         console.log("printed_sheet", [...printed_sheet, ...can_stock]);
 
         setReport([...printed_sheet, ...can_stock]); 
-        getReportData()
+
+        if (canView('Weekly Report | Export')) {
+          getReportData()
+        }
       }
     }
 
@@ -206,13 +209,13 @@ export default function WeeklyReport() {
 
     useEffect(() => {
       getCustomer();
-
-      if (canView('Weekly Report | Filter By Customer')) {
-        
-      } else {
-        setSelectedCustomer(getUserInfo()?.id);
-      }
     }, [])
+
+    useEffect(() => {
+      if (!canView('Weekly Report | Filter By Customer')) {
+        setSelectedCustomer(user?.id);
+      }
+    }, [user])
 
     useEffect(() => {
       if (selectedCustomer) getReport();
@@ -253,7 +256,8 @@ export default function WeeklyReport() {
                             
                         </span>
                         {
-                          canView('Weekly Report | Export') ? <div className="float-right">
+                          canView('Weekly Report | Export') && 
+                          (exportData?.can_stock?.length || exportData?.printed_sheet?.length) ? <div className="float-right">
                             <Button type="primary" className="btn-brand btn-block float-right mb-20" 
                             onClick={() => generateReport()} size="large">Generate Report</Button>
                           </div> : null
