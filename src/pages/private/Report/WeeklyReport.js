@@ -189,8 +189,9 @@ export default function WeeklyReport() {
       });
     }
 
-    const sarchByCustomer = () => {
-
+    const sarchByCustomer = (e) => {
+      console.log(e);
+      setSelectedCustomer(e);
     }
 
     const getCustomer = async() => {
@@ -204,8 +205,10 @@ export default function WeeklyReport() {
     }
 
     useEffect(() => {
+      getCustomer();
+
       if (canView('Weekly Report | Filter By Customer')) {
-        getCustomer();
+        
       } else {
         setSelectedCustomer(getUserInfo()?.id);
       }
@@ -237,7 +240,7 @@ export default function WeeklyReport() {
                             canView('Weekly Report | Filter By Customer') ? <Select
                                 size="large"
                                 allowClear
-                                mode="multiple"
+                                // mode="multiple"
                                 style={{ width: '300px' }}
                                 placeholder="Search Customer"
                                 onChange={sarchByCustomer}
