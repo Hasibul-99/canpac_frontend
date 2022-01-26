@@ -89,7 +89,7 @@ export default function Dashboard() {
                                 }
                                 
                                 {
-                                    getUserInfo()?.roles[0].name !== 'Merchant' || getUserInfo()?.roles[0].name !== 'Premium Merchant' ? <div className="col col-sm-12 col-lg-3 mb-10">
+                                    getUserInfo()?.roles[0].name !== 'Merchant' && getUserInfo()?.roles[0].name !== 'Premium Merchant' ? <div className="col col-sm-12 col-lg-3 mb-10">
                                         <div className="bg-grey-1 pt-15 pr-20 pb-15 pl-20 br-4 text-center">
                                             <h1>Low Stock</h1>
                                             <Link to="/low-stock"><h2>{dashboard.low_stock}</h2></Link>
