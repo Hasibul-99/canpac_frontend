@@ -207,13 +207,13 @@ export default function WeeklyReport() {
       if (canView('Weekly Report | Filter By Customer')) {
         getCustomer();
       } else {
-        selectedCustomer(getUserInfo().id);
+        setSelectedCustomer(getUserInfo()?.id);
       }
     }, [])
 
     useEffect(() => {
-      if (customer) getReport();
-    }, [dateRange, customer])
+      if (selectedCustomer) getReport();
+    }, [dateRange, selectedCustomer])
 
     return (
         <Fragment>
@@ -254,11 +254,12 @@ export default function WeeklyReport() {
                             <Button type="primary" className="btn-brand btn-block float-right mb-20" 
                             onClick={() => generateReport()} size="large">Generate Report</Button>
                           </div> : null
-                        }    
-
-
+                        }
                     </div>
-                    <Table dataSource={report} columns={columns} />
+                    {
+                      selectedCustomer ? <Table dataSource={report} 
+                        columns={columns} /> : <div className='pt-40 text-center'><h3 >Please first select customer</h3></div> 
+                    }
                 </div>
             </div>
             
