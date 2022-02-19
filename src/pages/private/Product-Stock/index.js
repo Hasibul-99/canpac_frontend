@@ -7,6 +7,7 @@ import { checkUserPermission } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
 import { CSVLink } from "react-csv";
 import moment from 'moment';
+import { HourglassOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -31,41 +32,50 @@ export default function ProductDelivery() {
     const [exportData, setExportData] = useState([]);
       
     const columns = [
-      {
-        title: 'Product name',
-        dataIndex: 'product_display_name',
-        key: 'address',
-      },
-    //   {
-    //     title: 'Date',
-    //     dataIndex: 'name',
-    //     key: 'name',
-    //   },
-    //   {
-    //     title: 'Printed Sheet (Body Blank)',
-    //     dataIndex: 'age',
-    //     key: 'age',
-    //   },
-      {
-          title: 'Can Stock',
-          dataIndex: 'stock',
-          key: 'stock',
-      },
-      {
-          title: 'Total Can Stock & Printed Sheet',
-          dataIndex: 'quantity_of_product_per_sheet',
-          key: 'quantity_of_product_per_sheet',
-      },
-      {
-          title: 'Weight Standard (g)',
-          dataIndex: 'weight',
-          key: 'weight',
-      },
-      {
-        title: 'Thickness(mm)',
-        dataIndex: 'thickness',
-        key: 'thickness',
-    },
+        {
+            title: '',
+            key: 'name',
+            render: (text, record) => <>
+                {
+                    record.has_low_stock ? <HourglassOutlined style={{color: "red", fontSize: '2rem'}} title="This product is in low stock"/> : ''
+                }
+            </>
+        },
+        {
+            title: 'Product name',
+            dataIndex: 'product_display_name',
+            key: 'address',
+        },
+        //   {
+        //     title: 'Date',
+        //     dataIndex: 'name',
+        //     key: 'name',
+        //   },
+        //   {
+        //     title: 'Printed Sheet (Body Blank)',
+        //     dataIndex: 'age',
+        //     key: 'age',
+        //   },
+        {
+            title: 'Can Stock',
+            dataIndex: 'stock',
+            key: 'stock',
+        },
+        {
+            title: 'Total Can Stock & Printed Sheet',
+            dataIndex: 'quantity_of_product_per_sheet',
+            key: 'quantity_of_product_per_sheet',
+        },
+        {
+            title: 'Weight Standard (g)',
+            dataIndex: 'weight',
+            key: 'weight',
+        },
+        {
+            title: 'Thickness(mm)',
+            dataIndex: 'thickness',
+            key: 'thickness',
+        },
     ];
 
     const getProductDetails = async () => {

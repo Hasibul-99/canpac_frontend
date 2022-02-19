@@ -10,6 +10,11 @@ const gridStyle = {
     width: '25%',
     textAlign: 'center',
 };
+const style = { padding: '20px', 
+    border: "1px solid #ccc",
+    borderRadius: '5px',
+    marginBottom: '10px'
+};
 
 export default function AddProductModel() {
     const history = useHistory();
@@ -61,12 +66,12 @@ export default function AddProductModel() {
     const assignModel = async () => {
         let res = await postData(MARCHENT_PRODUCT_MODEL_ASSIGN, {
             merchant_id: marchentId * 1,
-            product_models: selectedModelIds
+            product_models: JSON.stringify(selectedModelIds)
         });
 
         if (res) {
             alertPop('success', "Marchent Product Model Added Successfully!");
-            history.push('/merchents');
+            history.push('/update-merchents/'+ marchentId);
         }
     }
 
@@ -100,12 +105,23 @@ export default function AddProductModel() {
                             scrollableTarget="scrollableDiv"
                         >
                             <Card>
-                                {
+                                <Row gutter={{ xs: 8, sm: 16, md: 24}}>
+                                    {
+                                        products.map(pro => <Col className="gutter-row" span={6} key={"pro---", pro.id}>
+                                            <div style={style}>
+                                            <Checkbox onChange={(e) => handelProduct(pro.id, e.target.checked)} 
+                                                checked={isCheckedModel(pro)}>{pro.product_name}</Checkbox>
+                                            </div>
+                                            
+                                            </Col>)
+                                    }
+                                </Row>
+                                {/* {
                                     products.map(pro => <Card.Grid hoverable={false} style={gridStyle} key={"pro---", pro.id}>
                                         <Checkbox onChange={(e) => handelProduct(pro.id, e.target.checked)} 
                                             checked={isCheckedModel(pro)}>{pro.product_name}</Checkbox>
                                     </Card.Grid>)
-                                }
+                                } */}
                             </Card>
                         </InfiniteScroll>
                     </div>

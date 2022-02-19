@@ -9,9 +9,10 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { authContext } from '../../../context/AuthContext';
 
 const { Option } = Select;
-const gridStyle = {
-    width: '25%',
-    textAlign: 'center',
+const style = { padding: '20px', 
+    border: "1px solid #ccc",
+    borderRadius: '5px',
+    marginBottom: '10px'
 };
 export default function UpdateMarchent() {
     const { permissions } = useContext(authContext);
@@ -211,21 +212,30 @@ export default function UpdateMarchent() {
             {
                selectedRole === "Premium Merchant" ? <div className='mb-5'>
                     {
-                        marchentProducts?.length ? <Card title="Product Model">
-                            {
+                        marchentProducts?.length ? <Card title="Product Model" className='marchent-model'>
+                            <Row gutter={{ xs: 8, sm: 16, md: 24}}>
+                                {
+                                    marchentProducts.map(product => <Col className="gutter-row" span={6} key={"product43-" + product.product_id}>
+                                        <div style={style}>
+                                            {product.product.product_display_name}
+                                        </div>
+                                    </Col>)
+                                }
+                            </Row>
+                            {/* {
                                 marchentProducts.map(product => {
                                     return <Card.Grid hoverable={false} style={gridStyle} key={"product43-" + product.product_id}>
                                         {product.product.product_display_name}
                                     </Card.Grid>
                                 })
-                            }
+                            } */}
                         </Card> : ''
                     }
                     <Card>
                         <Row justify="end">
                             <Col span={4}>
                                 <Button type="primary" size="large">
-                                    <Link to={'/update-merchents-product-model/' + marchentId}>Add Product Model</Link>
+                                    <Link to={'/update-merchents-product-model/' + marchentId}>Assign Product Model</Link>
                                 </Button>
                             </Col>
                         </Row>

@@ -29,7 +29,8 @@ export default function Merchents() {
             render: (text, record) => <>
                 {
                     record.sap_id && 
-                    record?.roles[0].name === 'Premium Merchant' ? <CrownOutlined style={{color: "red", fontSize: '2rem'}} /> : ''
+                    record?.roles[0].name === 'Premium Merchant' ? <CrownOutlined style={{color: "red", fontSize: '2rem'}}
+                        title="This is premium merchant." /> : ''
                 }
             </>
         },

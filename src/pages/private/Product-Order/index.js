@@ -91,7 +91,7 @@ export default function ProductOrder() {
             )
         },
         {
-            title: 'Approve',
+            title: 'Details/Modify',
             key: 'update',
             render: (text, record) => (
                 <Space size="middle">

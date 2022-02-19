@@ -88,20 +88,21 @@ export default function ProductDetails() {
             <div className="rui-page-content">
                 <div className="container-fluid">
                     <div className="Order-info">
-                        <h4><strong>Order ID: </strong>{order?.id}</h4>
+                        <h4><strong>Order ID: </strong>{order?.sap_order_id || 'N/A'}</h4>
                         <h4><strong>Product: </strong>{order?.product?.product_name}</h4>
                         <h4><strong>Order Quantity: </strong>{order?.ordered_quantity}</h4>
                         <h4><strong>Remaining Quantity: </strong>{order?.remaining_quantity}</h4>
                         <h4><strong>Status: </strong>{order?.status_title}</h4>
+                        <h4><strong>Customer Name: </strong>{order?.merchant?.name}</h4>
                     </div>
 
-                    {
-                        canView('Product - Delivery | Update') ? <Fragment>
+                    {/* { */}
+                        {/* // canView('Product - Delivery | Update') ? <Fragment> */}
                             <hr/>
 
                             <div className="row">
                                 {
-                                    canView('Order - Creat') ? <div className="col col-sm-12 col-lg-6 mb-10">
+                                    canView('Product - Delivery | Update') ? <div className="col col-sm-12 col-lg-6 mb-10">
                                         <Form style={{width: "100%", marginTop: "2rem"}}
                                             form={form}
                                             layout={'vertical'}
@@ -141,7 +142,8 @@ export default function ProductDetails() {
                                                 </Button>
                                             </Form.Item>
                                         </Form>
-                                    </div> : ''
+                                    </div> 
+                                    : ''
                                 }
                                 
                                 {
@@ -157,8 +159,8 @@ export default function ProductDetails() {
                                 
                             </div>
 
-                        </Fragment> : ''
-                    }
+                        {/* // </Fragment> : '' */}
+                    {/* } */}
                     
                     <hr/>
 
