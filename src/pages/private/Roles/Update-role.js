@@ -23,11 +23,11 @@ export default function UpdateRole() {
 
         console.log("permissions", permissions);
 
-        // let res = await postData(ROLE_UPDATE, data);
-        // if (res) {
-        //     alertPop('success', "Role Updated Successfully!");
-        //     history.push('/roles');
-        // }
+        let res = await postData(ROLE_UPDATE, data);
+        if (res) {
+            alertPop('success', "Role Updated Successfully!");
+            history.push('/roles');
+        }
     };
 
     const getPermissions = async () => {
