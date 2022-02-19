@@ -33,7 +33,7 @@ export default function ProductDelivery() {
     const columns = [
       {
         title: 'Product name',
-        dataIndex: 'product_name',
+        dataIndex: 'product_display_name',
         key: 'address',
       },
     //   {

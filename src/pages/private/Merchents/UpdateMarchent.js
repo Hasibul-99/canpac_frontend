@@ -1,15 +1,20 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { Form, Input, Button, Upload, Select } from "antd";
-import { alertPop, getBase64 } from '../../../scripts/helper';
+import React, { Fragment, useEffect, useState, useContext } from 'react'
+import { Form, Input, Button, Upload, Select, Card,Row, Col } from "antd";
+import { alertPop, getBase64, checkUserPermission } from '../../../scripts/helper';
 import { postData } from '../../../scripts/api-service';
 import { UploadOutlined } from '@ant-design/icons';
-import { MERCHENT_LIST, ROLE_LIST, USER_CREATE, USER_LIST, MERCHENT_UPDATE } from '../../../scripts/api';
+import { MERCHENT_LIST, MARCHENT_PRODUCT_MODEL, ROLE_LIST, USER_CREATE, USER_LIST, MERCHENT_UPDATE } from '../../../scripts/api';
 import demo from "../../../assets/images/avatar-1.png";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { authContext } from '../../../context/AuthContext';
 
 const { Option } = Select;
-
+const gridStyle = {
+    width: '25%',
+    textAlign: 'center',
+};
 export default function UpdateMarchent() {
+    const { permissions } = useContext(authContext);
     const history = useHistory();
     let { marchentId } = useParams();
     const [form] = Form.useForm();
@@ -17,14 +22,19 @@ export default function UpdateMarchent() {
     const [imageBase64, setImageBase64] = useState();
     const [roles, setRoles] = useState();
     const [ userInfo, setUserInfo ] = useState();
-    const [selectedRole, setSelectedRole] = useState('Merchant')
+    const [selectedRole, setSelectedRole] = useState('Merchant');
+    const [marchentProducts, setMarchentProducts] = useState([]);
 
 
     const profilePreview = async ({file}) => {
         setfile(file.originFileObj);
         let preview = await getBase64(file.originFileObj);
         setImageBase64(preview);
-    }
+    };
+
+    const canView = (context) => {
+        return checkUserPermission(context, permissions);
+    };
 
     const onFinish = async (values) => {
         let data = new FormData();
@@ -71,8 +81,20 @@ export default function UpdateMarchent() {
         }
     }
 
+    const getMarchentProiductModel = async () => {
+        let res = await postData(MARCHENT_PRODUCT_MODEL, {
+            merchant_id: marchentId
+        });
+
+        if (res) {
+            let masterData = res.data.data || [];
+            setMarchentProducts(masterData);
+        }
+    }
+
     useEffect(() => {
-        getMerchentss()
+        getMerchentss();
+        if (canView("Merchant - Mapped Products")) getMarchentProiductModel()
     }, [])
     
     return (
@@ -185,6 +207,31 @@ export default function UpdateMarchent() {
                     </Form>
                 </div>
             </div>
+
+            {
+               selectedRole === "Premium Merchant" ? <div className='mb-5'>
+                    {
+                        marchentProducts?.length ? <Card title="Product Model">
+                            {
+                                marchentProducts.map(product => {
+                                    return <Card.Grid hoverable={false} style={gridStyle} key={"product43-" + product.product_id}>
+                                        {product.product.product_display_name}
+                                    </Card.Grid>
+                                })
+                            }
+                        </Card> : ''
+                    }
+                    <Card>
+                        <Row justify="end">
+                            <Col span={4}>
+                                <Button type="primary" size="large">
+                                    <Link to={'/update-merchents-product-model/' + marchentId}>Add Product Model</Link>
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Card>
+                </div> : ''
+            }
         </Fragment>
     )
 }

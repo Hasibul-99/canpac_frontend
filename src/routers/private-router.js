@@ -19,6 +19,7 @@ import UpdateUser from "../pages/private/users/UpdateUser";
 import CreateMarchent from "../pages/private/Merchents/CreateMarchent";
 import UpdateMarchent from "../pages/private/Merchents/UpdateMarchent";
 import Page404 from "../pages/private/404";
+import AddProductModel from "../pages/private/Merchents/addProductModel";
 
 const PrivateRoutes = [
     {
@@ -185,6 +186,14 @@ const PrivateRoutes = [
         path: "page-404",
         name: "page 404",
         component: Page404,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "update-merchents-product-model/:marchentId",
+        name: "Merchents Update product model",
+        permission: 'Merchant - Mapping Products',
+        component: AddProductModel,
         layout: "/",
         exact: true
     },
