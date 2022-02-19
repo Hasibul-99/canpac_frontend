@@ -32,7 +32,7 @@ export default function Page404() {
                         <div class="col-12"></div>
                         <div class="col-12">
                             {
-                                window.location.pathname === '/' && permissions?.length && !canView('Dashboard Report') ? <h3>There seems to be a problem with your access to the Dashboard data report. Although this is possible for non-Premium Merchants. For access, please contact us.</h3> : <Fragment>
+                                window.location.pathname === '/' && permissions?.length && !canView('Dashboard Report') ? <h2 style={{color: "red"}}>There seems to be a problem with your access to the Dashboard data report. Although this is possible for non-Premium Merchants. For access, please contact us.</h2> : <Fragment>
                                     <h1 class="mnb-30">404</h1>
                                     <p class="display-2 mb-50 text-grey-5">Page Not Found</p>
                                     <div>
