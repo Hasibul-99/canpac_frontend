@@ -62,3 +62,5 @@ export const PRODUCT_STOCK_LOW_EXPORT = "product/stock/low/export";
 
 export const MARCHENT_PRODUCT_MODEL = "merchant/product-model"
 export const MARCHENT_PRODUCT_MODEL_ASSIGN = "merchant/assign-product-model"
+
+export const GENERAL_RESOURCE = "general-resource";
