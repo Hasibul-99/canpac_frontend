@@ -50,10 +50,10 @@ export default function SignIn() {
                     </div>
                     <div className="form rui-sign-form rui-sign-form-cloud">
                         <div className="row vertical-gap sm-gap justify-content-center">
-                            <div className="col-12 text-center">
+                            <div className="col-12 pt-0">
                                 {
                                     general?.login_page_footer_logo ? <img src={general?.login_page_footer_logo}
-                                        height="100" width="150" className="mb-20"
+                                        height="100" width="150"
                                         alt="logo" /> : ''
                                 }
 
@@ -110,14 +110,20 @@ export default function SignIn() {
                     </div>
 
                     {
-                general ? <footer class="rui-footer">
-                    <div class="container-fluid">
-                        <p class="mb-0">{general.login_page_footer_copyright_year} © 
-                        <a href={general.login_page_footer_copyright_url} target="_blank">{general.login_page_footer_copyright_title}</a>.</p>
-                    </div>
-                </footer> : ''
-            }
-            
+                        general ? <footer class="rui-footer">
+                            <div class="container-fluid text-center">
+                                <p class="mb-0">
+                                    Copyright © {general.login_page_footer_copyright_year} {general.login_page_footer_copyright_text}
+                                    <a style={{ color: "#40a9ff" }} href={general.login_page_footer_copyright_url} target="_blank">{general.login_page_footer_copyright_url_title}</a>.
+                                    <br />
+                                    Contact with us: <span style={{ color: "#40a9ff" }} >{general.login_page_footer_contact_email}</span>
+                                    <br />
+                                    <span style={{ color: "#40a9ff" }}>{general.login_page_footer_contact_phone}</span>
+                                </p>
+                            </div>
+                        </footer> : ''
+                    }
+
                 </div>
             </div>
         </>
