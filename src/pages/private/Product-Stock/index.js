@@ -143,7 +143,7 @@ export default function ProductDelivery() {
 
     const runCommandNow = async () => {
         let res = await postData(RUN_COMMAND_NOW, {
-            command: "PRODUCT_SROCK"
+            command: "PRODUCT_STOCK"
         });
 
         if (res) {
