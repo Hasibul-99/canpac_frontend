@@ -207,6 +207,10 @@ export default function WeeklyReport() {
       }
     }
 
+    const numberRound = (num = 0.00) => {
+      if (num) return parseFloat(num).toFixed(1);
+    }
+
     useEffect(() => {
       getCustomer();
     }, [])
@@ -347,9 +351,9 @@ export default function WeeklyReport() {
                           {data.ItemName} - {data.ItemCode} 
                         </td>
                         <td></td>
-                        <td>{data.CmpltQty}</td>
-                        <td>{data.SWeight1}</td>
-                        <td>{data.SWidth1}</td>
+                        <td>{numberRound(data.CmpltQty)}</td>
+                        <td>{numberRound(data.SWeight1)}</td>
+                        <td>{numberRound(data.SWidth1)}</td>
                       </tr>
                     </>)
                   }
@@ -382,7 +386,7 @@ export default function WeeklyReport() {
                         <td className="xl88" width="500" style={{width: "500px"}}>
                           {data.ItemName} - {data.ItemCode} 
                         </td>
-                        <td>{data.CmpltQty}</td>
+                        <td>{numberRound(data.CmpltQty)}</td>
                         <td></td>
                     </tr>)
                   }
