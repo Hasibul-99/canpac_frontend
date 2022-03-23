@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
-import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker  } from 'antd';
+import { Link } from "react-router-dom";
+import { Table, Space, Select, Form, Button, Input, DatePicker } from 'antd';
 import { getData, postData } from '../../../scripts/api-service';
 import { PRODUCT_STOCK, PRODUCT_STOCK_EXPORT } from '../../../scripts/api';
 import { checkUserPermission } from '../../../scripts/helper';
@@ -14,7 +14,7 @@ const { RangePicker } = DatePicker;
 
 const children = [];
 for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
 
 const headers = [
@@ -30,14 +30,14 @@ export default function ProductDelivery() {
     const { permissions } = useContext(authContext);
     const [products, setProducts] = useState();
     const [exportData, setExportData] = useState([]);
-      
+
     const columns = [
         {
             title: '',
             key: 'name',
             render: (text, record) => <>
                 {
-                    record.has_low_stock ? <HourglassOutlined style={{color: "red", fontSize: '2rem'}} title="This product is in low stock"/> : ''
+                    record.has_low_stock ? <HourglassOutlined style={{ color: "red", fontSize: '2rem' }} title="This product is in low stock" /> : ''
                 }
             </>
         },
@@ -78,18 +78,21 @@ export default function ProductDelivery() {
         },
     ];
 
-    const getProductDetails = async () => {
-        let res = await postData(PRODUCT_STOCK, {});
+    const getProductDetails = async (query = {}) => {
+        let res = await postData(PRODUCT_STOCK, query);
 
         if (res) {
             setProducts(res.data.data);
 
-            getProductExportData();
+            getProductExportData(query);
         }
     }
 
-    const getProductExportData = async () => {
-        let res = await getData(PRODUCT_STOCK_EXPORT);
+    const getProductExportData = async (query) => {
+        let url = PRODUCT_STOCK_EXPORT;
+        if (query?.filter_by) url = url + '?filter_by=' + query?.filter_by; 
+        
+        let res = await getData(url);
 
         if (res) {
             setExportData(res?.data?.data || []);
@@ -99,6 +102,14 @@ export default function ProductDelivery() {
     const canView = (context) => {
         return checkUserPermission(context, permissions);
     };
+
+    const titleEnter = (e) => {
+        getProductDetails({filter_by: e.target.value});
+    }
+
+    const titleChange = (e) => {
+        if (!e.target.value) getProductDetails({});
+    }
 
     useEffect(() => {
         getProductDetails();
@@ -112,83 +123,30 @@ export default function ProductDelivery() {
                 </div>
             </div>
 
-            {
-                canView('Product - Stock | Export') ? <div className="float-right mb-20 pt-10">
-                    {/* <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button> */}
-                    <CSVLink data={exportData} headers={headers} target="_blank" filename={`Product-Stock-${moment().format('YYYY-MM-DD--HH-mm-ss')}.csv`}>
-                        <Button type="primary" style={{width: "300px"}} size="large" className="btn-brand btn-block float-right mb-20">
-                            Generate Report
-                        </Button>
-                    </CSVLink>
-                </div> : ''
-            }
-
             <div className="rui-page-content">
                 <div className="container-fluid">
-                    <div className="d-none">
+                    <div className="">
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-10 mb-30">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Name" />
-                            </div>
-
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                
-                                    <Select
-                                        size="large"
-                                        mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Status"
-                                        >
-                                        {children}
-                                    </Select>
-                                        
-                            </div>
-
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Select
-                                        size="large"
-                                        mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Customers"
-                                        >
-                                        {children}
-                                    </Select>
-                            </div>
-
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <Select
-                                        size="large"
-                                        // mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Select Models"
-                                        >
-                                        {children}
-                                    </Select>
-                            </div>
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                    <RangePicker size="large" style={{width: "100%"}} />
-                            </div>
-                            <div className="col  col-sm-12 col-lg-3 mb-10">
-                                
-                            </div>
-                            <div className="col col-sm-12 col-lg-3 mb-10">
-                                <Button className="btn-light btn-block" size="large" 
-                                        type="primary">
-                                        Reset Filter
-                                </Button>
-                            </div>
-                            <div className="col col-sm-12 col-lg-3 mb-10">
-                                <Button className="btn-brand btn-block float-right" size="large" 
-                                    type="primary">
-                                    Filter
-                                </Button>
+                                <Input size="large" placeholder="Title" allowClear={true}
+                                onPressEnter={titleEnter} onChange={titleChange}/>
                             </div>
                         </div>
                     </div>
+
+
+                    {
+                        canView('Product - Stock | Export') ? <div className="float-right mb-20 pt-10">
+                            {/* <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button> */}
+                            <CSVLink data={exportData} headers={headers} target="_blank" filename={`Product-Stock-${moment().format('YYYY-MM-DD--HH-mm-ss')}.csv`}>
+                                <Button type="primary" style={{ width: "300px" }} size="large" className="btn-brand btn-block float-right mb-20">
+                                    Generate Report
+                                </Button>
+                            </CSVLink>
+                        </div> : ''
+                    }
+
 
                     <Table dataSource={products} columns={columns} />
                 </div>
