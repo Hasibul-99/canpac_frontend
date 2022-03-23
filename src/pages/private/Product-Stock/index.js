@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { Link } from "react-router-dom";
-import { Table, Space, Select, Form, Button, Input, DatePicker } from 'antd';
+import { Table, Space, Select, Form, InputNumber, Button, Input, DatePicker } from 'antd';
 import { getData, postData } from '../../../scripts/api-service';
-import { PRODUCT_STOCK, PRODUCT_STOCK_EXPORT } from '../../../scripts/api';
-import { checkUserPermission } from '../../../scripts/helper';
+import { PRODUCT_STOCK, PRODUCT_STOCK_EXPORT, PRODUCT_QTY_SHEET_UPDATE } from '../../../scripts/api';
+import { alertPop, checkUserPermission } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
 import { CSVLink } from "react-csv";
 import moment from 'moment';
-import { HourglassOutlined } from '@ant-design/icons';
+import { HourglassOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -21,6 +21,7 @@ const headers = [
     { label: "Product Code of SAP", key: "product_code_of_sap" },
     { label: "Product name", key: "product_name" },
     { label: "Quantity of Product Per Sheet", key: "quantity_of_product_per_sheet" },
+    { label: "QTY per sheet", key: "qty_per_sheet" },
     { label: "Stock", key: "stock" },
     { label: "Thickness", key: "thickness" },
     { label: "Weight", key: "weight" },
@@ -67,6 +68,18 @@ export default function ProductDelivery() {
             key: 'quantity_of_product_per_sheet',
         },
         {
+            title: 'QTY per sheet',
+            key: 'qty_per_sheet',
+            render: (text, record) => <>
+                <InputNumber defaultValue={record.qty_per_sheet} id={"js-qty-sheet-" + record.id} min={0}
+                    style={{width: "60px"}} className="mr-5" disabled={!canView("Update Product Qty Per Sheet")} />
+                {
+                    canView("Update Product Qty Per Sheet") ? <EditOutlined onClick={() => updateQtySheet(record)} /> : ''
+                }
+            </>,
+            width: 120
+        },
+        {
             title: 'Weight Standard (g)',
             dataIndex: 'weight',
             key: 'weight',
@@ -77,6 +90,22 @@ export default function ProductDelivery() {
             key: 'thickness',
         },
     ];
+
+    const updateQtySheet = async (record) => {
+        let ele = document.getElementById(`js-qty-sheet-${record.id}`);
+
+        if (ele) {
+            let value = ele.value;
+            let res = await postData(PRODUCT_QTY_SHEET_UPDATE, {
+                product_id: record.id,
+                qty_per_sheet: parseInt(value) || 0
+            });
+
+            if (res) {
+                alertPop('success', res.data.message);
+            }
+        }
+    }
 
     const getProductDetails = async (query = {}) => {
         let res = await postData(PRODUCT_STOCK, query);
@@ -129,7 +158,7 @@ export default function ProductDelivery() {
                         <h3>Filter</h3>
                         <div className="row xs-gap mt-10 mb-30">
                             <div className="col  col-sm-12 col-lg-3 mb-10">
-                                <Input size="large" placeholder="Title" allowClear={true}
+                                <Input size="large" placeholder="Search" allowClear={true}
                                 onPressEnter={titleEnter} onChange={titleChange}/>
                             </div>
                         </div>

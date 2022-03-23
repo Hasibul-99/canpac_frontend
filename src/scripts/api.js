@@ -46,6 +46,7 @@ export const ORDER_EMAIL = "order/email";
 // Product
 export const PRODUCT_STOCK_LOW = "product/stock/low";
 export const PRODUCT_STOCK = "product/stock";
+export const PRODUCT_QTY_SHEET_UPDATE = "product/update-qty-per-sheet";
 
 // DashBoard
 export const DASHBOARD = "dashboard";
