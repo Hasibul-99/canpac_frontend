@@ -66,3 +66,7 @@ export const MARCHENT_PRODUCT_MODEL_ASSIGN = "merchant/assign-product-model"
 
 export const GENERAL_RESOURCE = "general-resource";
 export const RUN_COMMAND_NOW = "run-command-now";
+
+// report schedule
+export const REPORT_SCHEDULE_CONFIG = "report-schedule-config/list";
+export const REPORT_SCHEDULE_CONFIG_UPDATE = "report-schedule-config/update";

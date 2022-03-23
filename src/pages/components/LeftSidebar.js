@@ -12,7 +12,8 @@ import {
     GroupOutlined,
     ForkOutlined,
     UsergroupAddOutlined,
-    UserSwitchOutlined
+    UserSwitchOutlined,
+    DotChartOutlined
   } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
@@ -185,6 +186,18 @@ export default function LeftSidebar() {
                                 || canView('User - List')) ? <li className="yay-label">Authentications</li> : '' 
                             }
                             
+                            {
+                                canView('Report Email Schedule Config - List') ? <li className={className(window.location.pathname, "/report_schedule_config")}>
+                                    <Link to="/report_schedule_config">
+                                        <span className="yay-icon">
+                                            <DotChartOutlined />
+                                        </span>
+                                        <span>Report Schedule Config</span> 
+                                        <span className="rui-yaybar-circle"></span>
+                                    </Link>
+                                </li> : ''
+                            }
+
                             {
                                 canView('Role - List') ? <li className={className(window.location.pathname, "/roles")}>
                                     <Link to="/roles">

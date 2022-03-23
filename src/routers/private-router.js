@@ -20,6 +20,7 @@ import CreateMarchent from "../pages/private/Merchents/CreateMarchent";
 import UpdateMarchent from "../pages/private/Merchents/UpdateMarchent";
 import Page404 from "../pages/private/404";
 import AddProductModel from "../pages/private/Merchents/addProductModel";
+import ReportSchedule from "../pages/private/Report-schedule";
 
 const PrivateRoutes = [
     {
@@ -194,6 +195,14 @@ const PrivateRoutes = [
         name: "Merchents Update product model",
         permission: 'Merchant - Mapping Products',
         component: AddProductModel,
+        layout: "/",
+        exact: true
+    },
+    {
+        path: "report_schedule_config",
+        name: "Report Schedule Config",
+        permission: 'Report Email Schedule Config - List',
+        component: ReportSchedule,
         layout: "/",
         exact: true
     },
