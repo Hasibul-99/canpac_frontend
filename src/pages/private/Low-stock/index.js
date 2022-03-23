@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { Link } from "react-router-dom";
-import { Table, Button, Input } from 'antd';
+import { Table, Button, Input, Spin } from 'antd';
 import { getData, postData } from '../../../scripts/api-service';
 import { PRODUCT_STOCK_LOW, PRODUCT_STOCK_LOW_EXPORT, RUN_COMMAND_NOW } from '../../../scripts/api';
 import { checkUserPermission, alertPop } from '../../../scripts/helper';
@@ -20,6 +20,7 @@ export default function LowStock() {
   const [products, setProducts] = useState();
   const { permissions } = useContext(authContext);
   const [exportData, setExportData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
     {
@@ -47,10 +48,12 @@ export default function LowStock() {
   };
 
   const getProducts = async (query = {}) => {
+    setIsLoading(true);
     let res = await postData(PRODUCT_STOCK_LOW, query);
 
     if (res) {
       setProducts(res.data.data);
+      setIsLoading(false)
       getProductLowExportData(query);
     }
   }
@@ -126,7 +129,15 @@ export default function LowStock() {
               className='float-right mb-20 mt-10 px-20 mr-20'><UndoOutlined style={{ height: "10px" }} /></Button> : ''
           }
 
-          <Table dataSource={products} columns={columns} />
+          {/* <Table dataSource={products} columns={columns} /> */}
+
+          {
+                isLoading ? <div className="loading-content">
+                <Spin size="large" className="mr-20" />
+                <Spin size="large" className="mr-20"/>
+                <Spin size="large" className="mr-20"/>
+            </div> : <Table dataSource={products} columns={columns} />
+            }
         </div>
       </div>
     </Fragment>

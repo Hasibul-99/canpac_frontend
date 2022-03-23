@@ -118,10 +118,8 @@ export default function ForgetPassword() {
                         Don&apos;t you have an account? <Link to="/auth/signup" className="text-2">Sign Up</Link>
 
                     </div>
-                </div>
-            </div>
 
-            {
+                    {
                 general ? <footer class="rui-footer">
                     <div class="container-fluid">
                         <p class="mb-0">{general.login_page_footer_copyright_year} ©
@@ -130,6 +128,10 @@ export default function ForgetPassword() {
                 </footer> : ''
             }
 
+                </div>
+            </div>
+
+            
         </>
 
     )

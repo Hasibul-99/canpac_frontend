@@ -117,9 +117,8 @@ export default function SignUp() {
                     <div className="mt-20 text-grey-5">
                         Already have an account <Link to="/auth/login" className="text-2">Sign In</Link>
                     </div>
-                </div>
-            </div>
-            {
+
+                    {
                 general ? <footer class="rui-footer">
                     <div class="container-fluid">
                         <p class="mb-0">{general.login_page_footer_copyright_year} ©
@@ -127,6 +126,9 @@ export default function SignUp() {
                     </div>
                 </footer> : ''
             }
+                </div>
+            </div>
+            
         </>
 
     )
