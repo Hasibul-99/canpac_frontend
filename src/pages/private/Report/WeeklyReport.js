@@ -248,6 +248,7 @@ export default function WeeklyReport() {
                                 size="large"
                                 allowClear
                                 // mode="multiple"
+                                dropdownMatchSelectWidth={false}
                                 style={{ width: '300px' }}
                                 placeholder="Search Customer"
                                 onChange={sarchByCustomer}
