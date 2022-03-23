@@ -65,3 +65,4 @@ export const MARCHENT_PRODUCT_MODEL = "merchant/product-model"
 export const MARCHENT_PRODUCT_MODEL_ASSIGN = "merchant/assign-product-model"
 
 export const GENERAL_RESOURCE = "general-resource";
+export const RUN_COMMAND_NOW = "run-command-now";

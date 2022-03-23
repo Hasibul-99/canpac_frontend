@@ -2,11 +2,12 @@ import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { Link } from "react-router-dom";
 import { Table, Button, Input } from 'antd';
 import { getData, postData } from '../../../scripts/api-service';
-import { PRODUCT_STOCK_LOW, PRODUCT_STOCK_LOW_EXPORT } from '../../../scripts/api';
-import { checkUserPermission } from '../../../scripts/helper';
+import { PRODUCT_STOCK_LOW, PRODUCT_STOCK_LOW_EXPORT, RUN_COMMAND_NOW } from '../../../scripts/api';
+import { checkUserPermission, alertPop } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
 import { CSVLink } from "react-csv";
 import moment from 'moment';
+import { UndoOutlined } from '@ant-design/icons';
 
 
 const headers = [
@@ -56,8 +57,8 @@ export default function LowStock() {
 
   const getProductLowExportData = async (query) => {
     let url = PRODUCT_STOCK_LOW_EXPORT;
-        if (query?.filter_by) url = url + '?filter_by=' + query?.filter_by; 
-        
+    if (query?.filter_by) url = url + '?filter_by=' + query?.filter_by;
+
     let res = await getData(url);
 
     if (res) {
@@ -68,11 +69,21 @@ export default function LowStock() {
   };
 
   const titleEnter = (e) => {
-    getProducts({filter_by: e.target.value});
-}
+    getProducts({ filter_by: e.target.value });
+  }
 
-const titleChange = (e) => {
+  const titleChange = (e) => {
     if (!e.target.value) getProducts({});
+  }
+
+  const runCommandNow = async () => {
+    let res = await postData(RUN_COMMAND_NOW, {
+        command: "LOW_STOCK"
+    });
+
+    if (res) {
+        alertPop('success', res.data.message);
+    }
 }
 
   useEffect(() => {
@@ -109,6 +120,10 @@ const titleChange = (e) => {
                 </Button>
               </CSVLink>
             </div> : ''
+          }
+          {
+            canView('Run Command Now') ? <Button type="primary" size="large" onClick={() => runCommandNow()}
+              className='float-right mb-20 mt-10 px-20 mr-20'><UndoOutlined style={{ height: "10px" }} /></Button> : ''
           }
 
           <Table dataSource={products} columns={columns} />

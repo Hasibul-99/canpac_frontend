@@ -2,12 +2,12 @@ import React, { Fragment, useEffect, useState, useContext } from 'react';
 import { Link } from "react-router-dom";
 import { Table, Space, Select, Form, InputNumber, Button, Input, DatePicker } from 'antd';
 import { getData, postData } from '../../../scripts/api-service';
-import { PRODUCT_STOCK, PRODUCT_STOCK_EXPORT, PRODUCT_QTY_SHEET_UPDATE } from '../../../scripts/api';
+import { PRODUCT_STOCK, PRODUCT_STOCK_EXPORT, PRODUCT_QTY_SHEET_UPDATE, RUN_COMMAND_NOW } from '../../../scripts/api';
 import { alertPop, checkUserPermission } from '../../../scripts/helper';
 import { authContext } from '../../../context/AuthContext';
 import { CSVLink } from "react-csv";
 import moment from 'moment';
-import { HourglassOutlined, EditOutlined } from '@ant-design/icons';
+import { HourglassOutlined, EditOutlined, UndoOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -21,10 +21,10 @@ const headers = [
     { label: "Product Code of SAP", key: "product_code_of_sap" },
     { label: "Product name", key: "product_name" },
     { label: "Quantity of Product Per Sheet", key: "quantity_of_product_per_sheet" },
-    { label: "QTY per sheet", key: "qty_per_sheet" },
     { label: "Stock", key: "stock" },
     { label: "Thickness", key: "thickness" },
     { label: "Weight", key: "weight" },
+    { label: "QTY per sheet", key: "qty_per_sheet" },
 ];
 
 export default function ProductDelivery() {
@@ -103,6 +103,7 @@ export default function ProductDelivery() {
 
             if (res) {
                 alertPop('success', res.data.message);
+                getProductExportData();
             }
         }
     }
@@ -140,6 +141,16 @@ export default function ProductDelivery() {
         if (!e.target.value) getProductDetails({});
     }
 
+    const runCommandNow = async () => {
+        let res = await postData(RUN_COMMAND_NOW, {
+            command: "PRODUCT_SROCK"
+        });
+
+        if (res) {
+            alertPop('success', res.data.message);
+        }
+    }
+
     useEffect(() => {
         getProductDetails();
     }, [])
@@ -164,7 +175,6 @@ export default function ProductDelivery() {
                         </div>
                     </div>
 
-
                     {
                         canView('Product - Stock | Export') ? <div className="float-right mb-20 pt-10">
                             {/* <Button type="primary" onClick={() => generateReport()} size="large">Generate Report</Button> */}
@@ -174,6 +184,10 @@ export default function ProductDelivery() {
                                 </Button>
                             </CSVLink>
                         </div> : ''
+                    }
+                    {
+                        canView('Run Command Now') ? <Button type="primary" size="large" onClick={() => runCommandNow()}
+                            className='float-right mb-20 mt-10 px-20 mr-20'><UndoOutlined style={{height: "10px"}}/></Button> : ''
                     }
 
 
