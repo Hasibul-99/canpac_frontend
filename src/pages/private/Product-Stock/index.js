@@ -100,18 +100,19 @@ export default function ProductDelivery() {
     {
       title: "QTY per sheet",
       key: "qty_per_sheet",
-      render: (text, record) => (
+      render: (text, record, index) => (
         <>
           <InputNumber
             value={record.qty_per_sheet}
             id={"js-qty-sheet-" + record.id}
             min={0}
             style={{ width: "60px" }}
+            onChange={(e) => qtyOnChange(e, index)}
             className="mr-5"
             disabled={!canView("Update Product Qty Per Sheet")}
           />
           {canView("Update Product Qty Per Sheet") ? (
-            <EditOutlined onClick={() => updateQtySheet(record)} />
+            <EditOutlined onClick={() => updateQtySheet(record, index)} />
           ) : (
             ""
           )}
@@ -131,20 +132,20 @@ export default function ProductDelivery() {
     },
   ];
 
-  const updateQtySheet = async (record) => {
-    let ele = document.getElementById(`js-qty-sheet-${record.id}`);
+  const qtyOnChange = (val, index) => {
+    products[index].qty_per_sheet = val;
+    setProducts([...products]);
+  }
 
-    if (ele) {
-      let value = ele.value;
-      let res = await postData(PRODUCT_QTY_SHEET_UPDATE, {
-        product_id: record.id,
-        qty_per_sheet: parseInt(value) || 0,
-      });
+  const updateQtySheet = async (record, index) => {
+    let res = await postData(PRODUCT_QTY_SHEET_UPDATE, {
+      product_id: record.id,
+      qty_per_sheet: record.qty_per_sheet //parseInt(value) || 0,
+    });
 
-      if (res) {
-        alertPop("success", res.data.message);
-        getProductExportData();
-      }
+    if (res) {
+      alertPop("success", res.data.message);
+      getProductExportData();
     }
   };
 
