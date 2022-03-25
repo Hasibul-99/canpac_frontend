@@ -107,7 +107,7 @@ export default function ProductDelivery() {
             id={"js-qty-sheet-" + record.id}
             min={0}
             style={{ width: "60px" }}
-            onChange={(e) => qtyOnChange(e, index)}
+            onChange={(e) => qtyOnChange(e, index, record.id)}
             className="mr-5"
             disabled={!canView("Update Product Qty Per Sheet")}
           />
@@ -132,8 +132,9 @@ export default function ProductDelivery() {
     },
   ];
 
-  const qtyOnChange = (val, index) => {
-    products[index].qty_per_sheet = val;
+  const qtyOnChange = (val, index, recordId) => {
+    let idx = products.findIndex(pro => pro.id === recordId);
+    products[idx].qty_per_sheet = val;
     setProducts([...products]);
   }
 
