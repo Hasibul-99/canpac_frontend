@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Tag, Button, Input, DatePicker  } from 'antd';
+import {Table, Space, Select, Spin, Tag, Button, Input, DatePicker  } from 'antd';
 import { postData, getData } from '../../../scripts/api-service';
 import { PRODUCT_DELIVARY, DROPDOWN_LIST, ORDER_PRODUCT_DELIVERY_EXPORT } from '../../../scripts/api';
 import { buildSearchQuery, dateFormat, checkUserPermission } from '../../../scripts/helper';
@@ -34,6 +34,7 @@ export default function ProductDelivery() {
     const [customers, setCustomers] = useState();
     const [productModel, setProductModel] = useState();
     const [exportData, setExportData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const columns = [
         {
@@ -107,10 +108,12 @@ export default function ProductDelivery() {
     ];
 
     const getProductDetails = async () => {
+        setIsLoading(true);
         let res = await postData(PRODUCT_DELIVARY, search);
 
         if (res) {
             setProducts(res.data.data);
+            setIsLoading(false);
             generateReport();
         }
     }
@@ -309,7 +312,14 @@ export default function ProductDelivery() {
                         </> : ''
                     }
 
-                    <Table dataSource={products} columns={columns} />
+                    {           
+                        isLoading ? <div className="loading-content">
+                            <Spin size="large" className="mr-20" />
+                            <Spin size="large" className="mr-20"/>
+                            <Spin size="large" className="mr-20"/>
+                        </div> : <Table dataSource={products} columns={columns} />
+                    }
+
                 </div>
             </div>
         </Fragment>

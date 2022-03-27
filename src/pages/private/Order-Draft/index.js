@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker, Modal  } from 'antd';
+import {Table, Space, Select, Spin, Form, Button, Input, DatePicker, Modal  } from 'antd';
 import { postData, getData } from '../../../scripts/api-service';
 import { ORDER_APPROVE_OR_CANCEL, ORDER_DRAFT, DROPDOWN_LIST, ORDER_DRAFT_EXPORT } from '../../../scripts/api';
 import { alertPop, dateFormat, buildSearchQuery, checkUserPermission } from '../../../scripts/helper';
@@ -40,6 +40,7 @@ export default function OrderDraft() {
     const [customers, setCustomers] = useState();
     const [productModel, setProductModel] = useState();
     const [exportData, setExportData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
       
     const columns = [
         {
@@ -141,10 +142,12 @@ export default function OrderDraft() {
     };
 
     const getOrderDraft = async () => {
+        setIsLoading(true);
         let res = await postData(ORDER_DRAFT, search);
 
         if (res) {
             setDraftList(res.data.data);
+            setIsLoading(false);
             generateReport();
         }
     }
@@ -309,8 +312,15 @@ export default function OrderDraft() {
                         </div>
                         </> : ''
                     }
+
+                    {
+                        isLoading ? <div className="loading-content">
+                            <Spin size="large" className="mr-20" />
+                            <Spin size="large" className="mr-20"/>
+                            <Spin size="large" className="mr-20"/>
+                        </div> : <Table dataSource={draftList} columns={columns} />
+                    }
                     
-                    <Table dataSource={draftList} columns={columns} />
                 </div>
             </div>
 

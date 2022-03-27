@@ -13,8 +13,10 @@ export default function CreateMarchent() {
     const history = useHistory();
     const [file, setfile] = useState();
     const [imageBase64, setImageBase64] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const onFinish = async (values) => {
+        setIsLoading(true);
         let data = new FormData();
         
         if (file) data.append('image', file); 
@@ -31,8 +33,11 @@ export default function CreateMarchent() {
         let res = await postData(MERCHENT_CREATE, data);
 
         if (res) {
+            setIsLoading(false);
             alertPop('success', "Merchant Added Successfully!")
             history.push('/merchents');
+        } else {
+            setIsLoading(false);
         }
     };
 
@@ -145,7 +150,8 @@ export default function CreateMarchent() {
                         <div className="row xs-gap">
                             <div className="col-sm">
                                 <Form.Item>
-                                    <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
+                                    <Button className="btn-brand btn-block" loading={isLoading}
+                                    size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
                                         Add Merchant
                                     </Button>
                                 </Form.Item>

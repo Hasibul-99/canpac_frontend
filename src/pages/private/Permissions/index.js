@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useContext  } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker, Modal } from 'antd';
+import {Table, Space, Select, Form, Spin, Button, Input, DatePicker, Modal } from 'antd';
 import { PERMISSION_LIST, PERMISSION_CREATE, PERMISSION_UPDATE, PERMISSION_DELETE } from "../../../scripts/api";
 import { postData } from "../../../scripts/api-service";
 import { alertPop, checkUserPermission } from '../../../scripts/helper';
@@ -26,6 +26,7 @@ export default function Permissions(permissionId) {
     const [updatePermission, setUpdatePermission] = useState();
     const [selectedPermission, setSelectedPermission] = useState();
     const [search, setSearch] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     const showDeleteConfirm = (permissionId) => {
         confirm({
@@ -121,8 +122,12 @@ export default function Permissions(permissionId) {
     }
 
     const getPermissions = async () => {
+        setIsLoading(true);
         let res = await postData(PERMISSION_LIST, search);
-        if (res) setPermissions(res?.data?.data)
+        if (res) {
+            setIsLoading(false);
+            setPermissions(res?.data?.data);
+        }
     }
     
     const generateSearchObj = (name, value) => {
@@ -162,7 +167,13 @@ export default function Permissions(permissionId) {
                         </div> : ''
                     }
 
-                    <Table dataSource={permissionList} columns={columns} />
+                    {
+                        isLoading ? <div className="loading-content">
+                            <Spin size="large" className="mr-20" />
+                            <Spin size="large" className="mr-20"/>
+                            <Spin size="large" className="mr-20"/>
+                        </div> : <Table dataSource={permissionList} columns={columns} />
+                    }
                 </div>
             </div>
 

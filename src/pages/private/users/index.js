@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker, Avatar, Image, Modal, Tag, Switch } from 'antd';
+import {Table, Space, Select, Form, Button, Spin, Input, DatePicker, Avatar, Image, Modal, Tag, Switch } from 'antd';
 import {USER_LIST, USER_STATUS_UPDATE, EMAIL_CONFIRMATION_RESENT, DROPDOWN_LIST} from "../../../scripts/api";
 import {postData} from "../../../scripts/api-service";
 import { useHistory } from "react-router-dom";
@@ -18,6 +18,7 @@ export default function Users() {
     let [users, setUsers] = useState([]);
     const [search, setSearch] = useState({});
     const [roles, setRoles] = useState();
+    const [isLoading, setIsLoading] = useState(true);
       
     const resendVerification = async (userId) => {
         let res = await postData(EMAIL_CONFIRMATION_RESENT, {
@@ -139,9 +140,13 @@ export default function Users() {
     }
 
     const getUsersList = async () => {
+        setIsLoading(true);
         let res = await postData(USER_LIST, search);
 
-        if (res) setUsers(res.data.data);
+        if (res) {
+            setIsLoading(false);
+            setUsers(res.data.data);
+        } 
     };
 
     const statusSearch = (value) => {
@@ -239,7 +244,14 @@ export default function Users() {
                     }
                     
 
-                    <Table dataSource={users} columns={columns} />
+
+                    {
+                        isLoading ? <div className="loading-content">
+                            <Spin size="large" className="mr-20" />
+                            <Spin size="large" className="mr-20"/>
+                            <Spin size="large" className="mr-20"/>
+                        </div> : <Table dataSource={users} columns={columns} />
+                    }
                 </div>
             </div>
         </Fragment>

@@ -1,5 +1,5 @@
 import React, { Fragment, useState,useEffect, useContext } from 'react';
-import {Table, Space, Select, Form, Button, Input, DatePicker, Modal } from 'antd';
+import {Table, Space, Select, Form, Button, Spin, Input, DatePicker, Modal } from 'antd';
 import { MERCHENT_LIST, USER_STATUS_UPDATE, EMAIL_CONFIRMATION_RESENT, DROPDOWN_LIST } from "../../../scripts/api";
 import { postData } from "../../../scripts/api-service";
 import { useHistory, Link } from "react-router-dom";
@@ -17,6 +17,7 @@ export default function Merchents() {
     const [marchents, setMerchents ] = useState();
     const [search, setSearch] = useState();
     const [roles, setRoles] = useState();
+    const [isLoading, setIsLoading] = useState(true);
 
     const canView = (context) => {
         return checkUserPermission(context, permissions);
@@ -127,9 +128,13 @@ export default function Merchents() {
     }
 
     const getMerchents = async () => {
+        setIsLoading(true);
         let res = await postData(MERCHENT_LIST, search);
 
-        if (res) setMerchents(res.data.data);
+        if (res) {
+            setIsLoading(false);
+            setMerchents(res.data.data);
+        }
     }
 
     const generateSearchObj = (name, value) => {
@@ -243,8 +248,13 @@ export default function Merchents() {
                             type="primary" style={{width: "300px"}}> Add Merchent </Button> : ''
                         }
                     </div>
-
-                    <Table dataSource={marchents} columns={columns} />
+                    {
+                        isLoading ? <div className="loading-content">
+                            <Spin size="large" className="mr-20" />
+                            <Spin size="large" className="mr-20"/>
+                            <Spin size="large" className="mr-20"/>
+                        </div> : <Table dataSource={marchents} columns={columns} />
+                    }
                 </div>
             </div>
         </Fragment>

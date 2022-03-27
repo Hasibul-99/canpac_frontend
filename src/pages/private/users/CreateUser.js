@@ -14,9 +14,11 @@ export default function CreateUser() {
     const [file, setfile] = useState();
     const [imageBase64, setImageBase64] = useState();
     const [roles, setRoles] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const onFinish = async (values) => {
         console.log("value", values);
+        setIsLoading(true);
         let data = new FormData();
         
         if (file) data.append('image', file); 
@@ -31,8 +33,11 @@ export default function CreateUser() {
         let res = await postData(USER_CREATE, data);
 
         if (res) {
+            setIsLoading(true);
             alertPop('success', "User Added Successfully!")
             history.push('/users');
+        } else {
+            setIsLoading(false);
         }
     };
 
@@ -163,7 +168,8 @@ export default function CreateUser() {
                         <div className="row xs-gap">
                             <div className="col-sm">
                                 <Form.Item>
-                                    <Button className="btn-brand btn-block" size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
+                                    <Button className="btn-brand btn-block" loading={isLoading}
+                                        size="large" type="primary" htmlType="submit" style={{width: "100%", marginTop: "1rem"}} >
                                         Add User
                                     </Button>
                                 </Form.Item>

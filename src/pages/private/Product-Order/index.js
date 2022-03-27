@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useContext } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Form, Button, Input, DatePicker, Tag } from 'antd';
+import {Table, Space, Select, Spin, Form, Button, Input, DatePicker, Tag } from 'antd';
 import { postData, getData } from '../../../scripts/api-service';
 import { ORDER_LIST, DROPDOWN_LIST, ORDER_PRODUCT_EXPORT } from '../../../scripts/api';
 import { dateFormat, checkUserPermission, buildSearchQuery } from '../../../scripts/helper';
@@ -32,6 +32,7 @@ export default function ProductOrder() {
     const [customers, setCustomers] = useState();
     const [productModel, setProductModel] = useState();
     const [exportData, setExportData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const canView = (context) => {
         return checkUserPermission(context, permissions);
@@ -102,11 +103,13 @@ export default function ProductOrder() {
     ].filter(item => !canView('Order - Details') ? item.key !== 'update' : item);
 
     const getProductOrder = async () => {
+        setIsLoading(true);
         let res = await postData(ORDER_LIST, search)
 
         if (res) {
             setOrders(res.data.data);
             generateReport();
+            setIsLoading(false);
         }
     };
 
@@ -304,7 +307,14 @@ export default function ProductOrder() {
                         </div> : ''
                     }
                     
-                    <Table dataSource={orders} columns={columns} />
+                    {
+                        isLoading ? <div className="loading-content">
+                            <Spin size="large" className="mr-20" />
+                            <Spin size="large" className="mr-20"/>
+                            <Spin size="large" className="mr-20"/>
+                        </div> : <Table dataSource={orders} columns={columns} />
+                    }
+                    
                 </div>
             </div>
         </Fragment>

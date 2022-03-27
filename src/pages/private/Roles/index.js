@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
 import {Link} from "react-router-dom";
-import {Table, Space, Select, Modal, Button, Input, DatePicker  } from 'antd';
+import {Table, Space, Select, Modal, Button, Spin, Input, DatePicker  } from 'antd';
 import { ROLE_LIST, ROLE_DELETE } from "../../../scripts/api";
 import {postData} from "../../../scripts/api-service";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -20,6 +20,7 @@ export default function Roles() {
     const { permissions } = useContext(authContext);
     const [roles, setRoles] = useState([]);
     const [search, setSearch] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     const columns = [
         {
@@ -86,10 +87,12 @@ export default function Roles() {
     }
 
     const getRoles = async () => {
+        setIsLoading(true);
         let res = await postData(ROLE_LIST, search);
 
         if (res) {
             setRoles(res.data.data);
+            setIsLoading(false);
         }
     };
 
@@ -132,7 +135,13 @@ export default function Roles() {
                         </div> : ''
                     }
                     
-                    <Table dataSource={roles} columns={columns} />
+                    {
+                        isLoading ? <div className="loading-content">
+                            <Spin size="large" className="mr-20" />
+                            <Spin size="large" className="mr-20"/>
+                            <Spin size="large" className="mr-20"/>
+                        </div> : <Table dataSource={roles} columns={columns} />
+                    }
                 </div>
             </div>
         </Fragment>
