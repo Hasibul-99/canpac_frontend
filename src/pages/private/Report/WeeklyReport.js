@@ -275,7 +275,7 @@ export default function WeeklyReport() {
         </div>
       </div>
 
-      <div id="divToPrint" className="export-weekreprot " data-cols-width="10, 30, 20, 20, 30, 20">
+      <div id="divToPrint" className="export-weekreprot d-none" data-cols-width="10, 30, 20, 20, 30, 20">
         <table style={{ border: "3px" }}>
           <tr>
             <td class="text-center font12" data-a-h="center" data-f-bold="true"
