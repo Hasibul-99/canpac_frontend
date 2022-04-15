@@ -344,7 +344,7 @@ export default function WeeklyReport() {
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Trọng Lượng chuẩn(+5g)</th>
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Độ dày</th>
 
-            <th  data-f-bold="false" data-a-v="middle" 
+            {/* <th  data-f-bold="false" data-a-v="middle" 
               style={{width: '3rem'}}></th>
 
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">NO</th>
@@ -353,7 +353,7 @@ export default function WeeklyReport() {
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Total Can Stock & Printed Sheet</th>
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">QTY per sheet</th>
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Weight Standard(g)</th>
-            <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Thikness(mm)</th>
+            <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Thikness(mm)</th> */}
           </tr>
           {
             exportData?.can_stock?.map((data, i) => <>
@@ -368,7 +368,7 @@ export default function WeeklyReport() {
                 <td>{numberRound(data.SWidth1)}</td>
                 <td></td>
 
-                <td>{i + 1}</td>
+                {/* <td>{i + 1}</td>
                 <td>
                   {data?.product_stock?.product_display_name}
                 </td>
@@ -376,7 +376,7 @@ export default function WeeklyReport() {
                 <td>{data?.product_stock?.quantity_of_product_per_sheet}</td>
                 <td>{data?.product_stock?.qty_per_sheet}</td>
                 <td>{numberRound(data?.product_stock?.weight)}</td>
-                <td>{numberRound(data?.product_stock?.thickness)}</td>
+                <td>{numberRound(data?.product_stock?.thickness)}</td> */}
               </tr>
             </>)
           }
@@ -403,7 +403,7 @@ export default function WeeklyReport() {
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">SL Tấm Thép đã in</th>
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Tổng SL tấm thép đã in & lon TP</th>
           
-            <th  data-f-bold="false" data-a-v="middle" 
+            {/* <th  data-f-bold="false" data-a-v="middle" 
               style={{width: '3rem'}}></th>
 
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">NO</th>
@@ -412,7 +412,7 @@ export default function WeeklyReport() {
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Total Can Stock & Printed Sheet</th>
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">QTY per sheet</th>
             <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Weight Standard(g)</th>
-            <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Thikness(mm)</th>
+            <th data-b-a-s="medium" data-f-bold="true" data-a-v="middle">Thikness(mm)</th> */}
           </tr>
           {
             exportData?.printed_sheet?.map((data, i) => <tr key={i} style={{ border: ".5px solid black", borderCollapse: "collapse" }}>
@@ -424,7 +424,7 @@ export default function WeeklyReport() {
               <td></td>
               <td></td>
 
-              <td>{i + 1}</td>
+              {/* <td>{i + 1}</td>
               <td>
                 {data?.product_stock?.product_display_name}
               </td>
@@ -432,7 +432,7 @@ export default function WeeklyReport() {
               <td>{data?.product_stock?.quantity_of_product_per_sheet}</td>
               <td>{data?.product_stock?.qty_per_sheet}</td>
               <td>{numberRound(data?.product_stock?.weight)}</td>
-              <td>{numberRound(data?.product_stock?.thickness)}</td>
+              <td>{numberRound(data?.product_stock?.thickness)}</td> */}
             </tr>)
           }
         </table>
